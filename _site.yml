@@ -25,6 +25,7 @@ navbar:
   - icon: fa-github
     href: https://github.com/systats
   - icon: fa-twitter
+output_dir: "."
 output:
   html_document:
     theme: lumen
@@ -33,5 +34,4 @@ output:
     css: styles.css
     lib_dir: site_libs
     self_contained: no
-output_dir: _site
 

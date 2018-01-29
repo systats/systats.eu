@@ -5,20 +5,16 @@ navbar:
   left:
     - text: "Home"
       icon: fa-home
-      href: index.html
+      #href: index.html
     - text: "About"
       icon: fa-info
-      href: about.html
+      #href: about.html
     - text: "More"
       icon: fa-gear
       menu:
         - text: "Heading 1"
         - text: "Page A"
-          href: page_a.html
+      #    href: page_a.html
   right:
     - icon: fa-question fa-lg
       href: https://example.com
-output:
-  html_document:
-    theme: cosmo
-    highlight: textmate

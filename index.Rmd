@@ -1,5 +1,9 @@
 ---
 title: "Hello World"
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
 ---
 
 ```{r setup, include=FALSE}

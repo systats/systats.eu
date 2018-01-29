@@ -1,11 +1,10 @@
 name: "systats"
 navbar:
   title: "systats"
-  type: inverse
   left:
     - text: "Home"
       icon: fa-home
-      #href: index.html
+      href: index.html
     - text: "About"
       icon: fa-info
       #href: about.html

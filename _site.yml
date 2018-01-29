@@ -1,6 +1,6 @@
 name: systats
 navbar:
-  title: systats
+  title: SYSTATS
   left:
   - text: Home
     href: index.html
@@ -8,10 +8,18 @@ navbar:
     href: https://systats.github.io/linear_model
   - text: Rmarkdown
     icon: fa-heart-o
-    href: rmarkdown.html
+    href: https://systats.github.io/awesomeRmarkdown
+  - text: Shiny Apps
+    icon: fa-heart-o
+    menu:
+    - text: Gallery
   - text: About
     href: about.html
-  - text: More
+  right:
+  - icon: fa-github
+    href: https://github.com/systats
+  - icon: fa-twitter
+  - text: DEV
     icon: fa-gear
     menu:
     - text: Heading 1
@@ -21,10 +29,6 @@ navbar:
       href: page_b.html
     - text: '---------'
     - text: Heading 2
-  right:
-  - icon: fa-github
-    href: https://github.com/systats
-  - icon: fa-twitter
 output_dir: "."
 output:
   html_document:
@@ -34,4 +38,3 @@ output:
     css: styles.css
     lib_dir: site_libs
     self_contained: no
-

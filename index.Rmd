@@ -1,11 +1,8 @@
----
-title: "My Website"
----
 
 
 <div class="jumbotron">
-  <h1>Hello, world!</h1>
-  <p>...</p>
+  <h1>Hi and welcome to my universe!</h1>
+  <p>Here I plan to put up different materials on developing shiny apps, statistical learning and natural language processing.</p>
   <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
 </div>
 

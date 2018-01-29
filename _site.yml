@@ -1,8 +1,37 @@
-name: "my-website"
+name: systats
 navbar:
-  title: "My Website"
+  title: systats
   left:
-    - text: "Home"
-      href: index.html
-    - text: "About"
-      href: about.html
+  - text: Home
+    href: index.html
+  - text: Statistics
+    href: https://systats.github.io/linear_model
+  - text: Rmarkdown
+    icon: fa-heart-o
+    href: rmarkdown.html
+  - text: About
+    href: about.html
+  - text: More
+    icon: fa-gear
+    menu:
+    - text: Heading 1
+    - text: Page A
+      href: page_a.html
+    - text: Page B
+      href: page_b.html
+    - text: '---------'
+    - text: Heading 2
+  right:
+  - icon: fa-github
+    href: https://github.com/systats
+  - icon: fa-twitter
+output:
+  html_document:
+    theme: lumen
+    highlight: textmate
+    include: ~
+    css: styles.css
+    lib_dir: site_libs
+    self_contained: no
+output_dir: _site
+

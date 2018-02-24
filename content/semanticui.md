@@ -1,6 +1,35 @@
 
 # Web Development
 
+
+## Examples of Semantic UI Homepages
+
+<div class="ui three column grid">
+  <div class="column">
+    <div class="ui segment">
+      <a href="http://google.com" target="_blank">
+        <img class = "ui medium image" src="https://semantic-ui.com/images/logo.png">
+      </a>
+    </div>
+  </div>
+  <div class="column">
+    <div class="ui segment">
+      <a href="http://google.com" target="_blank">
+        <img class = "ui medium image" src="https://semantic-ui.com/images/logo.png">
+      </a>
+    </div>
+  </div>
+  <div class="column">
+    <div class="ui segment">
+      <a href="http://google.com" target="_blank">
+        <img class = "ui medium image" src="https://semantic-ui.com/images/logo.png">
+      </a>
+    </div>
+  </div>
+</div>
+
+
+
 **XMin** is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the  [**blogdown**](https://github.com/rstudio/blogdown) book. 
 
 # Custom layouts

@@ -44,26 +44,50 @@
 
 
     
+<div class="article-meta">
+<h1><span class="title"></span></h1>
 
 
-<h1>Notes</h1>
+</div>
+
+<main>
 
 
+<h1 id="web-development">Web Development</h1>
 
+<p><strong>XMin</strong> is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the  <a href="https://github.com/rstudio/blogdown"><strong>blogdown</strong></a> book.</p>
+
+<h1 id="custom-layouts">Custom layouts</h1>
+
+<p>There are two layout files under <code>layouts/partials/</code> that you may want to override: <code>head_custom.html</code> and <code>foot_custom.html</code>. This is how you inject arbitrary HTML code to the head and foot areas. For example, this site has a file <code>layouts/partials/foot_custom.html</code> to support LaTeX math via MathJax and center images automatically:</p>
+
+<pre><code class="language-html">&lt;script src=&quot;//yihui.name/js/math-code.js&quot;&gt;&lt;/script&gt;
+&lt;script async src=&quot;//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML&quot;&gt;
+&lt;/script&gt;
+&lt;script async src=&quot;//yihui.name/js/center-img.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<h1 id="other-features">Other features</h1>
+
+<p>I could have added more features to this theme, but I decided not to, since I have no intention to make this theme feature-rich. However, I will teach you how. I have prepared several examples via pull requests at <a href="https://github.com/yihui/hugo-xmin/pulls">https://github.com/yihui/hugo-xmin/pulls</a>, so that you can see the implementations of these features when you check out the diffs in the pull requests. For example, you can:</p>
 
 <ul>
-  
-  <li>
-    <span class="date">2017/06/14</span>
-    <a href="/note/2017/06/14/another-note/">Another Note on A blogdown Tutorial</a>
-  </li>
-  
-  <li>
-    <span class="date">2017/06/13</span>
-    <a href="/note/2017/06/13/a-quick-note/">A Quick Note on Two Beautiful Websites</a>
-  </li>
-  
+<li><p><a href="https://github.com/yihui/hugo-xmin/pull/3">Enable Google Analytics</a></p></li>
+
+<li><p><a href="https://github.com/yihui/hugo-xmin/pull/4">Enable Disqus comments</a></p></li>
+
+<li><p><a href="https://github.com/yihui/hugo-xmin/pull/5">Enable highlight.js for syntax highlighting of code blocks</a></p></li>
+
+<li><p><a href="https://github.com/yihui/hugo-xmin/pull/2">Display categories and tags on a page</a></p></li>
+
+<li><p><a href="https://github.com/yihui/hugo-xmin/pull/7">Add a table of contents</a></p></li>
+
+<li><p><a href="https://github.com/yihui/hugo-xmin/pull/6">Add a link in the footer of each page to &ldquo;Edit this page&rdquo; on Github</a></p></li>
 </ul>
+
+<p>To fully understand these examples, you have to read <a href="https://bookdown.org/yihui/blogdown/templates.html">the section on Hugo templates</a> in the <strong>blogdown</strong> book.</p>
+
+</main>
 
     <br>
     <br>

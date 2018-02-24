@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    
+  </head>
+  
+  <body>
+    <div class="ui inverted vertical masthead center aligned segment">
+    <div class="ui container">
+      <div class="ui top fixed large inverted pointing menu">
+        
+        <a class="item" href="/">Home</a>
+<a class="item" href="/categories/">Categories</a>
+<a class="item" href="/tags/">Tags</a>
+<a class="item" href="/about/">About</a>
+      </div>
+    </div>
+    <div class="ui text container">
+        <br>
+        <br>
+        <h1 class="ui inverted header">
+            Social Data Science
+        </h1>
+        <h2>Simon&#39;s Blog</h2>
+        <br>
+    </div>
+  </div>
+  <br>
+
+
+
+    
+<div class="article-meta">
+<h1><span class="title">Hello R Markdown</span></h1>
+<h2 class="author">Frida Gomam</h2>
+<h2 class="date">2015/07/23</h2>
+</div>
+
+<main>
+<div id="r-markdown" class="section level1">
+<h1>R Markdown</h1>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p>You can embed an R code chunk like this:</p>
+<pre class="r"><code>summary(cars)
+##      speed           dist       
+##  Min.   : 4.0   Min.   :  2.00  
+##  1st Qu.:12.0   1st Qu.: 26.00  
+##  Median :15.0   Median : 36.00  
+##  Mean   :15.4   Mean   : 42.98  
+##  3rd Qu.:19.0   3rd Qu.: 56.00  
+##  Max.   :25.0   Max.   :120.00
+fit &lt;- lm(dist ~ speed, data = cars)
+fit
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932</code></pre>
+</div>
+<div id="including-plots" class="section level1">
+<h1>Including Plots</h1>
+<p>You can also embed plots. See Figure <a href="#fig:pie">1</a> for example:</p>
+<pre class="r"><code>par(mar = c(0, 1, 0, 1))
+pie(
+  c(280, 60, 20),
+  c(&#39;Sky&#39;, &#39;Sunny side of pyramid&#39;, &#39;Shady side of pyramid&#39;),
+  col = c(&#39;#0292D8&#39;, &#39;#F7EA39&#39;, &#39;#C4B632&#39;),
+  init.angle = -50, border = NA
+)</code></pre>
+<div class="figure"><span id="fig:pie"></span>
+<img src="/post/2015-07-23-r-rmarkdown_files/figure-html/pie-1.png" alt="A fancy pie chart." width="672" />
+<p class="caption">
+Figure 1: A fancy pie chart.
+</p>
+</div>
+</div>
+
+</main>
+
+    <br>
+    <br>
+    <div class="ui inverted vertical footer segment">
+      <br>
+      <br>
+      <div class="ui container">
+        <div class="ui stackable inverted divided equal height stackable grid">
+          <div class="three wide column">
+            <h4 class="ui inverted header">About</h4>
+            <div class="ui inverted link list">
+              <a href="#" class="item">Sitemap</a>
+              <a href="#" class="item">Contact Us</a>
+              <a href="#" class="item">Religious Ceremonies</a>
+              <a href="#" class="item">Gazebo Plans</a>
+            </div>
+          </div>
+          <div class="three wide column">
+            <h4 class="ui inverted header">Services</h4>
+            <div class="ui inverted link list">
+              <a href="#" class="item">Banana Pre-Order</a>
+              <a href="#" class="item">DNA FAQ</a>
+              <a href="#" class="item">How To Access</a>
+              <a href="#" class="item">Favorite X-Men</a>
+            </div>
+          </div>
+          <div class="seven wide column">
+            <h4 class="ui inverted header">Footer Header</h4>
+            <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+    </div>
+  </body>
+</html>
+

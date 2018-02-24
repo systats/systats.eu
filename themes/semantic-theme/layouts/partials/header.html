@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link rel="stylesheet" href="{{ "/css/style.css" | relURL }}" />
+    <link rel="stylesheet" href="{{ "/css/fonts.css" | relURL }}" />-->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    {{ partial "head_custom.html" . }}
+  </head>
+  <!--- body --->
+  <body>
+    <div class="ui inverted vertical masthead center aligned segment">
+    <div class="ui container">
+      <div class="ui top fixed large inverted pointing menu">
+        <!---<a class="toc item">
+        <i class="sidebar icon"></i>
+        </a>-->
+        {{partial "menu" .}}
+      </div>
+    </div>
+    <div class="ui text container">
+        <br>
+        <br>
+        <h1 class="ui inverted header">
+            Social Data Science
+        </h1>
+        <h2>{{.Site.Title}}</h2>
+        <br>
+    </div>
+  </div>
+  <br>
+
+
+
+    

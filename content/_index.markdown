@@ -22,6 +22,12 @@ title: Home
     </div>
 </div>
 
+<div class="ui blue inverted segment">
+  <div class="ui huge center aligned header">
+    Affordable, Hassle-Free Package Forwarding
+  </div>
+</div>
+
 
 [<img src="https://simpleicons.org/icons/github.svg" style="max-width:15%;min-width:40px;float:right;" alt="Github repo" />](https://github.com/yihui/hugo-xmin)
 

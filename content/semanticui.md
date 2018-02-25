@@ -1,40 +1,13 @@
 
 # Web Development
 
+* [code-mentor](https://www.codementor.io/)
+* [blogdown for websites](https://bookdown.org/yihui/blogdown/)
 
-## Examples of Semantic UI Homepages
+## Other Stuff
 
-<div class="ui equal width column grid">
-  <div class="column">
-    <div class="ui fade reveal">
-      <div class="visible content">
-        <a href="https://moneytracker.cc/" target="_blank">
-          <img class = "ui medium image" src="https://semantic-ui.com/images/logo.png">
-        </a>
-      </div>
-      <div class="hidden content">
-        <h3 class="ui center aligned header">
-          moneytracker.cc
-        </h3>
-      </div>
-    </div>
-  </div>
-  <div class="column">
-    <div class="ui segment">
-      <a href="http://google.com" target="_blank">
-        <img class = "ui medium image" src="https://semantic-ui.com/images/logo.png">
-      </a>
-    </div>
-  </div>
-  <div class="column">
-    <div class="ui segment">
-      <a href="http://google.com" target="_blank">
-        <img class = "ui medium image" src="https://semantic-ui.com/images/logo.png">
-      </a>
-    </div>
-  </div>
-</div>
 
+{{< tweet 852205086956818432 >}}
 
 
 **XMin** is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the  [**blogdown**](https://github.com/rstudio/blogdown) book. 
@@ -67,3 +40,55 @@ I could have added more features to this theme, but I decided not to, since I ha
 - [Add a link in the footer of each page to "Edit this page" on Github](https://github.com/yihui/hugo-xmin/pull/6)
 
 To fully understand these examples, you have to read [the section on Hugo templates](https://bookdown.org/yihui/blogdown/templates.html) in the **blogdown** book.
+
+
+
+## Examples of Semantic UI Homepages
+
+<div class="ui three column grid">
+  <div class="column">
+    <a href="https://moneytracker.cc/" target="_blank">
+      <img class = "ui large image" src="/images/moneytracker.png">
+    </a>
+  </div>
+  <div class="column">
+    <a href="https://www.mistay.in/" target="_blank">
+      <img class = "ui large image" src="/images/mistay.png">
+    </a>
+  </div>
+  <div class="column">
+    <a href="https://www.clubom.com.br/" target="_blank">
+      <img class = "ui large image" src="/images/clubom.png">
+   </a>
+  </div>
+<!--- second image line --->
+  <div class="column">
+    <a href="https://edabit.com/" target="_blank">
+      <img class = "ui large image" src="/images/edabit.png">
+    </a>
+  </div>
+  <div class="column">
+    <a href="https://www.seeuletter.com/" target="_blank">
+      <img class = "ui large image" src="/images/seeuletter.png">
+    </a>
+  </div>
+  <div class="column">
+    <a href="https://www.blackship.com/" target="_blank">
+      <img class = "ui large image" src="/images/blackship.png">
+   </a>
+  </div>
+</div>
+<div class="ui three column grid">
+  <div class="column">
+    <a href="https://roadmap.space/" target="_blank">
+      <img class = "ui large image" src="/images/roadmap.png">
+    </a>
+  </div>
+</div>
+
+
+
+
+
+
+

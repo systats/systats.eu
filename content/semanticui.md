@@ -4,12 +4,19 @@
 
 ## Examples of Semantic UI Homepages
 
-<div class="ui three column grid">
+<div class="ui equal width column grid">
   <div class="column">
-    <div class="ui segment">
-      <a href="http://google.com" target="_blank">
-        <img class = "ui medium image" src="https://semantic-ui.com/images/logo.png">
-      </a>
+    <div class="ui fade reveal">
+      <div class="visible content">
+        <a href="https://moneytracker.cc/" target="_blank">
+          <img class = "ui medium image" src="https://semantic-ui.com/images/logo.png">
+        </a>
+      </div>
+      <div class="hidden content">
+        <h3 class="ui center aligned header">
+          moneytracker.cc
+        </h3>
+      </div>
     </div>
   </div>
   <div class="column">

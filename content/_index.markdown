@@ -34,7 +34,7 @@ title: Home
               </div>
               <div class="row">
                   <div class="center aligned column">
-                      <a class="ui huge button" href = "/semanticui/">Check Them Out</a>
+                      <a class="ui huge button" href = "/semanticui/">Check Them Out</a> <br><br><br><br>
                   </div>
               </div>
           </div>

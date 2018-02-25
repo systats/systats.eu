@@ -6,35 +6,25 @@
     <!--<link rel="stylesheet" href="{{ "/css/style.css" | relURL }}" />
     <link rel="stylesheet" href="{{ "/css/fonts.css" | relURL }}" />-->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+    <!--- jquery has to be placed befor js cdn due to $ init--->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   </head>
   <!--- body --->
   <body>
-    <div class="ui inverted vertical center aligned segment">
     <div class="ui container">
       <div class="ui top fixed inverted compact icon menu">
+      <!---<div class="ui large top fixed menu transition visible"
+      style="display: flex !important;">--->
         <!---<a class="toc item">
         <i class="sidebar icon"></i>
         </a>-->
         {{partial "menu" .}}
       </div>
-    </div>
-    <div class="ui text container">
       <br>
-      <br>
-      <h1 class="ui inverted header">
-          Social Data Science
-      </h1>
-      <h2>{{.Site.Title}}</h2>
       <br>
     </div>
-  </div>
-  <br>
-  <div class="ui grid">
-    <div class="row">
-      <div class="two wide column"></div>
-      <div class="twelve wide column">
+
         
 
 

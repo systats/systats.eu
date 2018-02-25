@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   </head>
   
   <body>
-    <div class="ui inverted vertical center aligned segment">
     <div class="ui container">
       <div class="ui top fixed inverted compact icon menu">
+      
         
         <a class="item" href="/">
   <i class="large home icon"></i>
@@ -20,35 +21,34 @@
 </a>
 <a class="item" href="/categories/">Categories</a>
 <a class="item" href="/tags/">Tags</a>
-<a class="item" href="/about">
-  <img src="http://hexb.in/hexagons/shiny.png" style = "width: 25px;">
-</a>
-<a class="item" href="/semanticui/">
-  <img src="https://semantic-ui.com/images/logo.png" style = "width: 25px;">
-</a>
-<a class="item" href="/about/">About</a>
-      </div>
+
+<div class="ui dropdown item">
+  <i class="code icon"></i>
+  Web Developement
+  <i class="dropdown icon"></i>
+  <div class="menu">
+    <div class="item">
+      Shiny Apps 
+      <img class = "ui top aligned right floated image" src="http://hexb.in/hexagons/shiny.png">
     </div>
-    <div class="ui text container">
-      <br>
-      <br>
-      <h1 class="ui inverted header">
-          Social Data Science
-      </h1>
-      <h2>Simon&#39;s Blog</h2>
-      <br>
-    </div>
+    <a class="item" href="/semanticui/">
+      Semantic UI
+      <img class = "ui tiny right floated middle aligned image" src="https://semantic-ui.com/images/logo.png">
+    </a>
   </div>
-  <br>
-  <div class="ui grid">
-    <div class="row">
-      <div class="two wide column"></div>
-      <div class="twelve wide column">
+</div>
+<a class="right item" href="/about/">About</a>
+      </div>
+      <br>
+      <br>
+    </div>
+
         
 
 
 
     
+
 <div class="article-meta">
 <h1><span class="title">About Hugo XMin</span></h1>
 <h2 class="author">Yihui Xie</h2>
@@ -56,7 +56,7 @@
 </div>
 
 <main>
-
+  
 
 <p><strong>XMin</strong> is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the  <a href="https://github.com/rstudio/blogdown"><strong>blogdown</strong></a> book. Basically I wanted a simple theme that supports a navigation menu, a home page, other single pages, lists of pages, blog posts, categories, tags, and RSS. That is all. Nothing fancy. In terms of CSS and JavaScript, I really want to keep them minimal. In fact, this theme does not contain any JavaScript code at all, although on this example website I did introduce some JavaScript code (still relatively simple anyway). The theme does not contain any images, either, and is pretty much a plain-text theme.</p>
 
@@ -157,10 +157,6 @@
 
 </main>
 
-        </div>
-        <div class="two wide column"></div>
-      </div>
-    </div>
     <br>
     <br>
     <footer>
@@ -209,7 +205,10 @@
       <br>
       <br>
     </div>
-  </footer>
+    </footer>
+    <script>
+      $('.ui.dropdown').dropdown();
+    </script>
   </body>
   
 <script>

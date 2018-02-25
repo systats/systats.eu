@@ -1,18 +1,35 @@
 {{ partial "header.html" . }}
 
-{{if not .IsHome }}
-<h1>{{ .Title }}</h1>
-{{ end }}
-
 {{ .Content }}
 
-<ul>
-  {{ range (where .Data.Pages "Section" "!=" "") }}
-  <li>
-    <span class="date">{{ .Date.Format "2006/01/02" }}</span>
-    <a href="{{ .URL }}">{{ .Title }}</a>
-  </li>
-  {{ end }}
-</ul>
+  <div class="ui grid">
+    <div class="row">
+      <div class="two wide column"></div>
+      <div class="twelve wide column">
+        <br>
+        <br>
+        {{if not .IsHome }}
+        <h1>{{ .Title }}</h1>
+        {{ end }}
+        
+        {{if not .IsHome }}
+        <ul>
+          {{ range (where .Data.Pages "Section" "!=" "") }}
+          <li>
+            <div class="date">{{ .Date.Format "2006/01/02" }}</div>
+            <a href="{{ .URL }}">{{ .Title }}</a><br>
+            Description: {{.Description}} <br>
+            ReadingTime: {{.ReadingTime}} min<br>
+            WordCount: {{.WordCount}} <br>
+            Tags: {{.Params.tags}} <br>
+            Categories: {{.Params.categories}} <br>
+          </li>
+          {{ end }}
+        </ul>
+        {{ end }}
+        </div>
+        <div class="two wide column"></div>
+      </div>
+    </div>
 
 {{ partial "footer.html" . }}

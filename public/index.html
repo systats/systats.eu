@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   </head>
   
   <body>
-    <div class="ui inverted vertical center aligned segment">
     <div class="ui container">
       <div class="ui top fixed inverted compact icon menu">
+      
         
         <a class="item" href="/">
   <i class="large home icon"></i>
@@ -21,116 +22,91 @@
 </a>
 <a class="item" href="/categories/">Categories</a>
 <a class="item" href="/tags/">Tags</a>
-<a class="item" href="/about">
-  <img src="http://hexb.in/hexagons/shiny.png" style = "width: 25px;">
-</a>
-<a class="item" href="/semanticui/">
-  <img src="https://semantic-ui.com/images/logo.png" style = "width: 25px;">
-</a>
-<a class="item" href="/about/">About</a>
-      </div>
+
+<div class="ui dropdown item">
+  <i class="code icon"></i>
+  Web Developement
+  <i class="dropdown icon"></i>
+  <div class="menu">
+    <div class="item">
+      Shiny Apps 
+      <img class = "ui top aligned right floated image" src="http://hexb.in/hexagons/shiny.png">
     </div>
-    <div class="ui text container">
-      <br>
-      <br>
-      <h1 class="ui inverted header">
-          Social Data Science
-      </h1>
-      <h2>Simon&#39;s Blog</h2>
-      <br>
-    </div>
+    <a class="item" href="/semanticui/">
+      Semantic UI
+      <img class = "ui tiny right floated middle aligned image" src="https://semantic-ui.com/images/logo.png">
+    </a>
   </div>
-  <br>
-  <div class="ui grid">
-    <div class="row">
-      <div class="two wide column"></div>
-      <div class="twelve wide column">
+</div>
+<a class="right item" href="/about/">About</a>
+      </div>
+      <br>
+      <br>
+    </div>
+
         
 
 
 
     
 
-
-
-
-
-<div class="ui vertical stripe segment" id="work">
-    <div class="ui middle aligned stackable grid container">
-        <div class="row">
-            <div class="eight wide column">
-                <h3 class="ui header">We Help Companies and Companions</h3>
-                <p>We can give your company superpowers to do things</p>
-                <h3 class="ui header"> We Make Bananas That Can Dance</h3>
-                <p>Yes that's right, you thought it was the stuff of dreams</p>
-            </div>
-            <div class="six wide right floated column">
-            </div>
-        </div>
-        <div class="row">
-            <div class="center aligned column">
-                <a class="ui huge button" href = "/semanticui/">Check Them Out</a>
-            </div>
-        </div>
+<div class="ui inverted vertical center aligned segment">
+    <br>
+    <br>
+    <div class="ui text container">
+      <h1 class="ui inverted header">
+          Social Data Science
+      </h1>
+      <h2>Simon's Blog</h2>
+      <br>
     </div>
-</div>
-
-<div class="ui blue inverted segment">
-  <div class="ui huge center aligned header">
-    Affordable, Hassle-Free Package Forwarding
+  </div>
+  <br>
+  <!---page grid--->
+  <div class="ui grid">
+    <div class="row">
+      <div class="two wide column"></div>
+      <div class="twelve wide column">
+      <!---first content--->
+      <div class="ui vertical stripe segment" id="work">
+          <div class="ui middle aligned stackable grid container">
+              <div class="row">
+                  <div class="eight wide column">
+                      <h3 class="ui header">We Help Companies and Companions</h3>
+                      <p>We can give your company superpowers to do things</p>
+                      <h3 class="ui header"> We Make Bananas That Can Dance</h3>
+                      <p>Yes that's right, you thought it was the stuff of dreams</p>
+                  </div>
+                  <div class="six wide right floated column">
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="center aligned column">
+                      <a class="ui huge button" href = "/semanticui/">Check Them Out</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class="two wide column"></div>
   </div>
 </div>
 
-<p><a href="https://github.com/yihui/hugo-xmin"><img src="https://simpleicons.org/icons/github.svg" style="max-width:15%;min-width:40px;float:right;" alt="Github repo" /></a></p>
 
-<h1 id="hugo-xmin">HUGO XMIN</h1>
-
-<h2 id="keep-it-simple-but-not-simpler"><em>Keep it simple, but not simpler</em></h2>
-
-<p><strong>XMin</strong> is a Hugo theme written by <a href="https://yihui.name">Yihui Xie</a> in about four hours: half an hour was spent on the Hugo templates, and 3.5 hours were spent on styling. The main motivation for writing this theme was to provide a really minimal example to beginners of Hugo templates. This XMin theme contains about 130 lines of code in total, including the code in HTML templates and CSS (also counting empty lines).</p>
-
-<p>I can certainly further reduce the code, for example, by eliminating the CSS, but I believe a tiny bit CSS can greatly improve readability. You cannot really find many CSS frameworks that only contain 50 lines of code.</p>
-
-<p>Although it is a minimal theme, it is actually fully functional. It supports pages (including the home page), blog posts, a navigation menu, categories, tags, and RSS. With <a href="https://github.com/yihui/hugo-xmin/blob/master/exampleSite/layouts/partials/foot_custom.html">a little bit customization</a>, it can easily support LaTeX math expressions, e.g.,</p>
-
-<p><code>$${\sqrt {n}}\left(\left({\frac {1}{n}}\sum _{i=1}^{n}X_{i}\right)-\mu \right)\ {\xrightarrow {d}}\ N\left(0,\sigma ^{2}\right)$$</code></p>
-
-<p>All pages not under the root directory of the website are listed below. You can also visit the list page of a single section, e.g., <a href="/post/">posts</a>, or <a href="/note/">notes</a>. See the <a href="/about/">About</a> page for the usage of this theme.</p>
-
-
-<ul>
-  
-  <li>
-    <span class="date">2017/06/14</span>
-    <a href="/note/2017/06/14/another-note/">Another Note on A blogdown Tutorial</a>
-  </li>
-  
-  <li>
-    <span class="date">2017/06/13</span>
-    <a href="/note/2017/06/13/a-quick-note/">A Quick Note on Two Beautiful Websites</a>
-  </li>
-  
-  <li>
-    <span class="date">2016/02/14</span>
-    <a href="/post/2016/02/14/a-plain-markdown-post/">A Plain Markdown Post</a>
-  </li>
-  
-  <li>
-    <span class="date">2015/07/23</span>
-    <a href="/post/2015/07/23/hello-r-markdown/">Hello R Markdown</a>
-  </li>
-  
-  <li>
-    <span class="date">2015/07/23</span>
-    <a href="/post/2015/07/23/lorem-ipsum/">Lorem Ipsum</a>
-  </li>
-  
-</ul>
-
+  <div class="ui grid">
+    <div class="row">
+      <div class="two wide column"></div>
+      <div class="twelve wide column">
+        <br>
+        <br>
+        
+        
+        
         </div>
         <div class="two wide column"></div>
       </div>
     </div>
+
     <br>
     <br>
     <footer>
@@ -179,7 +155,10 @@
       <br>
       <br>
     </div>
-  </footer>
+    </footer>
+    <script>
+      $('.ui.dropdown').dropdown();
+    </script>
   </body>
   
 <script>

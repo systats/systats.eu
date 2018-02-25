@@ -3,6 +3,10 @@
 
 * [code-mentor](https://www.codementor.io/)
 * [blogdown for websites](https://bookdown.org/yihui/blogdown/)
+* [dashboard examples](https://speckyboy.com/beautifully-designed-admin-dashboards/)
+* https://www.nounou-top.fr/
+* [learn semantic ui](http://learnsemantic.com/preface/introduction.html)
+
 
 ## Other Stuff
 
@@ -44,6 +48,7 @@ To fully understand these examples, you have to read [the section on Hugo templa
 
 
 ## Examples of Semantic UI Homepages
+
 
 <div class="ui three column grid">
   <div class="column">

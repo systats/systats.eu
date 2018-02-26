@@ -6,10 +6,19 @@
     <description>Recent content in R Markdown on Simon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 Jul 2015 21:13:14 -0500</lastBuildDate>
+    <lastBuildDate>Mon, 26 Feb 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Blogdown, Highcharter and R Markdown</title>
+      <link>/post/2018/02/26/blogdown-highcharter-and-r-markdown/</link>
+      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2018/02/26/blogdown-highcharter-and-r-markdown/</guid>
+      <description>First Header library(&amp;quot;highcharter&amp;quot;) ## Highcharts (www.highcharts.com) is a Highsoft software product which is ## not free for commercial and Governmental use data(diamonds, mpg, package = &amp;quot;ggplot2&amp;quot;) hchart(mpg, &amp;quot;scatter&amp;quot;, hcaes(x = displ, y = hwy, group = class))  {&#34;</description>
+    </item>
     
     <item>
       <title>Hello R Markdown</title>

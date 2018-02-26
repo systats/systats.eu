@@ -5,7 +5,7 @@ title: Social Data Science
 <br>
 <div class = "ui center aligned grid">
   <div class="middle aligned row">
-    <div class = "twelve wide column">
+    <div class = "ten wide column">
       <h1 class="ui header">
         Hi!
       </h1>
@@ -19,19 +19,39 @@ title: Social Data Science
 <br>
 <!---first content--->
 <div class="row">
-  <div class="ui equal width center aligned padded grid">
-    <div class="column">
-      <h2 class="ui icon header">
-        <i class="code icon"></i>
-        <div class="content">
-          Web Development
-          <div class="sub header">Manage your account settings and set e-mail preferences.</div>
+    <div class="ui equal width center aligned padded grid">
+      <div class="column">
+        <h2 class="ui icon header">
+          <i class="code icon"></i>
+          <div class="content">
+            Web Development
+            <div class="sub header">
+              This website is ⚡ by blogdown, hugo, Rmarkdown and Semantic UI. Beside front-end development I like to build Shiny Apps which bring the power of R (programming language) to everyone. This is where my data science career has started 3 years ago. 
+            </div>
           </div>
         </h2>
       </div>
       <div class="column">
+        <h2 class="ui icon header">
+          <i class="language icon"></i>
+          <div class="content">
+            Text Mining
+            <div class="sub header">
+            I ♡ web scraping and processing large collections of unstructured data. Particularly social media monitoring through NLP prediction methods like word2vec and LSTM networks yield useful insights for example on bitcoin stock prices or election outcomes. 
+            </div>
+          </div>
+        </h2>
       </div>
       <div class="column">
+        <h2 class="ui icon header">
+          <i class="flask icon"></i>
+          <div class="content">
+            Social Sciences
+            <div class="sub header">
+              Doing something that matters? Combining interesting research questions about human behavoir and socital dynamics with statistics and machine learning is never boring but enlightening 💡
+            </div>
+          </div>
+        </h2>
       </div>
     </div>
   </div>

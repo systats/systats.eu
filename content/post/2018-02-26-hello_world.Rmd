@@ -1,0 +1,27 @@
+---
+title: "Blogdown, Highcharter and R Markdown"
+date: '`r Sys.Date()`'
+categories: ["R"]
+tags: ["R Markdown", "Highcharter", "widgets"]
+description: "This post is an Rmarkdown example for using highcharter in blogdown post."
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+
+## First Header
+
+```{r}
+library("highcharter")
+data(diamonds, mpg, package = "ggplot2")
+hchart(mpg, "scatter", hcaes(x = displ, y = hwy, group = class))
+```
+
+
+
+
+
+
+

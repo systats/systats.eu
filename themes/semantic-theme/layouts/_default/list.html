@@ -2,34 +2,46 @@
 
 {{ .Content }}
 
-  <div class="ui grid">
-    <div class="row">
-      <div class="two wide column"></div>
-      <div class="twelve wide column">
-        <br>
-        <br>
-        {{if not .IsHome }}
-        <h1>{{ .Title }}</h1>
-        {{ end }}
-        
-        {{if not .IsHome }}
-        <ul>
-          {{ range (where .Data.Pages "Section" "!=" "") }}
-          <li>
-            <div class="date">{{ .Date.Format "2006/01/02" }}</div>
-            <a href="{{ .URL }}">{{ .Title }}</a><br>
-            Description: {{.Description}} <br>
-            ReadingTime: {{.ReadingTime}} min<br>
-            WordCount: {{.WordCount}} <br>
-            Tags: {{.Params.tags}} <br>
-            Categories: {{.Params.categories}} <br>
-          </li>
-          {{ end }}
-        </ul>
-        {{ end }}
+ <div class="row">
+  <div class="four wide column"></div>
+ 	<div class="eight wide column">
+    <!---{{if not .IsHome }}
+    <h1>{{ .Title }}</h1>
+    {{ end }}--->
+    <br>
+    <h1 class = "ui dividing header">
+      Blog Posts
+    </h1>
+    <!--- blog posts ---->
+    <div class="ui animated divided selection list">
+      {{ range (where .Data.Pages "Section" "!=" "") }}
+      <a class="item" href="{{ .URL }}">
+      	<div class="ui blue ribbon label">
+      		{{ .Date.Format "2006-01-02" }}
         </div>
-        <div class="two wide column"></div>
-      </div>
+        <h3 class="ui header">
+        	{{ .Title }}
+      	<div class="ui mini horizontal list">
+      	  {{range .Params.tags}}
+      	  <div class="item">
+      	    <div class="ui horizontal label">
+      		    <i class="tag icon"></i> 
+      		    {{ . }}
+      	    </div>
+          </div>
+			    {{end}}
+        </div>	                  	
+        <div class="sub header" style = "color:#A0A0A0;">
+          {{.Description}}
+          ... ({{.ReadingTime}} min read)
+        </div>
+        </h3>
+      </a>
+      {{ end }}
     </div>
+  <!--- END OF BLOG ---->
+  </div>
+  <div class="four wide column"></div>
+</div>
 
 {{ partial "footer.html" . }}

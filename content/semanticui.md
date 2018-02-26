@@ -1,5 +1,7 @@
+---
+title: Semantic UI
+---
 
-# Web Development
 
 * [code-mentor](https://www.codementor.io/)
 * [blogdown for websites](https://bookdown.org/yihui/blogdown/)

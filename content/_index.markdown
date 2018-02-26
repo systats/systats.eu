@@ -1,45 +1,38 @@
 ---
-title: Home
+title: Social Data Science
 ---
 
-  <div class="ui inverted vertical center aligned segment">
-    <br>
-    <br>
-    <div class="ui text container">
-      <h1 class="ui inverted header">
-          Social Data Science
+<br>
+<div class = "ui center aligned grid">
+  <div class="middle aligned row">
+    <div class = "twelve wide column">
+      <h1 class="ui header">
+        Hi!
       </h1>
-      <h2>Simon's Blog</h2>
-      <br>
-    </div>
+      <h2 class="ui medium header">
+        In the following you find a short overview of my research fields ...
+      </h2>
+    </div>  
   </div>
-  <br>
-  <!---page grid--->
-  <div class="ui grid">
-    <div class="row">
-      <div class="two wide column"></div>
-      <div class="twelve wide column">
-      <!---first content--->
-      <div class="ui vertical stripe segment" id="work">
-          <div class="ui middle aligned stackable grid container">
-              <div class="row">
-                  <div class="eight wide column">
-                      <h3 class="ui header">We Help Companies and Companions</h3>
-                      <p>We can give your company superpowers to do things</p>
-                      <h3 class="ui header"> We Make Bananas That Can Dance</h3>
-                      <p>Yes that's right, you thought it was the stuff of dreams</p>
-                  </div>
-                  <div class="six wide right floated column">
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="center aligned column">
-                      <a class="ui huge button" href = "/semanticui/">Check Them Out</a> <br><br><br><br>
-                  </div>
-              </div>
+</div>
+<br>
+<br>
+<!---first content--->
+<div class="row">
+  <div class="ui equal width center aligned padded grid">
+    <div class="column">
+      <h2 class="ui icon header">
+        <i class="code icon"></i>
+        <div class="content">
+          Web Development
+          <div class="sub header">Manage your account settings and set e-mail preferences.</div>
           </div>
+        </h2>
+      </div>
+      <div class="column">
+      </div>
+      <div class="column">
       </div>
     </div>
-    <div class="two wide column"></div>
   </div>
 </div>

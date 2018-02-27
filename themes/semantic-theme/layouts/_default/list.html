@@ -12,8 +12,8 @@
     <h1 class = "ui dividing header">
       Blog Posts
     </h1>
-    <!--- blog posts ---->
-    <div class="ui animated divided selection list">
+    <!--- blog posts <divided>---->
+    <div class="ui animated selection list">
       {{ range (where .Data.Pages "Section" "!=" "") }}
       <a class="item" href="{{ .URL }}">
       	<div class="ui blue ribbon label">

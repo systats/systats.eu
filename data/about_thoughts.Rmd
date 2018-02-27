@@ -1,0 +1,118 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+## BEST
+
+* [Custom JavaScript visualizations in RMarkdown](http://livefreeordichotomize.com/2017/01/24/custom-javascript-visualizations-in-rmarkdown/)
+
+
+## Tensorflow King
+
+* Which feature is important to predict that individual case? sentiment extraction. 
+* tfruns -> recode/ logs all params, for all model runs for experimentation outout is a dataframe/ compare/visualize shiny to identify aspects for resulting in diffrent performen results via flags
+*cloadml -> yaml hparams definition for cloud with different customiable flag consfigurations. 
+* deployment in shiny app. 
+* deaplearn js for tensorlfow. 
+* Deep Learning with R -> all examples.
+
+
+
+* fraud detection or anonamly detection for good prediction accuracy on highly inbalenced data. 
+
+
+## REST
+
+
+Hi, I’m Jon Gauthier.
+
+
+
+
+I’m a bioinformatician/computational biologist turned data scientist who focuses on improving researchers interactions with the data they produce. I develop visualizations, frameworks and GUI’s as well as related tools (mostly in R). I’m currently employed by SKAT as a data scientist.
+
+I’m on twitter (@thomasp85) and GitHub mainly, though you can also reach me on LinkedIn. My posts about R are published on R-Bloggers together with a lot of other amazing R related content.
+
+Are you interested in R courses or training - do reach out and we’ll see if we can make it work!
+
+There should probably be some more about me here, but it must be added another day…
+
+
+XMin is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the blogdown book. Basically I wanted a simple theme that supports a navigation menu, a home page, other single pages, lists of pages, blog posts, categories, tags, and RSS. That is all. Nothing fancy. In terms of CSS and JavaScript, I really want to keep them minimal. In fact, this theme does not contain any JavaScript code at all, although on this example website I did introduce some JavaScript code (still relatively simple anyway). The theme does not contain any images, either, and is pretty much a plain-text theme.
+
+The theme name “XMin” can be interpreted as “Xie’s Minimal theme” (Xie is my last name) or “eXtremely Minimal theme”.
+
+
+
+[Nice Web Toruials](https://www.youtube.com/user/21dtrg/playlists)
+
+https://alison.rbind.io/#teaching
+
+https://cdnjs.com/libraries/semantic-ui
+
+
+* [Tidyverse committment](http://paulaandrea.rbind.io/project/tidyverse-workshops/)
+* [`book Field Guide to the R Ecosystem](http://fg2re.sellorm.com/)
+* [Talk: R *is* Production Safe](http://blog.sellorm.com/2016/11/26/talk-r-is-production-safe/)
+
+## Off Topic but Nice Data Science Posts:
+
+* [Oktoberfest party stats](https://gresch.github.io/2017/09/14/201701oktoberfest1985-2016/)
+
+
+
+
+
+* *The LASSO:** also known as Least Absolute Shrinkage and Selection Operator), is a regression model that does variable selection and regularization. The LASSO model uses a parameter that penalizes fitting too many variables. It allows the shrinkage of variable coefficients to 0, which essentially results in those variables having no effect in the model, thereby reducing dimensionality. Since there are quite a few explanatory variables, reducing the number of variables may increase interpretability and prediction accuracy.
+
+* *Random Forest:** A more advanced model, the random forest uses multiple decision trees and gives the mean prediction of each tree. This is somewhat of a black box approach as the random forest mechanism is not very clear as it will give model results, but lack information on coefficients which is something we normally get from an output of a regression model. However, the random forest model is a great general purpose algorithm that has potential to make quite accurate predictions. Random forests can be quite robusts against outliers and do not require assumptions of normality.
+
+* *GBM Gradient:** boosting models are one of the most popular algorithms on Kaggle. A variant of GBMs known as the XGBoost has been a clear favorite for many recent competitions. The algorithm works well right out of the box. It is a type of ensemble model, like the random forest, where multiple decision trees are used and optimized over some cost function. The popularity and ability to score well in competition are reasons enough to use this type of model for house price prediction problem.
+
+* *Neural Networks:** Neural nets have recently been popularized in the media especially for their use in deep learning. Neural networks mimic the function of a human brain. There are multiple layers containing neurons. Inputs into each layer become the output for the subsequent layer until there are no additional layers. Neural networks are useful in this problem because they can take complex datasets and find patterns. This model can be useful when dealing with mixed variable type datasets.
+
+* **Ensemble Model/Model Averaging:** The last type of model used was the ensemble model, specifically model averaging. Several models are created that perform relaively well on the problem and the predictions are averaged. In this case, all the models above were used to create an average prediction. The reason for using this model was that the recent Kaggle winners used ensemble models. It is not surprising that most winning submissions are ensembles because one can leverage the prediction power of several different models to obtain the highest prediction accuracy.
+
+
+* [nice data science company dashboard advertisment](https://www.emarsys.com/en-uk/products/analytics/)
+
+* [Leveraging uncertainty information from deep neural networks for disease detection - a summary](http://livefreeordichotomize.com/2017/12/24/leveraging-uncertainty-information-from-deep-neural-networks-for-disease-detection---a-summary/)
+* Randomly walking my way though a career in statistics
+* [LSTM neural nets as told by baseball](http://livefreeordichotomize.com/2017/11/08/lstm-neural-nets-as-told-by-baseball/)
+* [Commentary and follow up to p<0.005 suggestion](http://livefreeordichotomize.com/2017/09/25/commentary-and-follow-up-to-p-0-005-suggestion/)
+* [Why you maybe shouldn't care about that p-value](http://livefreeordichotomize.com/2017/08/14/why-you-maybe-shouldnt-care-about-that-p-value./)
+
+
+```{r}
+devtools::install_github("nstrayer/shinysense")
+library(shiny)
+library(shinysense)
+?shinydrawr
+?shinydrawrUI
+```
+
+
+* [The dire consequences of tests for linearity](http://livefreeordichotomize.com/2017/02/18/the-dire-consequences-of-tests-for-linearity/)
+* [Wait, what are P-values?](http://livefreeordichotomize.com/2016/12/24/wait-what-are-p-values/)
+* [HOW TO FOLLOW AND ENGAGE WITH THE R COMMUNITY](https://aebou.rbind.io/post/beginr_follow/)
+* [monkeylearn text mining docs](https://monkeylearn.com/blog/)
+* [DALEX: how would you explain this prediction?](https://www.r-bloggers.com/dalex-how-would-you-explain-this-prediction/)
+* [earlconf](https://earlconf.com/)
+* [A comparison between spaCy and UDPipe for Natural Language Processing for R users](https://www.r-bloggers.com/a-comparison-between-spacy-and-udpipe-for-natural-language-processing-for-r-users/)
+
+Welcome on my website, where I’ll showcase my work and some data analysis/R. My posts are syndicated on R-bloggers.
+
+* [NLP Blog](http://www.foldl.me/posts/)
+* [good portfolio](http://www.districtdatalabs.com/data-science-training/)
+* [Course Overview](https://www.jumpingrivers.com/courses#analytics)
+* [simple and scalable statistical modelling in R](https://github.com/goldingn/greta) based on tensorflow
+
+
+
+
+```{r}
+greta::install_tensorflow()
+```
+

@@ -1,0 +1,316 @@
+---
+title: "components"
+author: "Simon Roth"
+date: "1 März 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+#pacman::p_load_gh("rstudio/keras")
+#pacman::p_load_gh("systats/tidyTX", install = T)
+#devtools::install_github("systats/tidyTX")
+pacman::p_load(dplyr, stringr, manifestoR, purrr, keras, tidyr, tidytext, tidyTX, keras)
+# keras::install_keras()
+```
+
+
+* http://colah.github.io/posts/2015-01-Visualizing-Representations/
+
+```{r}
+#tokenizer <- load_text_tokenizer("tokenizer")
+glove_fit <- load_model_hdf5("glove_fit.h5")
+lstm_fit <- load_model_hdf5("lstm_fit.h5")
+load("test_seq.Rdata")
+load("test.Rdata")
+```
+
+
+```{r}
+#plot(glove_hist)
+preds <- tx_keras_predict(test_seq, glove_fit, 1) %>% as.vector()
+caret::confusionMatrix(preds, test$party_id)
+```
+
+```{r}
+tx_confusion(preds, test$party_id)
+tx_confusion(preds, test$party_id, lib = "")
+```
+
+```{r}
+#plot(glove_hist)
+lstm_preds <- tx_keras_predict(test_seq, lstm_fit, 1) %>% as.vector()
+caret::confusionMatrix(lstm_preds, test$party_id)
+tx_confusion(lstm_preds, test$party_id)
+```
+
+
+## Word Embeddings
+
+```{r, eval = F}
+library(dplyr)
+
+embedding_matrix <- get_weights(lstm_fit)[[1]]
+
+words <- data_frame(
+  word = names(tokenizer$word_index), 
+  id = as.integer(unlist(tokenizer$word_index))
+)
+
+words <- words %>%
+  filter(id <= tokenizer$num_words) %>%
+  arrange(id)
+
+dim(words)
+row.names(embedding_matrix) <- c(words$word)
+
+```
+
+```{r, eval = F}
+library(text2vec)
+
+find_similar_words <- function(word, embedding_matrix, n = 5) {
+  similarities <- embedding_matrix[word, , drop = FALSE] %>%
+    sim2(embedding_matrix, y = ., method = "cosine")
+  
+  similarities[,1] %>% sort(decreasing = TRUE) %>% head(n)
+}
+find_similar_words("Klimawandel", embedding_matrix)
+```
+
+
+
+```{r, eval = F}
+library(Rtsne)
+library(ggplot2)
+library(plotly)
+
+tsne <- Rtsne(embedding_matrix[2:500,], perplexity = 50, pca = FALSE)
+
+tsne_plot <- tsne$Y %>%
+  as.data.frame() %>%
+  mutate(word = row.names(embedding_matrix)[2:500]) %>%
+  ggplot(aes(x = V1, y = V2, label = word)) + 
+  geom_text(size = 3)
+tsne_plot
+#plotly::ggplotly()
+
+df1 <- tsne$Y %>%
+  as.data.frame() %>%
+  rename(dim1 = V1, dim2 = V2) %>%
+  mutate(word = row.names(embedding_matrix)[2:500]) 
+
+
+library(highcharter)
+hchart(df1, hcaes(x = dim1, y = dim2, name = word), type = 'scatter', color = "#2A1EB0") %>%
+  hc_add_theme(hc_theme_smpl()) %>%
+  hc_tooltip(
+    formatter = JS("function(){
+                    return ('Word: <strong>' + this.point.word + '</strong><br> Dim1: ' + this.x + ' <br> Dim1: ' + this.y + ' <br>')
+                  }")) %>%
+  hc_chart(zoomType = "xy")
+```
+
+
+
+
+
+
+## new
+
+```{r}
+
+library(ggplot2)
+### Greens
+"Wir sind die erste Generation, die an den Folgen der Klimaerhitzung leidet. Und die letzte, die noch etwas dagegen tun kann. Vom Elektroauto bis zur Integration, von nachhaltiger Wirtschaft bis zum Datenschutz. Damit wir auch morgen gut leben können." %>% 
+  str_to_lower() %>% 
+  tx_keras_predict_one(token_fun = tokenizer, model = glove_fit, string = .) %>%
+  rename(greens = V1, left = V2, spd = V3, fdp = V4, cdu = V5) %>%
+  tidyr::gather("party", "prob") %>%
+  mutate(party = factor(party, levels = unique(party))) %>%
+  ggplot(aes(party, prob, fill = party)) +
+  geom_bar(stat = "identity", alpha = .7) +
+  ggplot2::scale_fill_manual("", values = c("#46962b", 
+    "#8B1A1A", "#E2001A", "#ffed00", "black")) +
+  ggthemes::theme_hc()
+```
+
+## Structure of classifiers
+
+```{r}
+structure <- list(
+  list(id = "glove", t = tokenizer, m = glove_fit),
+  list(id = "lstm", t = tokenizer, m = lstm_fit1),
+  list(id = "lstm2", t = tokenizer, m = lstm_fit1)
+)
+
+test <- "Wir sind die erste Generation, die an den Folgen der Klimaerhitzung leidet. Und die letzte, die noch etwas dagegen tun kann. Vom Elektroauto bis zur Integration, von nachhaltiger Wirtschaft bis zum Datenschutz. Damit wir auch morgen gut leben können." 
+
+preds_str <- tx_keras_predict_str(test, str = structure)
+colnames(preds_str)[1:5] <- party_abbrev[1:5]
+preds_str %>%
+  tx_plot_party_str(plotly = F)
+```
+
+```{r}
+
+tx_plot_party_str <- function (x, plotly = F) 
+{
+  if (!plotly) {
+    x %>% tidyr::gather("party", "prob", -model) %>% dplyr::mutate(party = factor(party, 
+      levels = unique(party))) %>% ggplot2::ggplot(ggplot2::aes(party, 
+      prob, alpha = model, fill = party)) + ggplot2::geom_bar(stat = "identity", 
+      position = "dodge") + ggplot2::geom_text(ggplot2::aes(label = model), 
+      position = ggplot2::position_dodge(width = 0.9), 
+      vjust = -0.25) + ggplot2::scale_alpha_discrete(range = c(0.5, 
+      0.9)) + ggplot2::scale_fill_manual("", values = c("#46962b", 
+      "#8B1A1A", "#E2001A", "#ffed00", "black")) + ggthemes::theme_hc()
+  }
+  else {
+    gg <- x %>% tidyr::gather("party", "prob", -model) %>% 
+      dplyr::mutate(party = factor(party, levels = unique(party))) %>% 
+      ggplot2::ggplot(ggplot2::aes(party, prob, alpha = model, 
+        fill = party)) + ggplot2::geom_bar(stat = "identity", 
+      position = "dodge") + ggplot2::scale_alpha_discrete(range = c(0.5, 
+      0.9)) + ggplot2::scale_fill_manual("", values = c("#46962b", 
+      "#8B1A1A", "#E2001A", "#ffed00", "black")) + ggthemes::theme_hc()
+    plotly::ggplotly(gg, width = 800)
+  }
+}
+
+preds_str %>%
+  tx_plot_party_str(plotly = T)
+```
+
+
+
+## HC attempts
+
+```{r}
+colstops <- data.frame(
+  q = 1:5,
+  c = 
+  ) %>%
+  list_parse()
+
+library("viridisLite")
+
+cols <- viridis(3)
+cols <- substr(cols, 0, 7)
+cols <- c("#46962b","#8B1A1A", "#E2001A", "#ffed00", "black")
+
+library(highcharter)
+preds_str %>%
+  tidyr::gather("party", "prob", -model) %>%
+      dplyr::mutate(party = factor(party, levels = unique(party))) %>%
+  dplyr::mutate(prob = round(prob, 2)) %>%
+  hchart("column", hcaes(x = party, y = prob, group = model, gr = model)) %>%
+  hc_colors(cols)
+```
+
+
+
+
+# H2O
+
+For benchmark models
+
+## word2vec
+
+```{r}
+library(text2vec)
+
+it_train <- train$batches %>%
+  itoken(
+    ids = train$id, 
+    progressbar = F
+  )
+
+vocab <- create_vocabulary(it_train)
+vectorizer <- vocab_vectorizer(vocab)
+
+t1 <- Sys.time()
+dtm_train <- create_dtm(it_train, vectorizer)
+print(difftime(Sys.time(), t1, units = 'sec'))
+```
+
+
+```{r}
+tx_get_dtm <- function(text, id, vec){
+  dtm <- text %>%
+    itoken(ids = id) %>% #, progressbar = FALSE
+    create_dtm(vec)
+  return(dtm)
+}
+dtm_test <- tx_get_dtm(test$batches, test$id, vec = vectorizer)
+```
+
+## H2O prep 
+
+```{r}
+pacman::p_load(h2o, slam, data.table)
+
+h2o.init()
+
+h2o_train <- as.h2o(dtm_train)
+y <- train$party_id %>% 
+  as.factor()
+
+h2o_train <- h2o.cbind(h2o_train, as.h2o(y))
+h2o_test <- as.h2o(dtm_test)
+
+target <- h2o::colnames(h2o_train)[length(h2o_train)]
+input <- setdiff(h2o::colnames(h2o_train), target)
+colnames(h2o_train) %>% tail
+```
+
+## GLM
+
+```{r}
+mf.glm <- h2o.glm(
+  x = input, 
+  y = target, 
+  training_frame = h2o_train,
+  family = "multinomial"
+)
+#h2o::h2o.saveModel(mf.glm, path = ".")
+```
+
+```{r}
+mf.glm <- h2o::h2o.loadModel("GLM_model_R_1520190640794_1")
+
+preds <- mf.glm %>% 
+  h2o.predict(h2o_test)
+
+# table(as.vector(preds$predict))
+caret::confusionMatrix(as.vector(preds$predict), test$party_id)
+```
+
+
+## GBM
+
+```{r}
+mf.gbm <- h2o.gbm(
+  x = input, 
+  y = target, 
+  training_frame = h2o_train,
+  distribution = "multinomial"
+)
+
+#h2o::h2o.saveModel(mf.gbm, path = ".")
+```
+
+
+```{r}
+mf.gbm <- h2o::h2o.loadModel("GBM_model_R_1520190640794_2")
+
+preds <- mf.gbm %>% 
+  h2o.predict(h2o_test)
+
+caret::confusionMatrix(as.vector(preds$predict), test$party_id)
+```
+

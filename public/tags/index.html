@@ -3,11 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css" />
     
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.js"></script>
+    
+    <script src="/js/highlight.pack.js"></script>
   </head>
   
   <body>
@@ -108,6 +111,20 @@
 <div class="ui large relaxed list">
  
  <div class="item">
+   <a href="/tags/glove">
+      <div class="ui right labeled button" tabindex="0">
+        <div class="ui button">
+          Glove
+        </div>
+        <div class="ui inverted blue left pointing label">
+          <i class="tags icon"></i> 
+          1
+        </div>
+      </div>
+    </a>
+  </div>
+  
+ <div class="item">
    <a href="/tags/highcharter">
       <div class="ui right labeled button" tabindex="0">
         <div class="ui button">
@@ -122,24 +139,10 @@
   </div>
   
  <div class="item">
-   <a href="/tags/markdown">
+   <a href="/tags/keras">
       <div class="ui right labeled button" tabindex="0">
         <div class="ui button">
-          Markdown
-        </div>
-        <div class="ui inverted blue left pointing label">
-          <i class="tags icon"></i> 
-          2
-        </div>
-      </div>
-    </a>
-  </div>
-  
- <div class="item">
-   <a href="/tags/mathjax">
-      <div class="ui right labeled button" tabindex="0">
-        <div class="ui button">
-          MathJax
+          Keras
         </div>
         <div class="ui inverted blue left pointing label">
           <i class="tags icon"></i> 
@@ -150,10 +153,10 @@
   </div>
   
  <div class="item">
-   <a href="/tags/pandoc">
+   <a href="/tags/lstm">
       <div class="ui right labeled button" tabindex="0">
         <div class="ui button">
-          Pandoc
+          LSTM
         </div>
         <div class="ui inverted blue left pointing label">
           <i class="tags icon"></i> 
@@ -171,20 +174,6 @@
         </div>
         <div class="ui inverted blue left pointing label">
           <i class="tags icon"></i> 
-          2
-        </div>
-      </div>
-    </a>
-  </div>
-  
- <div class="item">
-   <a href="/tags/rstudio">
-      <div class="ui right labeled button" tabindex="0">
-        <div class="ui button">
-          RStudio
-        </div>
-        <div class="ui inverted blue left pointing label">
-          <i class="tags icon"></i> 
           1
         </div>
       </div>
@@ -192,52 +181,10 @@
   </div>
   
  <div class="item">
-   <a href="/tags/tutorial">
+   <a href="/tags/tensorflow">
       <div class="ui right labeled button" tabindex="0">
         <div class="ui button">
-          Tutorial
-        </div>
-        <div class="ui inverted blue left pointing label">
-          <i class="tags icon"></i> 
-          1
-        </div>
-      </div>
-    </a>
-  </div>
-  
- <div class="item">
-   <a href="/tags/blogdown">
-      <div class="ui right labeled button" tabindex="0">
-        <div class="ui button">
-          blogdown
-        </div>
-        <div class="ui inverted blue left pointing label">
-          <i class="tags icon"></i> 
-          1
-        </div>
-      </div>
-    </a>
-  </div>
-  
- <div class="item">
-   <a href="/tags/plot">
-      <div class="ui right labeled button" tabindex="0">
-        <div class="ui button">
-          plot
-        </div>
-        <div class="ui inverted blue left pointing label">
-          <i class="tags icon"></i> 
-          1
-        </div>
-      </div>
-    </a>
-  </div>
-  
- <div class="item">
-   <a href="/tags/regression">
-      <div class="ui right labeled button" tabindex="0">
-        <div class="ui button">
-          regression
+          TensorFlow
         </div>
         <div class="ui inverted blue left pointing label">
           <i class="tags icon"></i> 
@@ -323,6 +270,7 @@
     <script>
       $('.ui.dropdown').dropdown();
       $('.tabular.menu .item').tab();
+      hljs.initHighlightingOnLoad();
     </script>
   </body>
   

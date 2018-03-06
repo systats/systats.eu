@@ -1,0 +1,282 @@
+---
+title: "Text Classification in R"
+date: '`r Sys.Date()`'
+categories: ["R", "ML", "NLP", "Text"]
+tags: ["keras", "TensorFlow", "H2O", "text2vec"]
+description: "This post is an Rmarkdown example for using highcharter in blogdown post."
+output: 
+  md_document:
+    preserve_yaml: true
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, error = F)
+```
+
+* https://www.datacamp.com/community/tutorials/keras-r-deep-learning
+
+
+## Load Packages
+
+```{r packs}
+#pacman::p_load_gh("rstudio/keras")
+#pacman::p_load_gh("systats/tidyTX", install = T)
+#devtools::install_github("systats/tidyTX")
+pacman::p_load(dplyr, stringr, manifestoR, purrr, keras, tidyr, tidytext, tidyTX, keras, ggplot2, viridis, ggthemes)
+# keras::install_keras()
+```
+
+
+## Load data by `manifestoR`
+
+```{r manifesto, eval = F}
+mkey <- "c1d709849c34e15130f9052699c214af"
+mp_setapikey(key = mkey)
+
+# edate = Day, month, and year of national election
+df <- mp_corpus(
+    countryname == "Germany" &
+    edate > as.Date("2002-01-01")
+  ) %>%
+  tidy()
+```
+
+```{r ldata, echo = F}
+#save(df, file = "data/df.Rdata")
+load("data/df.Rdata")
+```
+
+```{r}
+glimpse(df)
+```
+
+
+## clean text data
+
+* [Regular Expressions as used in R](https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html)
+
+
+```{r mapping}
+party_dict <- list(
+"greens"= c("Green Party", "1", "41113", "#46962b"),
+"left" = c("The Left", "2", "41223", "#8B1A1A"),
+"spd" = c("SPD", "3", "41320", "#E2001A"),
+"fdp" = c("FDP", "4", "41420", "#ffed00"),
+"union" = c("CDU/CSU", "5",  "41521", "black")
+#"41953" = c("AfD", "6", "afd", "#1C86EE")
+)
+
+party_abbrev <- names(party_dict)
+party_name <- map_chr(party_dict, function(x) x[1])
+party_index <- map_chr(party_dict, function(x) x[2])
+party_id <- map_chr(party_dict, function(x) x[3])
+party_cols <- map_chr(party_dict, function(x) x[4])
+
+
+df$party_names <- tx_map_dict(df$party, party_dict, key1 = 3, key2 = 1)
+df$party_id <- tx_map_dict(df$party, party_dict, key1 = 3, key2 = 2)
+```
+
+
+```{r clean}
+maxlen <- 30
+
+sp_de <-read.table("data/german_stopwords_cust.txt", skip = 9, stringsAsFactors = F) %>%
+  rename(words = V1)
+
+df_clean <- df %>%
+  #sample_n(size = 1000) %>%
+  select(party_id, date, id, text) %>%
+  mutate(text = text %>%
+    tx_replace_punc() %>%
+    #str_replace_all("[[:digit:]]|[[:punct:]]", " ") %>%
+    tidyTX::tx_spacing()
+  ) %>% 
+  # unnest_tokens(unit, text, token = "sentences") %>%
+  unnest_tokens(words, text, token = "words") %>%
+  ### build batches from one-token-per-row df
+  group_by(party_id) %>%
+  # generate splitting id (seq)
+  dplyr::mutate(seq = seq_along(words) %/% maxlen) %>%
+  #ungroup() %>%
+  group_by(party_id, seq) %>%
+  summarise(text = paste(words, collapse = " ")) %>%
+  ungroup() %>%
+  ### exclude AfD 6 due to less data
+  mutate(party_id = party_id %>% as.numeric) %>% 
+  filter(party_id %in% 1:5) %>%
+  ### kick statments shorter than 5 words
+  mutate(nwords = tx_n_tokens(text)) %>%
+  filter(nwords > 5) %>%
+  ### Downsample green party statments
+  group_by(party_id) %>%
+  sample_n(size = 4000) %>%
+  ungroup() %>% 
+  ### give a reliabel
+  mutate(id = 1:n()) %>%
+  tx_discard_tokens(text = "text", dict = sp_de, purrr = T) %>%
+  ### randomize order of statments from parties
+  arrange(sample(1:length(id), length(id)))
+
+print(object.size(df_clean), standard = "SI", units = "MB")
+df_clean
+```
+
+
+## Train & Test Set 
+
+```{r split}
+set.seed(2018)
+df_clean$split_id <- sample(1:2, size = nrow(df_clean), replace = T, prob=c(.9, .1))
+train <- df_clean %>% filter(split_id %in% 1)
+test <- df_clean %>% filter(split_id == 2)
+```
+
+
+# Keras
+
+## Text Preprocessing
+
+```{r vocab}
+### vocabluary size
+library(ggplot2)
+train %>%
+  unnest_tokens(words, ctext) %>%
+  select(words) %>%
+  group_by(words) %>%
+  tally %>%
+  ggplot(aes(n)) +
+  geom_histogram() +
+  xlim(0, 100) 
+```
+
+
+
+```{r prekeras}
+max_features <- 20000 # top most common words
+batch_size <- 32
+#maxlen <- 20 # Cut texts after this number of words (called earlier)
+
+#tokenizer <- text_tokenizer(num_words = max_features)
+#fit_text_tokenizer(tokenizer, x = train$ctext)
+#keras::save_text_tokenizer(tokenizer, "data/tokenizer")
+tokenizer <- keras::load_text_tokenizer("data/tokenizer")
+
+train_seq <- tx_text_to_seq(
+  token_fun = tokenizer,
+  string = train$ctext,
+  maxlen = maxlen
+)
+
+test_seq <- tx_text_to_seq(
+  token_fun = tokenizer,
+  string = test$ctext,
+  maxlen = maxlen
+)
+```
+
+
+## fasttext Model
+
+```{r}
+glove_fit <- keras_model_sequential() %>%
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+    ) %>%
+  layer_global_average_pooling_1d() %>%
+  layer_dense(5, activation = "sigmoid") %>%
+  compile(
+    loss = "binary_crossentropy",
+    optimizer = "adam",
+    metrics = "accuracy"
+  )
+
+summary(glove_fit)
+```
+
+```{r, eval = F}
+glove_hist <- glove_fit %>% 
+  keras::fit(
+    x = train_seq, 
+    y = tx_onehot(train$party_id),
+    batch_size = batch_size,
+    epochs = 5, 
+    validation_split = .2
+  )
+```
+
+
+```{r, echo = F}
+#keras::save_model_hdf5(glove_fit, "data/glove_fit.h5", include_optimizer = F, overwrite = T)
+glove_fit <- load_model_hdf5("data/glove_fit.h5")
+```
+
+
+```{r pred1}
+#plot(glove_hist)
+preds_glove <- glove_fit %>%
+  tx_keras_predict(test_seq, 1) %>% 
+  as.vector()
+
+caret::confusionMatrix(preds_glove, test$party_id)
+tx_confusion(x = preds_glove, y = test$party_id, lib = "gg")
+```
+
+
+## LSTM model
+
+```{r}
+lstm_fit <- keras_model_sequential() %>%
+  ### model arch
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+  ) %>% 
+  layer_lstm(units = 64, dropout = 0.3, recurrent_dropout = 0.1) %>% 
+  layer_dense(units = 5, activation = 'sigmoid') %>%
+  ### compiler
+  compile(
+    loss = 'binary_crossentropy',
+    optimizer = 'adam',
+    metrics = c('accuracy')
+  )
+
+summary(lstm_fit)
+```
+
+```{r, eval = F}
+lstm_hist <- lstm_fit %>% 
+  keras::fit(
+    x = train_seq, 
+    y = tx_onehot(train$party_id),
+    batch_size = batch_size,
+    epochs = 3,
+    validation_split = .2
+  )
+```
+
+
+```{r, echo = F, eval = T}
+#keras::save_model_hdf5(lstm_fit, "data/lstm_fit.h5", include_optimizer = F, overwrite = T)
+lstm_fit <- keras::load_model_hdf5("data/lstm_fit.h5")
+```
+
+
+```{r fit2, eval = T}
+# tx_keras_plot(lstm_hist)
+preds_lstm <- lstm_fit %>% 
+  tx_keras_predict(test_seq, 1)
+
+nn <- tibble(preds_lstm, test$party_id) %>%
+  mutate(real = preds_lstm == test$party_id)
+prop.table(table(nn$real))
+#dm[[3]] %>% hist
+
+caret::confusionMatrix(preds_lstm, test$party_id)
+tx_confusion(x = preds_lstm, y = test$party_id, lib = "gg", info = F)
+```
+

@@ -3,11 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css" />
     
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.js"></script>
+    
+    <script src="/js/highlight.pack.js"></script>
   </head>
   
   <body>
@@ -115,9 +118,53 @@
     
     <div class="ui animated selection list">
       
-      <a class="item" href="/post/2018/02/26/blogdown-highcharter-and-r-markdown/">
+      <a class="item" href="/post/2018/03/06/text-classification-in-r/">
       	<div class="ui blue ribbon label">
-      		2018-02-26
+      		2018-03-06
+        </div>
+        <h3 class="ui header">
+        	Text Classification in R
+      	<div class="ui mini horizontal list">
+      	  
+      	  <div class="item">
+      	    <div class="ui horizontal label">
+      		    <i class="tag icon"></i> 
+      		    Keras
+      	    </div>
+          </div>
+			    
+      	  <div class="item">
+      	    <div class="ui horizontal label">
+      		    <i class="tag icon"></i> 
+      		    TensorFlow
+      	    </div>
+          </div>
+			    
+      	  <div class="item">
+      	    <div class="ui horizontal label">
+      		    <i class="tag icon"></i> 
+      		    Glove
+      	    </div>
+          </div>
+			    
+      	  <div class="item">
+      	    <div class="ui horizontal label">
+      		    <i class="tag icon"></i> 
+      		    LSTM
+      	    </div>
+          </div>
+			    
+        </div>	                  	
+        <div class="sub header" style = "color:#A0A0A0;">
+          This post is an Rmarkdown example for using highcharter in blogdown post.
+          ... (7 min read)
+        </div>
+        </h3>
+      </a>
+      
+      <a class="item" href="/post/2018/03/05/blogdown-highcharter-and-r-markdown/">
+      	<div class="ui blue ribbon label">
+      		2018-03-05
         </div>
         <h3 class="ui header">
         	Blogdown, Highcharter and R Markdown
@@ -148,117 +195,6 @@
         <div class="sub header" style = "color:#A0A0A0;">
           This post is an Rmarkdown example for using highcharter in blogdown post.
           ... (2 min read)
-        </div>
-        </h3>
-      </a>
-      
-      <a class="item" href="/post/2016/02/14/a-plain-markdown-post/">
-      	<div class="ui blue ribbon label">
-      		2016-02-14
-        </div>
-        <h3 class="ui header">
-        	A Plain Markdown Post
-      	<div class="ui mini horizontal list">
-      	  
-      	  <div class="item">
-      	    <div class="ui horizontal label">
-      		    <i class="tag icon"></i> 
-      		    blogdown
-      	    </div>
-          </div>
-			    
-      	  <div class="item">
-      	    <div class="ui horizontal label">
-      		    <i class="tag icon"></i> 
-      		    Markdown
-      	    </div>
-          </div>
-			    
-      	  <div class="item">
-      	    <div class="ui horizontal label">
-      		    <i class="tag icon"></i> 
-      		    MathJax
-      	    </div>
-          </div>
-			    
-      	  <div class="item">
-      	    <div class="ui horizontal label">
-      		    <i class="tag icon"></i> 
-      		    Pandoc
-      	    </div>
-          </div>
-			    
-      	  <div class="item">
-      	    <div class="ui horizontal label">
-      		    <i class="tag icon"></i> 
-      		    RStudio
-      	    </div>
-          </div>
-			    
-        </div>	                  	
-        <div class="sub header" style = "color:#A0A0A0;">
-          
-          ... (3 min read)
-        </div>
-        </h3>
-      </a>
-      
-      <a class="item" href="/post/2015/07/23/hello-r-markdown/">
-      	<div class="ui blue ribbon label">
-      		2015-07-23
-        </div>
-        <h3 class="ui header">
-        	Hello R Markdown
-      	<div class="ui mini horizontal list">
-      	  
-      	  <div class="item">
-      	    <div class="ui horizontal label">
-      		    <i class="tag icon"></i> 
-      		    R Markdown
-      	    </div>
-          </div>
-			    
-      	  <div class="item">
-      	    <div class="ui horizontal label">
-      		    <i class="tag icon"></i> 
-      		    plot
-      	    </div>
-          </div>
-			    
-      	  <div class="item">
-      	    <div class="ui horizontal label">
-      		    <i class="tag icon"></i> 
-      		    regression
-      	    </div>
-          </div>
-			    
-        </div>	                  	
-        <div class="sub header" style = "color:#A0A0A0;">
-          good save the fallen angels
-          ... (1 min read)
-        </div>
-        </h3>
-      </a>
-      
-      <a class="item" href="/post/2015/07/23/lorem-ipsum/">
-      	<div class="ui blue ribbon label">
-      		2015-07-23
-        </div>
-        <h3 class="ui header">
-        	Lorem Ipsum
-      	<div class="ui mini horizontal list">
-      	  
-      	  <div class="item">
-      	    <div class="ui horizontal label">
-      		    <i class="tag icon"></i> 
-      		    Markdown
-      	    </div>
-          </div>
-			    
-        </div>	                  	
-        <div class="sub header" style = "color:#A0A0A0;">
-          
-          ... (3 min read)
         </div>
         </h3>
       </a>
@@ -327,6 +263,7 @@
     <script>
       $('.ui.dropdown').dropdown();
       $('.tabular.menu .item').tab();
+      hljs.initHighlightingOnLoad();
     </script>
   </body>
   

@@ -6,29 +6,18 @@
     <description>Recent content in R Markdown on Simon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 26 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 05 Mar 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/r-markdown/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Blogdown, Highcharter and R Markdown</title>
-      <link>/post/2018/02/26/blogdown-highcharter-and-r-markdown/</link>
-      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
+      <link>/post/2018/03/05/blogdown-highcharter-and-r-markdown/</link>
+      <pubDate>Mon, 05 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/2018/02/26/blogdown-highcharter-and-r-markdown/</guid>
+      <guid>/post/2018/03/05/blogdown-highcharter-and-r-markdown/</guid>
       <description>First Header library(&amp;quot;highcharter&amp;quot;) ## Highcharts (www.highcharts.com) is a Highsoft software product which is ## not free for commercial and Governmental use data(diamonds, mpg, package = &amp;quot;ggplot2&amp;quot;) hchart(mpg, &amp;quot;scatter&amp;quot;, hcaes(x = displ, y = hwy, group = class))  {&#34;</description>
-    </item>
-    
-    <item>
-      <title>Hello R Markdown</title>
-      <link>/post/2015/07/23/hello-r-markdown/</link>
-      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
-      
-      <guid>/post/2015/07/23/hello-r-markdown/</guid>
-      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
     </item>
     
   </channel>

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css" />
+    
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.js"></script>
+    
+    <script src="/js/highlight.pack.js"></script>
+  </head>
+  
+  <body>
+    <div class="ui container">
+      <div class="ui top fixed inverted compact icon menu">
+      
+        
+        <a class="item" href="/">
+  <i class="large home icon"></i>
+  Home
+</a>
+
+<div class="ui dropdown item">
+  <i class="code icon"></i>
+  Web Developement
+  <i class="dropdown icon"></i>
+  <div class="menu">
+    <a class="item">
+      <img class = "ui top aligned right floated image" src="http://hexb.in/hexagons/shiny.png">
+      <div class="content">
+        <h5 class="ui header">
+          Shiny Apps
+          <div class="gray sub header">Web Applicationin R</div>
+        </h5>
+      </div>
+    </a>
+    <a class="item" href="/semanticui/">
+      <img class = "ui tiny right floated middle aligned image" src="https://semantic-ui.com/images/logo.png">
+      <div class="content">
+        <h5 class="ui header">
+          Semantic UI
+          <div class="gray sub header">Beautiful Web</div>
+        </h5>
+      </div>
+    </a>
+  </div>
+</div>
+<div class="right compact menu">
+  <a class="item" href="/teaching/">
+    <i class="graduation icon"></i>
+    Teaching
+  </a>
+  <div class="ui dropdown item">
+    <i class="archive icon"></i>
+    Blog Archive
+    <i class="dropdown icon"></i>
+    <div class="menu">
+      <a class="item" href="/categories/">
+        <i class="tag icon"></i>  
+        Categories
+      </a>
+      <a class="item" href="/tags/">
+        <i class="tags icon"></i>  
+        Tags
+      </a>
+    </div>
+  </div>
+  <a class="item" href="/about/">About</a>
+</div>
+
+
+
+
+
+
+
+      </div>
+      <br>
+      <br>
+    </div>
+      <div class="ui inverted vertical center aligned segment">
+    <br>
+    <br>
+    <div class="ui text container">
+      <h1 class="ui inverted header", style = "font-size:40px">
+        Text Classification in R
+      </h1>
+      <br>
+      <br>
+      <br>
+    </div>
+  </div>
+  <br>
+  
+  <div class="ui grid">
+    <br>
+    <div class="three wide column"></div>
+    <div class="ten wide column">
+        
+
+
+
+    
+
+<div class="article-meta">
+<h1><span class="title">Text Classification in R</span></h1>
+
+
+</div>
+
+<main>
+  <p>Today’s tutorial will cover how to perform text classification with <code>keras</code> (build on top of tensorflow). This is a fairly new but incrediable experience for R users who have been limited in the past to more high level machine learning liberaries like <code>caret</code> and <code>h2o</code>. These packages are great for a varity of machine learning tasts by the magic ensemble learning and hyperparameter grid search infrastructure from <code>h2o</code>. Despite some good feed forward networks, natural language or computer vision tasks require more complex network archetectures to learn informativ low dimensional features.</p>
+<div id="load-packages" class="section level2">
+<h2>Load Packages</h2>
+<p>If you want to reproduce this code you can get the corresponding github repo with all the code here. For more convienence the package management library <code>pacman</code> is used to (once install +) load the packages. Most of the packages used are part of the tidyverse. To better integrate keras into my textmining workflow I wrote a little helper package (so far). As the package api will change in the future you can easily access the function source code by clicking on the function name and press <code>F2</code>. Than you can copy and paste the code as needed. Finally you will need to install the tensorflow python package once.</p>
+<pre class="r"><code>#install.packages(c(&quot;devtools&quot;, &quot;pacman&quot;))
+#devtools::install_github(&quot;rstudio/keras&quot;)
+#devtools::install_github(&quot;systats/tidyTX&quot;)
+pacman::p_load(
+  dplyr, stringr, manifestoR, purrr, keras, tidyr, 
+  tidytext, tidyTX, keras, ggplot2, viridis, ggthemes
+)
+# keras::install_keras()</code></pre>
+</div>
+<div id="get-data-by-manifestor" class="section level2">
+<h2>Get data by <code>manifestoR</code></h2>
+<p>The <a href="https://manifesto-project.wzb.eu/">manifestoR api</a> is a nice project that offers the scientific community parties’ policy positions derived from a content analysis of parties’ electoral manifestos. Aquire your own free key after short registration. The project is present on <a href="https://github.com/ManifestoProject/manifestoR">github</a> and provide a <a href="https://visuals.manifesto-project.wzb.eu/mpdb-shiny/cmp_dashboard_dataset/">shiny app to explore their database</a></p>
+<!--c1d709849c34e15130f9052699c214af-->
+<pre class="r"><code>mkey &lt;- &quot;__put__your__key__here__&quot;
+mp_setapikey(key = mkey)
+
+# edate = Day, month, and year of national election
+df &lt;- mp_corpus(
+    countryname == &quot;Germany&quot; &amp;
+    edate &gt; as.Date(&quot;2002-01-01&quot;)
+  ) %&gt;%
+  tidytext::tidy()</code></pre>
+<p>German party agendas since 2002 are downloaded and directly converted from class corpus to data.frame with the tidytext function <code>tidy()</code>. Let’s inspect the raw data.</p>
+<pre class="r"><code>glimpse(df)</code></pre>
+<pre><code>## Observations: 28
+## Variables: 17
+## $ manifesto_id                &lt;chr&gt; &quot;41113_200209&quot;, &quot;41113_200509&quot;, &quot;4...
+## $ party                       &lt;dbl&gt; 41113, 41113, 41113, 41113, 41113,...
+## $ date                        &lt;dbl&gt; 200209, 200509, 200909, 201309, 20...
+## $ language                    &lt;chr&gt; &quot;german&quot;, &quot;german&quot;, &quot;german&quot;, &quot;ger...
+## $ source                      &lt;chr&gt; &quot;MARPOR&quot;, &quot;MARPOR&quot;, &quot;MARPOR&quot;, &quot;MAR...
+## $ has_eu_code                 &lt;lgl&gt; FALSE, TRUE, TRUE, FALSE, FALSE, F...
+## $ is_primary_doc              &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE...
+## $ may_contradict_core_dataset &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE,...
+## $ md5sum_text                 &lt;chr&gt; &quot;41e90a16558cc94ea37f96c36cc92498&quot;...
+## $ url_original                &lt;chr&gt; &quot;/down/originals/2015-1/41113_2002...
+## $ md5sum_original             &lt;chr&gt; &quot;CURRENTLY_UNAVAILABLE&quot;, &quot;CURRENTL...
+## $ annotations                 &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE...
+## $ handbook                    &lt;chr&gt; &quot;3&quot;, &quot;2&quot;, &quot;2&quot;, &quot;4&quot;, &quot;5&quot;, &quot;3&quot;, &quot;2&quot;,...
+## $ is_copy_of                  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ title                       &lt;chr&gt; &quot;Grün wirkt! Unser Wahlprogramm 20...
+## $ id                          &lt;chr&gt; &quot;41113_200209&quot;, &quot;41113_200509&quot;, &quot;4...
+## $ text                        &lt;chr&gt; &quot;Grün wirkt!\nUnser Wahlprogramm\n...</code></pre>
+</div>
+<div id="clean-text-data" class="section level2">
+<h2>clean text data</h2>
+<p>Next the documents have to be tokenized and cleaned up. The following steps were applied:</p>
+<ol style="list-style-type: decimal">
+<li>Clean text with stringr and <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html">Regular Expressions</a>.</li>
+<li>Map <code>party_dict</code> entries to get party name and id.</li>
+<li>Exclude AfD 6 (not enough data).</li>
+<li>Tokenize into one-token-one-row (tidyverse principle).</li>
+<li>Split documents into text batches of length(maxlen = 30).</li>
+<li>Exclude text batches shorter than 5 words.</li>
+<li>Sample balanced training data.</li>
+<li>Remove stopwords.</li>
+<li>Randomize order of statments.</li>
+</ol>
+<p>In the first step the data label and names are matched and renamed for better understanding and processing the data. This is done by the <code>tx_map_dict</code> function that loops through a provided dictionary and replaces a given key1 with a target key2. In order to avoid unbalenced data the Afd has been removed from the corpus. In sum 23 party manifestos are collected.</p>
+<pre class="r"><code># some information about german political data as dict
+party_dict &lt;- list(
+  &quot;greens&quot;= c(&quot;Green Party&quot;, &quot;1&quot;, &quot;41113&quot;, &quot;#46962b&quot;),
+  &quot;left&quot; = c(&quot;The Left&quot;, &quot;2&quot;, &quot;41223&quot;, &quot;#8B1A1A&quot;),
+  &quot;spd&quot; = c(&quot;SPD&quot;, &quot;3&quot;, &quot;41320&quot;, &quot;#E2001A&quot;),
+  &quot;fdp&quot; = c(&quot;FDP&quot;, &quot;4&quot;, &quot;41420&quot;, &quot;#ffed00&quot;),
+  &quot;union&quot; = c(&quot;CDU/CSU&quot;, &quot;5&quot;,  &quot;41521&quot;, &quot;black&quot;)
+  #&quot;41953&quot; = c(&quot;AfD&quot;, &quot;6&quot;, &quot;afd&quot;, &quot;#1C86EE&quot;)
+)
+
+step1 &lt;- df %&gt;%
+  select(party, date, id, text) %&gt;%
+  # 2. get party names and id
+  mutate(party_names = tx_map_dict(party, party_dict, key1 = 3, key2 = 1)) %&gt;%
+  mutate(party_id = tx_map_dict(party, party_dict, key1 = 3, key2 = 2)) %&gt;%
+  # 3. Exclude AfD 6 (not enough data)
+  filter(party_id %in% 1:5)
+
+step1 %&gt;% 
+  count(party_names)</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   party_names     n
+##   &lt;chr&gt;       &lt;int&gt;
+## 1 CDU/CSU         5
+## 2 FDP             5
+## 3 Green Party     5
+## 4 SPD             5
+## 5 The Left        3</code></pre>
+<p>The next step takes tow datasets als input, one containing a vector of (all) stopwords and one a two dimensional array carrying each possible word with its lemma.</p>
+<pre class="r"><code>stopwords_de &lt;-read.table(&quot;data/german_stopwords_cust.txt&quot;, skip = 9, stringsAsFactors = F, col.names = &quot;words&quot;)
+lemma_de &lt;-read.table(&quot;data/lemmatization-de.txt&quot;, col.names = c(&quot;lemma&quot;, &quot;words&quot;), stringsAsFactors = F)
+# tibble(test = &quot;Ich bin hier in Aalen&quot;) %&gt;%
+stopwords_de %&gt;% tail</code></pre>
+<pre><code>##          words
+## 418    überall
+## 419 überallhin
+## 420   überdies
+## 421 übermorgen
+## 422      übrig
+## 423   übrigens</code></pre>
+<pre class="r"><code>lemma_de %&gt;% head</code></pre>
+<pre><code>##    lemma   words
+## 1      A      As
+## 2 Aachen Aachens
+## 3    Aal    Aale
+## 4    Aal   Aalen
+## 5    Aal   Aales
+## 6    Aal    Aals</code></pre>
+<p>Next the text data will be transformed by the <code>one-token-one-row</code> principle coming from the R tidyverse. This means a abitrary long strings can be reshaped into <code>long</code> format where each row represents another word or token. This is very useful as we can use dplyr for wranggling and filtering. After unnesting the words the lemmatized words are appended by words and stopwords were discarded by simply <code>anti_joining</code> the both dataframes again by words. Finally words are deleted that have numbers or punctuation aligned, as well as are not longer than one character . These procedures are important to manually reduce dimensioanlity of the resulting vocabluary in order to avoid overfitting the data too fast.</p>
+<ul>
+<li><a href="http://www.lexiconista.com/datasets/lemmatization/" class="uri">http://www.lexiconista.com/datasets/lemmatization/</a></li>
+</ul>
+<pre class="r"><code>step2 &lt;- step1 %&gt;%
+  tidytext::unnest_tokens(words, text, to_lower = F) %&gt;% 
+  left_join(lemma_de, by = &quot;words&quot;) %&gt;%
+  mutate(lemma = ifelse(is.na(lemma), words, lemma)) %&gt;%
+  dplyr::anti_join(stopwords_de, by = &quot;words&quot;) %&gt;%
+  filter(!stringr::str_detect(lemma, &quot;[[:digit:]]|[[:punct:]]&quot;)) %&gt;%
+  # 5. Remove words shorter than 2 character
+  filter(nchar(words) &gt; 1)</code></pre>
+<p>Next the tidy dataframe nested (summerized) again into seqences of text by party which are each 30 words long.</p>
+<pre class="r"><code>maxlen &lt;- 30 # break long documents into units of 30 words
+# load german stopwords
+
+step3 &lt;- step2 %&gt;%
+  # 6. Split documents into text batches of length(maxlen)
+  group_by(party_id) %&gt;%
+  dplyr::mutate(seq = seq_along(words) %/% maxlen) %&gt;%
+  group_by(party_id, seq) %&gt;%
+  summarise(
+    text_word = paste(words, collapse = &quot; &quot;),
+    text_lemma = paste(lemma, collapse = &quot; &quot;)) %&gt;%
+  ungroup()</code></pre>
+<p>The final cleaning step comprises downsampling and randomisation of the texts which are both very important to get unbiased predictions.</p>
+<pre class="r"><code>df_clean &lt;- step3 %&gt;%
+  # 8. Sample balanced training data
+  group_by(party_id) %&gt;%
+  sample_n(size = 2534) %&gt;%
+  ungroup() %&gt;% 
+  # 9. Randomize order of statments
+  arrange(sample(1:length(seq), length(seq)))
+
+print(object.size(df_clean), standard = &quot;SI&quot;, units = &quot;MB&quot;)</code></pre>
+<pre><code>## 8.8 MB</code></pre>
+<pre class="r"><code>df_clean</code></pre>
+<pre><code>## # A tibble: 12,670 x 4
+##    party_id   seq text_word                    text_lemma                 
+##    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                        &lt;chr&gt;                      
+##  1 5        1495. sich vergangenen acht Jahre… sich vergangen acht Jahr v…
+##  2 3         733. Erneuerung Land Unser Regie… Erneuerung Land Unser Regi…
+##  3 4        2122. stattfinden Eine Ideologie … stattfinden Eine Ideologie…
+##  4 3        2247. Sicherheit gewährleistet Ei… Sicherheit gewährleisten E…
+##  5 3        2647. Frische Luft gesunde Böden … frischen Luft gesunden Bod…
+##  6 4        1624. können Hochschulen Studiere… können Hochschule Studiere…
+##  7 2        2127. Menschen kleineren ökologis… Mensch klein ökologisch Fu…
+##  8 1         310. BÜNDNIS DIE GRÜNEN befürwor… BÜNDNIS DIE GRÜNEN befürwo…
+##  9 5        1384. Gesellschaftsmodell kann es… Gesellschaftsmodell können…
+## 10 4         148. werden Völlig verfehlt hing… werden Völlig verfehlen hi…
+## # ... with 12,660 more rows</code></pre>
+</div>
+<div id="train-test-set" class="section level2">
+<h2>Train &amp; Test Set</h2>
+<p>For evaluation purpose the data is split into 90% train and 10% test set.</p>
+<pre class="r"><code>set.seed(2018)
+df_clean$split_id &lt;- sample(1:2, size = nrow(df_clean), replace = T, prob=c(.9, .1))
+train &lt;- df_clean %&gt;% filter(split_id == 1)
+test &lt;- df_clean %&gt;% filter(split_id == 2)</code></pre>
+</div>
+<div id="keras" class="section level1">
+<h1>Keras</h1>
+<div id="build-text-sequences" class="section level2">
+<h2>Build Text Sequences</h2>
+<pre class="r"><code>max_features &lt;- 12000 # top most common words
+batch_size &lt;- 32
+#maxlen &lt;- 30 # Cut texts after this number of words (called earlier)
+
+tokenizer &lt;- text_tokenizer(num_words = max_features)
+fit_text_tokenizer(tokenizer, x = train$text_lemma)
+#keras::save_text_tokenizer(tokenizer, &quot;data/tokenizer&quot;)
+#tokenizer &lt;- keras::load_text_tokenizer(&quot;data/tokenizer&quot;)
+
+train_seq &lt;- tokenizer %&gt;% 
+  texts_to_sequences(train$text_lemma) %&gt;% 
+  pad_sequences(maxlen = maxlen, value = 0)
+
+test_seq &lt;- tokenizer %&gt;% 
+  texts_to_sequences(test$text_lemma) %&gt;% 
+  pad_sequences(maxlen = maxlen, value = 0)</code></pre>
+<pre class="r"><code>train[2,] %&gt;%
+  tidytext::unnest_tokens(words, text_word) %&gt;%
+  select(words) %&gt;%
+  cbind(., token = train_seq[2,]) %&gt;% 
+  t %&gt;%
+  as.data.frame %&gt;%
+  set_names(paste0(&quot;w&quot;, 1:30)) %&gt;% 
+  rownames_to_column(var = &quot; &quot;) %&gt;%
+  select(1:10) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">w1</th>
+<th align="left">w2</th>
+<th align="left">w3</th>
+<th align="left">w4</th>
+<th align="left">w5</th>
+<th align="left">w6</th>
+<th align="left">w7</th>
+<th align="left">w8</th>
+<th align="left">w9</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>words</td>
+<td align="left">erneuerung</td>
+<td align="left">land</td>
+<td align="left">unser</td>
+<td align="left">regierungsprogramm</td>
+<td align="left">angebot</td>
+<td align="left">gesamte</td>
+<td align="left">gesellschaft</td>
+<td align="left">es</td>
+<td align="left">richtet</td>
+</tr>
+<tr class="even">
+<td>token</td>
+<td align="left">1254</td>
+<td align="left">17</td>
+<td align="left">180</td>
+<td align="left">3930</td>
+<td align="left">176</td>
+<td align="left">545</td>
+<td align="left">36</td>
+<td align="left">78</td>
+<td align="left">1041</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="fasttext-model" class="section level2">
+<h2>fasttext Model</h2>
+<pre class="r"><code>glove_fit &lt;- keras_model_sequential() %&gt;%
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+    ) %&gt;%
+  layer_global_average_pooling_1d() %&gt;%
+  layer_dense(5, activation = &quot;sigmoid&quot;) %&gt;%
+  compile(
+    loss = &quot;binary_crossentropy&quot;,
+    optimizer = &quot;adam&quot;,
+    metrics = &quot;accuracy&quot;
+  )
+
+summary(glove_fit)</code></pre>
+<pre><code>## ___________________________________________________________________________
+## Layer (type)                     Output Shape                  Param #     
+## ===========================================================================
+## embedding_1 (Embedding)          (None, 30, 128)               1536000     
+## ___________________________________________________________________________
+## global_average_pooling1d_1 (Glob (None, 128)                   0           
+## ___________________________________________________________________________
+## dense_1 (Dense)                  (None, 5)                     645         
+## ===========================================================================
+## Total params: 1,536,645
+## Trainable params: 1,536,645
+## Non-trainable params: 0
+## ___________________________________________________________________________</code></pre>
+<pre class="r"><code>glove_hist &lt;- glove_fit %&gt;% 
+  keras::fit(
+    x = train_seq, 
+    y = tx_onehot(train$party_id),
+    batch_size = batch_size,
+    epochs = 5, 
+    validation_split = .2
+  )</code></pre>
+<pre class="r"><code>#plot(glove_hist)
+preds_glove &lt;- glove_fit %&gt;%
+  tx_keras_predict(test_seq, 1) %&gt;% 
+  as.vector()
+
+caret::confusionMatrix(preds_glove, test$party_id)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   1   2   3   4   5
+##          1 162  15  25   7  10
+##          2  28 225  18   9   1
+##          3  20   6 146   7  10
+##          4  18   5  17 205  13
+##          5   9   3  40  15 180
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.7688          
+##                  95% CI : (0.7439, 0.7925)
+##     No Information Rate : 0.2127          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.711           
+##  Mcnemar&#39;s Test P-Value : 1.815e-05       
+## 
+## Statistics by Class:
+## 
+##                      Class: 1 Class: 2 Class: 3 Class: 4 Class: 5
+## Sensitivity            0.6835   0.8858   0.5935   0.8436   0.8411
+## Specificity            0.9404   0.9404   0.9546   0.9443   0.9316
+## Pos Pred Value         0.7397   0.8007   0.7725   0.7946   0.7287
+## Neg Pred Value         0.9231   0.9682   0.9005   0.9594   0.9641
+## Prevalence             0.1985   0.2127   0.2060   0.2035   0.1792
+## Detection Rate         0.1357   0.1884   0.1223   0.1717   0.1508
+## Detection Prevalence   0.1834   0.2353   0.1583   0.2161   0.2069
+## Balanced Accuracy      0.8120   0.9131   0.7741   0.8939   0.8864</code></pre>
+<pre class="r"><code>tx_confusion(x = preds_glove, y = test$party_id, lib = &quot;gg&quot;)</code></pre>
+<p><img src="/post/2018-03-06-keras_tensorflow_files/figure-html/pred1-1.png" width="672" /></p>
+</div>
+<div id="lstm-model" class="section level2">
+<h2>LSTM model</h2>
+<pre class="r"><code>lstm_fit &lt;- keras_model_sequential() %&gt;%
+  ### model arch
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+  ) %&gt;% 
+  layer_lstm(units = 64, dropout = 0.2, recurrent_dropout = 0.2) %&gt;% 
+  layer_dense(units = 5, activation = &#39;sigmoid&#39;) %&gt;%
+  ### compiler
+  compile(
+    loss = &#39;binary_crossentropy&#39;,
+    optimizer = &#39;adam&#39;,
+    metrics = c(&#39;accuracy&#39;)
+  )
+
+summary(lstm_fit)</code></pre>
+<pre><code>## ___________________________________________________________________________
+## Layer (type)                     Output Shape                  Param #     
+## ===========================================================================
+## embedding_2 (Embedding)          (None, 30, 128)               1536000     
+## ___________________________________________________________________________
+## lstm_1 (LSTM)                    (None, 64)                    49408       
+## ___________________________________________________________________________
+## dense_2 (Dense)                  (None, 5)                     325         
+## ===========================================================================
+## Total params: 1,585,733
+## Trainable params: 1,585,733
+## Non-trainable params: 0
+## ___________________________________________________________________________</code></pre>
+<pre class="r"><code>lstm_hist &lt;- lstm_fit %&gt;% 
+  keras::fit(
+    x = train_seq, 
+    y = tx_onehot(train$party_id),
+    batch_size = batch_size,
+    epochs = 3,
+    validation_split = .2
+  )</code></pre>
+<pre class="r"><code># tx_keras_plot(lstm_hist)
+preds_lstm &lt;- lstm_fit %&gt;% 
+  tx_keras_predict(test_seq, 1)
+
+caret::confusionMatrix(preds_lstm, test$party_id)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   1   2   3   4   5
+##          1 159  19  19   4   7
+##          2  25 221  13   7   0
+##          3  30   7 163  13  13
+##          4  10   7  19 191  10
+##          5  13   0  32  28 184
+## 
+## Overall Statistics
+##                                           
+##                Accuracy : 0.7688          
+##                  95% CI : (0.7439, 0.7925)
+##     No Information Rate : 0.2127          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.7111          
+##  Mcnemar&#39;s Test P-Value : NA              
+## 
+## Statistics by Class:
+## 
+##                      Class: 1 Class: 2 Class: 3 Class: 4 Class: 5
+## Sensitivity            0.6709   0.8701   0.6626   0.7860   0.8598
+## Specificity            0.9488   0.9521   0.9335   0.9516   0.9255
+## Pos Pred Value         0.7644   0.8308   0.7212   0.8059   0.7160
+## Neg Pred Value         0.9209   0.9644   0.9143   0.9457   0.9680
+## Prevalence             0.1985   0.2127   0.2060   0.2035   0.1792
+## Detection Rate         0.1332   0.1851   0.1365   0.1600   0.1541
+## Detection Prevalence   0.1742   0.2228   0.1893   0.1985   0.2152
+## Balanced Accuracy      0.8098   0.9111   0.7981   0.8688   0.8927</code></pre>
+<pre class="r"><code>tx_confusion(x = preds_lstm, y = test$party_id, lib = &quot;gg&quot;)</code></pre>
+<p><img src="/post/2018-03-06-keras_tensorflow_files/figure-html/fit2-1.png" width="672" /></p>
+</div>
+</div>
+<div id="final-thoughts" class="section level1">
+<h1>Final Thoughts</h1>
+<ul>
+<li><a href="https://www.datacamp.com/community/tutorials/keras-r-deep-learning" class="uri">https://www.datacamp.com/community/tutorials/keras-r-deep-learning</a></li>
+<li>examples</li>
+</ul>
+</div>
+
+</main>
+
+
+
+      </div>
+      <div class="three wide column"></div>
+      
+    </div>
+    <br>
+    <br>
+    <footer>
+    <div class="ui blue inverted bottom attached vertical segment">
+      <br>
+      <br>
+      <div class="ui container">
+        <div class="ui stackable inverted divided equal height stackable grid">
+          <div class="three wide column">
+            <h4 class="ui inverted header">About</h4>
+            <div class="ui inverted link list">
+              <a href="#" class="item">Sitemap</a>
+              <a href="#" class="item">Contact Us</a>
+              <a href="#" class="item">Religious Ceremonies</a>
+              <a href="#" class="item">Gazebo Plans</a>
+            </div>
+          </div>
+          <div class="three wide column">
+            <h4 class="ui inverted header">Services</h4>
+            <div class="ui inverted link list">
+              <a href="#" class="item">Banana Pre-Order</a>
+              <a href="#" class="item">DNA FAQ</a>
+              <a href="https://en.wiktionary.org/wiki/sapiosexual" target="_blank" class="item">Sapiosexuality</a>
+              <a href="#" class="item">Favorite X-Men</a>
+            </div>
+          </div>
+          <div class="seven wide column">
+            <h4 class="ui inverted header">Let's connect!</h4>
+            <p>
+              <a href="" target="_blank" rel="nofollow" class = "ui circular icon inverted button">
+                <i class="inverted blue facebook icon large"></i>
+              </a>
+              <a href="https://twitter.com/systatz" target="_blank" rel="nofollow" class = "ui circular icon inverted button">
+                <i class="inverted blue twitter icon large"></i>
+              </a>
+              <a href="https://github.com/systats" target="_blank" rel="nofollow" class = "ui circular icon inverted button">
+                <i class="inverted blue github icon large"></i>
+              </a>
+              <a href="mailto:sy-ro@gmx.net" target="_blank" rel="nofollow" class = "ui circular icon inverted button">
+                <i class="inverted blue mail icon large"></i>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+    </div>
+    </footer>
+    <script>
+      $('.ui.dropdown').dropdown();
+      $('.tabular.menu .item').tab();
+      hljs.initHighlightingOnLoad();
+    </script>
+  </body>
+  
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-114717666-1', 'auto');
+ga('send', 'pageview');
+</script>
+
+</html>
+

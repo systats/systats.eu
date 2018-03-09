@@ -6,18 +6,18 @@
     <description>Recent content in Posts on Simon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 06 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 07 Mar 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Text Classification in R</title>
-      <link>/post/2018/03/06/text-classification-in-r/</link>
-      <pubDate>Tue, 06 Mar 2018 00:00:00 +0000</pubDate>
+      <link>/post/2018/03/07/text-classification-in-r/</link>
+      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/2018/03/06/text-classification-in-r/</guid>
-      <description>https://www.datacamp.com/community/tutorials/keras-r-deep-learning  Load Packages #pacman::p_load_gh(&amp;quot;rstudio/keras&amp;quot;) #pacman::p_load_gh(&amp;quot;systats/tidyTX&amp;quot;, install = T) #devtools::install_github(&amp;quot;systats/tidyTX&amp;quot;) pacman::p_load(dplyr, stringr, manifestoR, purrr, keras, tidyr, tidytext, tidyTX, keras, ggplot2, viridis, ggthemes) # keras::install_keras()  Load data by manifestoR mkey &amp;lt;- &amp;quot;c1d709849c34e15130f9052699c214af&amp;quot; mp_setapikey(key = mkey) # edate = Day, month, and year of national election df &amp;lt;- mp_corpus( countryname == &amp;quot;Germany&amp;quot; &amp;amp; edate &amp;gt; as.Date(&amp;quot;2002-01-01&amp;quot;) ) %&amp;gt;% tidy() glimpse(df) ## Observations: 28 ## Variables: 17 ## $ manifesto_id &amp;lt;chr&amp;gt; &amp;quot;41113_200209&amp;quot;, &amp;quot;41113_200509&amp;quot;, &amp;quot;4.</description>
+      <guid>/post/2018/03/07/text-classification-in-r/</guid>
+      <description>Today’s tutorial will cover how to perform text classification with keras (build on top of tensorflow). This is a fairly new but incrediable experience for R users who have been limited in the past to more high level machine learning liberaries like caret and h2o. These packages are great for a varity of machine learning tasts by the magic ensemble learning and hyperparameter grid search infrastructure from h2o. Despite some good feed forward networks, natural language or computer vision tasks require more complex network archetectures to learn informativ low dimensional features.</description>
     </item>
     
     <item>

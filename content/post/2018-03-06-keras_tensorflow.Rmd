@@ -1,0 +1,345 @@
+---
+title: "Text Classification in R"
+date: "2018-03-07"
+categories: ["R", "ML", "NLP"]
+tags: ["Keras", "TensorFlow", "Glove", "LSTM"]
+description: "Building text classification models with keras and tensorflow trained on political party agendas (`manifestoR`)."
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, error = F)
+```
+
+
+Today’s tutorial will cover how to perform text classification with `keras` (build on top of tensorflow). This is a fairly new but incrediable experience for R users who have been limited in the past to more high level machine learning liberaries like `caret` and `h2o`. These packages are great for a varity of machine learning tasts by the magic ensemble learning and hyperparameter grid search infrastructure from `h2o`. Despite some good feed forward networks, natural language or computer vision tasks require more complex network archetectures to learn informativ low dimensional features. 
+
+
+## Load Packages
+
+If you want to reproduce this code you can get the corresponding github repo with all the code here. For more convienence the package management library `pacman` is used to (once install +) load the packages. Most of the packages used are part of the tidyverse. To better integrate keras into my textmining workflow I wrote a little helper package (so far). As the package api will change in the future you can easily access the function source code by clicking on the function name and press `F2`. Than you can copy and paste the code as needed. Finally you will need to install the tensorflow python package once. 
+
+
+```{r packs}
+#install.packages(c("devtools", "pacman"))
+#devtools::install_github("rstudio/keras")
+#devtools::install_github("systats/tidyTX")
+pacman::p_load(
+  dplyr, stringr, manifestoR, purrr, keras, tidyr, 
+  tidytext, tidyTX, keras, ggplot2, viridis, ggthemes
+)
+# keras::install_keras()
+```
+
+
+## Get data by `manifestoR`
+
+The [manifestoR api](https://manifesto-project.wzb.eu/) is a nice project that offers the scientific community parties’ policy positions derived from a content analysis of parties’ electoral manifestos. Aquire your own free key after short registration. The project is present on [github](https://github.com/ManifestoProject/manifestoR) and provide a [shiny app to explore their database](https://visuals.manifesto-project.wzb.eu/mpdb-shiny/cmp_dashboard_dataset/)
+
+<!--c1d709849c34e15130f9052699c214af-->
+
+```{r manifesto, eval = F}
+mkey <- "__put__your__key__here__"
+mp_setapikey(key = mkey)
+
+# edate = Day, month, and year of national election
+df <- mp_corpus(
+    countryname == "Germany" &
+    edate > as.Date("2002-01-01")
+  ) %>%
+  tidytext::tidy()
+```
+
+German party agendas since 2002 are downloaded and directly converted from class corpus to data.frame with the tidytext function `tidy()`. Let's inspect the raw data.
+
+```{r ldata, echo = F}
+#save(df, file = "data/df.Rdata")
+load("data/df.Rdata")
+```
+
+```{r}
+glimpse(df)
+```
+
+
+## clean text data
+
+Next the documents have to be tokenized and cleaned up. The following steps were applied:
+
+1. Clean text with stringr and [Regular Expressions](https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html).
+2. Map `party_dict` entries to get party name and id.
+3. Exclude AfD 6 (not enough data).
+4. Tokenize into one-token-one-row (tidyverse principle).
+5. Split documents into text batches of length(maxlen = 30).
+6. Exclude text batches shorter than 5 words.
+7. Sample balanced training data.
+8. Remove stopwords.
+9. Randomize order of statments.
+
+
+In the first step the data label and names are matched and renamed for better understanding and processing the data. This is done by the `tx_map_dict` function that loops through a provided dictionary and replaces a given key1 with a target key2. In order to avoid unbalenced data the Afd has been removed from the corpus. In sum 23 party manifestos are collected.
+
+```{r}
+# some information about german political data as dict
+party_dict <- list(
+  "greens"= c("Green Party", "1", "41113", "#46962b"),
+  "left" = c("The Left", "2", "41223", "#8B1A1A"),
+  "spd" = c("SPD", "3", "41320", "#E2001A"),
+  "fdp" = c("FDP", "4", "41420", "#ffed00"),
+  "union" = c("CDU/CSU", "5",  "41521", "black")
+  #"41953" = c("AfD", "6", "afd", "#1C86EE")
+)
+
+step1 <- df %>%
+  select(party, date, id, text) %>%
+  # 2. get party names and id
+  mutate(party_names = tx_map_dict(party, party_dict, key1 = 3, key2 = 1)) %>%
+  mutate(party_id = tx_map_dict(party, party_dict, key1 = 3, key2 = 2)) %>%
+  # 3. Exclude AfD 6 (not enough data)
+  filter(party_id %in% 1:5)
+
+step1 %>% 
+  count(party_names)
+```
+
+The next step takes tow datasets als input, one containing a vector of (all) stopwords and one a two dimensional array carrying each possible word with its lemma.  
+
+```{r}
+stopwords_de <-read.table("data/german_stopwords_cust.txt", skip = 9, stringsAsFactors = F, col.names = "words")
+lemma_de <-read.table("data/lemmatization-de.txt", col.names = c("lemma", "words"), stringsAsFactors = F)
+# tibble(test = "Ich bin hier in Aalen") %>%
+stopwords_de %>% tail
+lemma_de %>% head
+```
+
+Next the text data will be transformed by the `one-token-one-row` principle coming from the R tidyverse. This means a abitrary long strings can be reshaped into `long` format where each row represents another word or token. This is very useful as we can use dplyr for wranggling and filtering. After unnesting the words the lemmatized words are appended by words and stopwords were discarded by simply `anti_joining` the both dataframes again by words. Finally words are deleted that have numbers or punctuation aligned, as well as are not longer than one character . These procedures are important to manually reduce dimensioanlity of the resulting vocabluary in order to avoid overfitting the data too fast. 
+
+* http://www.lexiconista.com/datasets/lemmatization/
+
+```{r}
+step2 <- step1 %>%
+  tidytext::unnest_tokens(words, text, to_lower = F) %>% 
+  left_join(lemma_de, by = "words") %>%
+  mutate(lemma = ifelse(is.na(lemma), words, lemma)) %>%
+  dplyr::anti_join(stopwords_de, by = "words") %>%
+  filter(!stringr::str_detect(lemma, "[[:digit:]]|[[:punct:]]")) %>%
+  # 5. Remove words shorter than 2 character
+  filter(nchar(words) > 1)
+```
+
+
+Next the tidy dataframe nested (summerized) again into seqences of text by party which are each 30 words long. 
+
+```{r}
+maxlen <- 30 # break long documents into units of 30 words
+# load german stopwords
+
+step3 <- step2 %>%
+  # 6. Split documents into text batches of length(maxlen)
+  group_by(party_id) %>%
+  dplyr::mutate(seq = seq_along(words) %/% maxlen) %>%
+  group_by(party_id, seq) %>%
+  summarise(
+    text_word = paste(words, collapse = " "),
+    text_lemma = paste(lemma, collapse = " ")) %>%
+  ungroup()
+```
+
+The final cleaning step comprises downsampling and randomisation of the texts which are both very important to get unbiased predictions. 
+
+```{r}
+df_clean <- step3 %>%
+  # 8. Sample balanced training data
+  group_by(party_id) %>%
+  sample_n(size = 2534) %>%
+  ungroup() %>% 
+  # 9. Randomize order of statments
+  arrange(sample(1:length(seq), length(seq)))
+
+print(object.size(df_clean), standard = "SI", units = "MB")
+df_clean
+```
+
+
+## Train & Test Set 
+
+For evaluation purpose the data is split into 90% train and 10% test set. 
+
+```{r split}
+set.seed(2018)
+df_clean$split_id <- sample(1:2, size = nrow(df_clean), replace = T, prob=c(.9, .1))
+train <- df_clean %>% filter(split_id == 1)
+test <- df_clean %>% filter(split_id == 2)
+```
+
+
+# Keras
+
+## Build Text Sequences
+
+
+```{r prekeras1, echo = F}
+max_features <- 12000 # top most common words
+batch_size <- 32
+#maxlen <- 30 # Cut texts after this number of words (called earlier)
+
+tokenizer <- keras::load_text_tokenizer("data/tokenizer")
+
+train_seq <- tokenizer %>% 
+  texts_to_sequences(train$text_lemma) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+
+test_seq <- tokenizer %>% 
+  texts_to_sequences(test$text_lemma) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+```
+
+
+```{r prekeras2, echo = T, eval = F}
+max_features <- 12000 # top most common words
+batch_size <- 32
+#maxlen <- 30 # Cut texts after this number of words (called earlier)
+
+tokenizer <- text_tokenizer(num_words = max_features)
+fit_text_tokenizer(tokenizer, x = train$text_lemma)
+#keras::save_text_tokenizer(tokenizer, "data/tokenizer")
+#tokenizer <- keras::load_text_tokenizer("data/tokenizer")
+
+train_seq <- tokenizer %>% 
+  texts_to_sequences(train$text_lemma) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+
+test_seq <- tokenizer %>% 
+  texts_to_sequences(test$text_lemma) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+```
+
+
+```{r}
+train[2,] %>%
+  tidytext::unnest_tokens(words, text_word) %>%
+  select(words) %>%
+  cbind(., token = train_seq[2,]) %>% 
+  t %>%
+  as.data.frame %>%
+  set_names(paste0("w", 1:30)) %>% 
+  rownames_to_column(var = " ") %>%
+  select(1:10) %>%
+  knitr::kable()
+```
+
+
+
+
+## fasttext Model
+
+```{r glove_fit}
+glove_fit <- keras_model_sequential() %>%
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+    ) %>%
+  layer_global_average_pooling_1d() %>%
+  layer_dense(5, activation = "sigmoid") %>%
+  compile(
+    loss = "binary_crossentropy",
+    optimizer = "adam",
+    metrics = "accuracy"
+  )
+
+summary(glove_fit)
+```
+
+```{r, eval = F}
+glove_hist <- glove_fit %>% 
+  keras::fit(
+    x = train_seq, 
+    y = tx_onehot(train$party_id),
+    batch_size = batch_size,
+    epochs = 5, 
+    validation_split = .2
+  )
+```
+
+
+
+```{r, echo = F}
+#keras::save_model_hdf5(glove_fit, "data/glove_fit.h5", include_optimizer = F, overwrite = T)
+#save(glove_hist, file = "data/glove_hist")
+glove_fit <- load_model_hdf5("data/glove_fit.h5")
+#load("data/glove_hist")
+
+# tx_keras_plot(glove_hist) +
+#   theme_hc() +
+#   scale_colour_manual(values = c("blue", "green"), labels = c("Train", "Validation"))
+```
+
+
+```{r pred1}
+#plot(glove_hist)
+preds_glove <- glove_fit %>%
+  tx_keras_predict(test_seq, 1) %>% 
+  as.vector()
+
+caret::confusionMatrix(preds_glove, test$party_id)
+tx_confusion(x = preds_glove, y = test$party_id, lib = "gg")
+```
+
+
+## LSTM model
+
+```{r}
+lstm_fit <- keras_model_sequential() %>%
+  ### model arch
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+  ) %>% 
+  layer_lstm(units = 64, dropout = 0.2, recurrent_dropout = 0.2) %>% 
+  layer_dense(units = 5, activation = 'sigmoid') %>%
+  ### compiler
+  compile(
+    loss = 'binary_crossentropy',
+    optimizer = 'adam',
+    metrics = c('accuracy')
+  )
+
+summary(lstm_fit)
+```
+
+```{r, eval = F}
+lstm_hist <- lstm_fit %>% 
+  keras::fit(
+    x = train_seq, 
+    y = tx_onehot(train$party_id),
+    batch_size = batch_size,
+    epochs = 3,
+    validation_split = .2
+  )
+```
+
+
+```{r, echo = F, eval = T}
+#keras::save_model_hdf5(lstm_fit, "data/lstm_fit.h5", include_optimizer = F, overwrite = T)
+lstm_fit <- keras::load_model_hdf5("data/lstm_fit.h5")
+```
+
+
+```{r fit2, eval = T}
+# tx_keras_plot(lstm_hist)
+preds_lstm <- lstm_fit %>% 
+  tx_keras_predict(test_seq, 1)
+
+caret::confusionMatrix(preds_lstm, test$party_id)
+tx_confusion(x = preds_lstm, y = test$party_id, lib = "gg")
+```
+
+
+# Final Thoughts
+
+* https://www.datacamp.com/community/tutorials/keras-r-deep-learning
+* examples
+
+

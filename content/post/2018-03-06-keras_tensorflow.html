@@ -8,10 +8,10 @@ description: "Building text classification models with keras and tensorflow trai
 
 
 
-<p>Today’s tutorial will cover how to perform text classification with <code>keras</code> (build on top of tensorflow). This is a fairly new but incrediable experience for R users who have been limited in the past to more high level machine learning liberaries like <code>caret</code> and <code>h2o</code>. These packages are great for a varity of machine learning tasts by the magic ensemble learning and hyperparameter grid search infrastructure from <code>h2o</code>. Despite some good feed forward networks, natural language or computer vision tasks require more complex network archetectures to learn informativ low dimensional features.</p>
+<p>Today’s tutorial will cover how to perform text classification with <code>keras</code> (build on top of tensorflow). This is a fairly new but incredible experience for R users who have been limited in the past to more high level machine learning libraries like <code>caret</code> and <code>h2o</code>. These packages are great for a variety of machine learning tasks by the magic ensemble learning and hyperparameter grid search infrastructure from <code>h2o</code>. Despite some good feed forward networks, natural language or computer vision tasks require more complex network architectures to learn informative low dimensional features.</p>
 <div id="load-packages" class="section level2">
 <h2>Load Packages</h2>
-<p>If you want to reproduce this code you can get the corresponding github repo with all the code here. For more convienence the package management library <code>pacman</code> is used to (once install +) load the packages. Most of the packages used are part of the tidyverse. To better integrate keras into my textmining workflow I wrote a little helper package (so far). As the package api will change in the future you can easily access the function source code by clicking on the function name and press <code>F2</code>. Than you can copy and paste the code as needed. Finally you will need to install the tensorflow python package once.</p>
+<p>If you want to reproduce this code you can get the corresponding github repo with all the code here. For more convenience the package management library <code>pacman</code> is used to (once install +) load the packages. Most of the packages used are part of the tidyverse. To better integrate keras into my textmining workflow I wrote a little helper package (so far). As the package api will change in the future you can easily access the function source code by clicking on the function name and press <code>F2</code>. Than you can copy and paste the code as needed. Finally you will need to install the tensorflow python package once.</p>
 <pre class="r"><code>#install.packages(c(&quot;devtools&quot;, &quot;pacman&quot;))
 #devtools::install_github(&quot;rstudio/keras&quot;)
 #devtools::install_github(&quot;systats/tidyTX&quot;)
@@ -23,7 +23,7 @@ pacman::p_load(
 </div>
 <div id="get-data-by-manifestor" class="section level2">
 <h2>Get data by <code>manifestoR</code></h2>
-<p>The <a href="https://manifesto-project.wzb.eu/">manifestoR api</a> is a nice project that offers the scientific community parties’ policy positions derived from a content analysis of parties’ electoral manifestos. Aquire your own free key after short registration. The project is present on <a href="https://github.com/ManifestoProject/manifestoR">github</a> and provide a <a href="https://visuals.manifesto-project.wzb.eu/mpdb-shiny/cmp_dashboard_dataset/">shiny app to explore their database</a></p>
+<p>The <a href="https://manifesto-project.wzb.eu/">manifestoR api</a> is a nice project that offers the scientific community parties’ policy positions derived from a content analysis of parties’ electoral manifestos. Acquire your own free key after short registration. The project is present on <a href="https://github.com/ManifestoProject/manifestoR">github</a> and provide a <a href="https://visuals.manifesto-project.wzb.eu/mpdb-shiny/cmp_dashboard_dataset/">shiny app to explore their database</a></p>
 <!--c1d709849c34e15130f9052699c214af-->
 <pre class="r"><code>mkey &lt;- &quot;__put__your__key__here__&quot;
 mp_setapikey(key = mkey)
@@ -68,9 +68,9 @@ df &lt;- mp_corpus(
 <li>Exclude text batches shorter than 5 words.</li>
 <li>Sample balanced training data.</li>
 <li>Remove stopwords.</li>
-<li>Randomize order of statments.</li>
+<li>Randomize order of statements.</li>
 </ol>
-<p>In the first step the data label and names are matched and renamed for better understanding and processing the data. This is done by the <code>tx_map_dict</code> function that loops through a provided dictionary and replaces a given key1 with a target key2. In order to avoid unbalenced data the Afd has been removed from the corpus. In sum 23 party manifestos are collected.</p>
+<p>In the first step the data label and names are matched and renamed for better understanding and processing the data. This is done by the <code>tx_map_dict</code> function that loops through a provided dictionary and replaces a given key1 with a target key2. In order to avoid unbalanced data the AfD has been removed from the corpus. In sum 23 party manifestos are collected.</p>
 <pre class="r"><code># some information about german political data as dict
 party_dict &lt;- list(
   &quot;greens&quot;= c(&quot;Green Party&quot;, &quot;1&quot;, &quot;41113&quot;, &quot;#46962b&quot;),
@@ -119,7 +119,7 @@ stopwords_de %&gt;% tail</code></pre>
 ## 4    Aal   Aalen
 ## 5    Aal   Aales
 ## 6    Aal    Aals</code></pre>
-<p>Next the text data will be transformed by the <code>one-token-one-row</code> principle coming from the R tidyverse. This means a abitrary long strings can be reshaped into <code>long</code> format where each row represents another word or token. This is very useful as we can use dplyr for wranggling and filtering. After unnesting the words the lemmatized words are appended by words and stopwords were discarded by simply <code>anti_joining</code> the both dataframes again by words. Finally words are deleted that have numbers or punctuation aligned, as well as are not longer than one character . These procedures are important to manually reduce dimensioanlity of the resulting vocabluary in order to avoid overfitting the data too fast.</p>
+<p>Next the text data will be transformed by the <code>one-token-one-row</code> principle coming from the R tidyverse. This means a arbitrary long strings can be reshaped into <code>long</code> format where each row represents another word or token. This is very useful as we can use dplyr for wrangling and filtering. After unnesting the text, the lemmatized words are appended by words and stopwords were discarded by simply <code>anti_joining</code> the both dataframes again by words. Finally words are deleted that have numbers or punctuation aligned, as well as are not longer than one character . These procedures are important to manually reduce dimensionality of the resulting vocabulary in order to avoid overfitting the data too fast.</p>
 <ul>
 <li><a href="http://www.lexiconista.com/datasets/lemmatization/" class="uri">http://www.lexiconista.com/datasets/lemmatization/</a></li>
 </ul>
@@ -131,7 +131,7 @@ stopwords_de %&gt;% tail</code></pre>
   filter(!stringr::str_detect(lemma, &quot;[[:digit:]]|[[:punct:]]&quot;)) %&gt;%
   # 5. Remove words shorter than 2 character
   filter(nchar(words) &gt; 1)</code></pre>
-<p>Next the tidy dataframe nested (summerized) again into seqences of text by party which are each 30 words long.</p>
+<p>Next the tidy dataframe nested (summarized) again into sequences of text by party which are each 30 words long.</p>
 <pre class="r"><code>maxlen &lt;- 30 # break long documents into units of 30 words
 # load german stopwords
 
@@ -144,7 +144,7 @@ step3 &lt;- step2 %&gt;%
     text_word = paste(words, collapse = &quot; &quot;),
     text_lemma = paste(lemma, collapse = &quot; &quot;)) %&gt;%
   ungroup()</code></pre>
-<p>The final cleaning step comprises downsampling and randomisation of the texts which are both very important to get unbiased predictions.</p>
+<p>The final cleaning step comprises downsampling and randomization of the texts which are both very important to get unbiased predictions.</p>
 <pre class="r"><code>df_clean &lt;- step3 %&gt;%
   # 8. Sample balanced training data
   group_by(party_id) %&gt;%
@@ -159,16 +159,16 @@ print(object.size(df_clean), standard = &quot;SI&quot;, units = &quot;MB&quot;)<
 <pre><code>## # A tibble: 12,670 x 4
 ##    party_id   seq text_word                    text_lemma                 
 ##    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                        &lt;chr&gt;                      
-##  1 3        2524. Gesetz Weg ermöglichen Mens… Gesetz Weg ermöglichen Men…
-##  2 5        1892. Landes beizutragen Kommunal… Land beitragen Kommunalfin…
-##  3 2        2376. hat ehrenamtliches Engageme… haben ehrenamtlich Engagem…
-##  4 2        2379. Freiwilligendienste Die ehr… Freiwilligendienste Die eh…
-##  5 2          21. aufgepumpt wurden Mit Geld … aufpumpen werden Mit Geld …
-##  6 1        3720. Beleidigung religiöser Gefü… Beleidigung religiös Gefüh…
-##  7 3         432. gewinnen Wir wollen gesells… gewinnen Wir wollen gesell…
-##  8 1        1039. freier Meinungsauftrag bede… freier Meinungsauftrag bed…
-##  9 3        1008. Einkommensunterschiede Eheg… Einkommensunterschiede Ehe…
-## 10 2         532. Das Unternehmen will nicht … Das Unternehmen wollen nic…
+##  1 4        3014. verwendet Wir wissen Konzep… verwenden Wir wissen Konze…
+##  2 4        1585. Die FDP tritt Abschaffung U… Die FDP tritt Abschaffung …
+##  3 3         959. gesellschaftlichen Leben te… gesellschaftlich Leben tei…
+##  4 1        1497. beigetragen Wir stehen hist… beitragen Wir stehen histo…
+##  5 2         539. gesellschaftliche Debatte A… gesellschaftliche Debatte …
+##  6 3        1173. Gesellschaft durchzusetzen … Gesellschaft durchsetzen G…
+##  7 2        1209. setzt sich dafür Spielautom… setzen sich dafür Spielaut…
+##  8 3        1485. Kosten Anpassungsmaßnahmen … Kosten Anpassungsmaßnahmen…
+##  9 3        1188. Wir brauchen Regeln Gesundh… Wir brauchen Regel Gesundh…
+## 10 4        2371. dürfen nicht pauschal Verda… dürfen nicht pauschal Verd…
 ## # ... with 12,660 more rows</code></pre>
 </div>
 <div id="train-test-set" class="section level2">
@@ -227,27 +227,27 @@ test_seq &lt;- tokenizer %&gt;%
 <tbody>
 <tr class="odd">
 <td>words</td>
-<td align="left">landes</td>
-<td align="left">beizutragen</td>
-<td align="left">kommunalfinanzen</td>
-<td align="left">krisenfest</td>
-<td align="left">zukunftssicher</td>
-<td align="left">machen</td>
-<td align="left">voraussetzung</td>
-<td align="left">gute</td>
-<td align="left">kommunale</td>
+<td align="left">die</td>
+<td align="left">fdp</td>
+<td align="left">tritt</td>
+<td align="left">abschaffung</td>
+<td align="left">ungleichbehandlung</td>
+<td align="left">wir</td>
+<td align="left">wollen</td>
+<td align="left">faire</td>
+<td align="left">chancen</td>
 </tr>
 <tr class="even">
 <td>token</td>
-<td align="left">0</td>
-<td align="left">17</td>
-<td align="left">393</td>
-<td align="left">9236</td>
-<td align="left">3941</td>
-<td align="left">38</td>
-<td align="left">159</td>
-<td align="left">16</td>
-<td align="left">406</td>
+<td align="left">5</td>
+<td align="left">86</td>
+<td align="left">1012</td>
+<td align="left">772</td>
+<td align="left">6422</td>
+<td align="left">3</td>
+<td align="left">4</td>
+<td align="left">528</td>
+<td align="left">72</td>
 </tr>
 </tbody>
 </table>
@@ -300,33 +300,33 @@ caret::confusionMatrix(preds_glove, test$party_id)</code></pre>
 ## 
 ##           Reference
 ## Prediction   1   2   3   4   5
-##          1 178   6  26   9  14
-##          2  20 205  13  10   4
-##          3  15   4 143  12  12
-##          4  27   6  20 194  19
-##          5  18   2  33  17 187
+##          1 157  13  23   7  10
+##          2  34 234  18   5   5
+##          3  15   2 135  13  12
+##          4  21   3  23 186  16
+##          5  10   0  29  20 203
 ## 
 ## Overall Statistics
 ##                                           
-##                Accuracy : 0.7596          
-##                  95% CI : (0.7344, 0.7836)
-##     No Information Rate : 0.2161          
+##                Accuracy : 0.7663          
+##                  95% CI : (0.7413, 0.7901)
+##     No Information Rate : 0.2111          
 ##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
 ##                                           
-##                   Kappa : 0.6996          
-##  Mcnemar&#39;s Test P-Value : 3.322e-05       
+##                   Kappa : 0.7075          
+##  Mcnemar&#39;s Test P-Value : 1.099e-06       
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: 1 Class: 2 Class: 3 Class: 4 Class: 5
-## Sensitivity            0.6899   0.9193   0.6085   0.8017   0.7924
-## Specificity            0.9412   0.9516   0.9552   0.9244   0.9269
-## Pos Pred Value         0.7639   0.8135   0.7688   0.7293   0.7276
-## Neg Pred Value         0.9168   0.9809   0.9087   0.9483   0.9477
-## Prevalence             0.2161   0.1868   0.1968   0.2027   0.1977
-## Detection Rate         0.1491   0.1717   0.1198   0.1625   0.1566
-## Detection Prevalence   0.1951   0.2111   0.1558   0.2228   0.2152
-## Balanced Accuracy      0.8156   0.9354   0.7818   0.8630   0.8597</code></pre>
+## Sensitivity            0.6624   0.9286   0.5921   0.8052   0.8252
+## Specificity            0.9446   0.9342   0.9565   0.9346   0.9378
+## Pos Pred Value         0.7476   0.7905   0.7627   0.7470   0.7748
+## Neg Pred Value         0.9187   0.9800   0.9086   0.9524   0.9539
+## Prevalence             0.1985   0.2111   0.1910   0.1935   0.2060
+## Detection Rate         0.1315   0.1960   0.1131   0.1558   0.1700
+## Detection Prevalence   0.1759   0.2479   0.1482   0.2085   0.2194
+## Balanced Accuracy      0.8035   0.9314   0.7743   0.8699   0.8815</code></pre>
 <pre class="r"><code>tx_confusion(x = preds_glove, y = test$party_id, lib = &quot;gg&quot;)</code></pre>
 <p><img src="/post/2018-03-06-keras_tensorflow_files/figure-html/pred1-1.png" width="672" /></p>
 </div>
@@ -379,33 +379,33 @@ caret::confusionMatrix(preds_lstm, test$party_id)</code></pre>
 ## 
 ##           Reference
 ## Prediction   1   2   3   4   5
-##          1 166  11  33  10  19
-##          2  23 205   9   8   0
-##          3  38   6 152  20  14
-##          4  13   1  13 179   5
-##          5  18   0  28  25 198
+##          1 147  11  19   7   7
+##          2  25 234  11   4   3
+##          3  35   3 162  24  11
+##          4  19   3  19 169  18
+##          5  11   1  17  27 207
 ## 
 ## Overall Statistics
-##                                          
-##                Accuracy : 0.7538         
-##                  95% CI : (0.7283, 0.778)
-##     No Information Rate : 0.2161         
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
-##                                          
-##                   Kappa : 0.6923         
-##  Mcnemar&#39;s Test P-Value : NA             
+##                                           
+##                Accuracy : 0.7697          
+##                  95% CI : (0.7447, 0.7933)
+##     No Information Rate : 0.2111          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.7119          
+##  Mcnemar&#39;s Test P-Value : 0.003748        
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: 1 Class: 2 Class: 3 Class: 4 Class: 5
-## Sensitivity            0.6434   0.9193   0.6468   0.7397   0.8390
-## Specificity            0.9220   0.9588   0.9187   0.9664   0.9259
-## Pos Pred Value         0.6946   0.8367   0.6609   0.8483   0.7361
-## Neg Pred Value         0.9037   0.9810   0.9139   0.9359   0.9589
-## Prevalence             0.2161   0.1868   0.1968   0.2027   0.1977
-## Detection Rate         0.1390   0.1717   0.1273   0.1499   0.1658
-## Detection Prevalence   0.2002   0.2052   0.1926   0.1767   0.2253
-## Balanced Accuracy      0.7827   0.9390   0.7827   0.8530   0.8824</code></pre>
+## Sensitivity            0.6203   0.9286   0.7105   0.7316   0.8415
+## Specificity            0.9540   0.9544   0.9244   0.9387   0.9409
+## Pos Pred Value         0.7696   0.8448   0.6894   0.7412   0.7871
+## Neg Pred Value         0.9103   0.9804   0.9312   0.9358   0.9581
+## Prevalence             0.1985   0.2111   0.1910   0.1935   0.2060
+## Detection Rate         0.1231   0.1960   0.1357   0.1415   0.1734
+## Detection Prevalence   0.1600   0.2320   0.1968   0.1910   0.2203
+## Balanced Accuracy      0.7871   0.9415   0.8175   0.8352   0.8912</code></pre>
 <pre class="r"><code>tx_confusion(x = preds_lstm, y = test$party_id, lib = &quot;gg&quot;)</code></pre>
 <p><img src="/post/2018-03-06-keras_tensorflow_files/figure-html/fit2-1.png" width="672" /></p>
 </div>

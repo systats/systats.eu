@@ -23,7 +23,8 @@ pacman::p_load(dplyr, stringr, manifestoR, purrr, keras, tidyr, tidytext, tidyTX
 * http://127.0.0.1:28103/library/gridExtra/doc/tableGrob.html
 
 ```{r}
-#tokenizer <- load_text_tokenizer("tokenizer")
+tokenizer <- load_text_tokenizer("tokenizer")
+dir()
 glove_fit <- load_model_hdf5("glove_fit.h5")
 lstm_fit <- load_model_hdf5("lstm_fit.h5")
 load("test_seq.Rdata")
@@ -69,7 +70,35 @@ words <- words %>%
 dim(words)
 row.names(embedding_matrix) <- c(words$word)
 
+mat <- embedding_matrix %>% t
+mat[1:10, 1:10]
 ```
+
+## Cluster
+
+```{r}
+res.dist <- dist(mat, method = "euclidean")
+colnames(res.dist) <- colnames(mat)
+res_hc <- hclust(d = res.dist, method = "ward.D2")
+
+library(factoextra)
+fviz_dend(res.hc, k = 5, # Cut in four groups
+          k_colors = "jco",
+          type = "phylogenic", 
+          #repel = TRUE,
+          phylo_layout = "layout.gem")
+```
+
+
+
+
+
+
+
+
+
+
+
 
 ```{r, eval = F}
 library(text2vec)
@@ -462,3 +491,17 @@ cwords <- train %>%
 cwords %>%
   slice(10000:10500)
 ```
+
+
+
+
+
+
+```{r}
+fviz_dend(res.hc, k = 3, # Cut in four groups
+          k_colors = "jco",
+          type = "phylogenic", 
+          repel = TRUE,
+          phylo_layout = "layout.gem")
+```
+

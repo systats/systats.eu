@@ -13,6 +13,11 @@
   </url>
   
   <url>
+    <loc>/post/2017/08/01/r-squared-simulations/</loc>
+    <lastmod>2017-08-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/about/</loc>
   </url>
   
@@ -52,6 +57,12 @@
   </url>
   
   <url>
+    <loc>/tags/model-fit/</loc>
+    <lastmod>2017-08-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/categories/nlp/</loc>
     <lastmod>2018-03-07T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -76,12 +87,30 @@
   </url>
   
   <url>
+    <loc>/tags/r2/</loc>
+    <lastmod>2017-08-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/semanticui/</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/simulations/</loc>
+    <lastmod>2017-08-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
     <loc>/</loc>
     <lastmod>2018-03-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/statistics/</loc>
+    <lastmod>2017-08-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>
@@ -97,12 +126,6 @@
   <url>
     <loc>/tags/tensorflow/</loc>
     <lastmod>2018-03-07T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/widgets/</loc>
-    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

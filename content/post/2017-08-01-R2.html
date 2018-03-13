@@ -1,0 +1,382 @@
+---
+title: "R Squared Simulations"
+date: "2017-08-01"
+categories: ["R", "Statistics"]
+tags: ["R2", "Simulations", "Model Fit"]
+description: "This post is imported from my last blog which demostrates the volatility of R-square and its consequences by talking about explained variance."
+---
+
+
+
+<p>The model performance measure <span class="math inline">\(R^2\)</span> is often subject to fierce criticism for being prone to its context. This notebook describes some well known criticism of <span class="math inline">\(R^2\)</span> and tests the deficiencies by simulations. By combining theory, code and accessible graphics I want to show the implications for getting any useful information from <span class="math inline">\(R^2\)</span>.</p>
+<div id="literature" class="section level1">
+<h1>Literature</h1>
+<p>The theoretical considerations are partly taken from</p>
+<ul>
+<li><a href="http://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12.pdf">The Elements of Statistical Learning p.14-16</a></li>
+<li><a href="http://www.springer.com/de/book/9783531173450">Urban and Mayerl (2011)</a> set up a <em>poison</em> list of 10 items to be considered, as <span class="math inline">\(R^2\)</span> is artificially biased by other parameters.</li>
+<li><a href="http://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/01/lecture-01.pdf">F-Tests, R2, and Other Distractions (2015)</a> by Shalizi. A course taught in Modern Regression at the University of Carnegie, department for statistics. Interestingly the discussion on the content was continued on <a href="https://www.reddit.com/r/statistics/comments/3ow1cd/my_stats_professor_just_went_on_a_rant_about_how/">reddit</a>.</li>
+</ul>
+</div>
+<div id="recap" class="section level1">
+<h1>Recap</h1>
+<div id="linear-model" class="section level2">
+<h2>Linear Model</h2>
+<p>Before we start with the simulation part lets recap the basics. If you are familiar with this concept just skip directly to the simulation part. A simple linear model is defined as</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1x_i + \varepsilon_i \]</span></p>
+<p>Some R code to simulate <span class="math inline">\(R^2\)</span>.</p>
+<pre class="r"><code>set.seed(2017)  # for reproducibility 
+x &lt;- 1:20 # independent variable
+# dependent variable; function of x with random error
+y &lt;- 2 + 1/2*x + rnorm(n = 20, mean = 0, sd = 3)   
+mod &lt;- lm(y ~ x) # simple linear regression
+summary(mod)$r.squared</code></pre>
+<pre><code>## [1] 0.3909931</code></pre>
+<p>The actual formula is</p>
+<p><span class="math display">\[y_i = 2 + \frac{1}{2}x + \varepsilon \;\;\; \text{ with }\;\;\; \varepsilon_i \sim N(0, 3)\]</span></p>
+<p>This can be divided in the structural component (parameter/ estimates)</p>
+<p><span class="math display">\[\hat y_i = \beta_0 + \beta_1x_i \]</span></p>
+<p>and the residuals</p>
+<p><span class="math display">\[\varepsilon_i \sim N(0, \sigma^2/n)\]</span></p>
+<p>where <span class="math inline">\(\varepsilon_i\)</span> is a random Gaussian-noise term (iid). What? It simply means the error/distance between the prediction and the actual empirical value is assumed to be drawn from a Normal distribution.</p>
+<p><span class="math display">\[(y_i - \hat y_i) \sim N(0, \sigma^2/n)\]</span></p>
+<p>As you might already know, the Normal distribution has the formula</p>
+<p><span class="math display">\[y_i = \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2} = N(\mu, \sigma^2/n)\]</span></p>
+<p>As linear regression is estimated by <em>ordinary least squares</em> (OLS) from the optimal prediction line, the first parameter <span class="math inline">\(\mu= 0\)</span> with some random error variance <span class="math inline">\(\sigma^2\)</span>. The residuals are calculated by the so called loss or error function</p>
+<p><span class="math display">\[\ell(\beta) = \sum^N_{i = 1} (y_i - \hat y_i)^2\]</span></p>
+<p>which gets optimized (minimized) to derive the parameters <span class="math display">\[\hat \beta\]</span></p>
+<p><span class="math display">\[\hat \beta = argmin_\beta \;\;\; \ell(\beta)\]</span></p>
+</div>
+<div id="r-squared" class="section level2">
+<h2>R Squared</h2>
+<p>In order to assess whether a model performed well on the given data, we conventionally use <span class="math inline">\(R^2\)</span>, which compares a restricted model with a so called null model. The null or reference model is formalized as</p>
+<p><span class="math display">\[y_i = \beta_0 + \varepsilon_i \;\;\; \text{ with }\;\;\; \varepsilon_i \sim N(0, \sigma^2/n) \]</span></p>
+<p>In this case, the null model intercept equals the mean of y (<span class="math display">\[\beta_0 = \bar y\]</span>).</p>
+<p><span class="math display">\[y_i = \bar y + \varepsilon_i\]</span></p>
+<p>So the most basic form of <span class="math inline">\(R^2\)</span> is the ratio of the sample variance of the fitted values <span class="math display">\[s^2_{\hat m}\]</span> (restricted model) to the sample variance of y <span class="math display">\[s^2_y\]</span> (reference model).</p>
+<p><span class="math display">\[R^2 = \frac{s^2_{\hat m}}{s^2_y} = \frac{\sum(\hat y_i - \bar y)^2}{\sum (y_i-\bar y)^2} = \frac{mss}{tss}\]</span></p>
+<p>First the model sum of squares (mss) and the total sum of squares (in y) are calculated and then compared to each other.</p>
+<pre class="r"><code>f &lt;- mod$fitted.values       # extract fitted (or predicted) values from model
+mss &lt;- sum((f - mean(y))^2)  # sum of squared fitted-value deviations
+tss &lt;- sum((y - mean(y))^2)  # sum of squared original-value deviations
+r2 &lt;- mss / tss                      # r-squared
+r2</code></pre>
+<pre><code>## [1] 0.3909931</code></pre>
+<p><span class="math inline">\(R^2\)</span> can also be computed by subtracting the error variance from 1.</p>
+<p><span class="math display">\[ R^2 = 1 - \frac{\sum(y_i - \hat y_i)^2}{\sum (y_i-\bar y)^2} = 1- \frac{rss}{tss}\]</span></p>
+<p>Under the hood</p>
+<pre class="r"><code>rss &lt;-sum(mod$residuals^2)    
+tss &lt;- sum((y - mean(y))^2)  # sum of squared original-value deviations
+r2 &lt;- 1 - (rss / tss)                      # r-squared
+r2</code></pre>
+<pre><code>## [1] 0.3909931</code></pre>
+<p>Some more equations might help to see connections to other implications. The model variance is calculated as follows</p>
+<p><span class="math display">\[s^2_{\hat m} = s^2_{\beta_0 + \beta_1x} = s^2_{\beta_1x}= \hat \beta^2_1 s^2_x\]</span></p>
+<p>Thus we get another expression</p>
+<p><span class="math display">\[R^2 = \frac{\hat \beta^2_1 s^2_x}{s^2_y}\]</span></p>
+<p>This can be further understood as</p>
+<p><span class="math display">\[R^2 = \left(\frac{cov(xy)}{s_xs_y}\right)^2\]</span></p>
+<p>This is the squared correlation of x and y. A noteworthy characteristics of this equation is that we can expect exactly the same <span class="math inline">\(R^2\)</span> whether we regress Y on X, or vice versa <a href="http://www.stat.cmu.edu/~cshalizi/mreg/15/lectures/10/lecture-10.pdf">F-Tests, R2, and Other Distractions by Shalizi</a>.</p>
+<pre class="r"><code>x1 &lt;- 1:20 # independent variable
+y &lt;- 2 + 1/2*x1 + rnorm(n = 20, mean = 0, sd = 3)   # dependent variable; function of x with random error
+summary(lm(y ~ x1))$r.squared == summary(lm(x1 ~ y))$r.squared</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Finally this expression is also true</p>
+<p><span class="math display">\[R^2 = \frac{s_y^2 - \hat \sigma^2}{s^2_y} \]</span></p>
+<p>Since <span class="math inline">\(\hat \sigma^2\)</span> is the sample variance of the residuals, and the residuals are uncorrelated and independent in sample with the model, it’s is easy to see that the numerator is equal to the model variance <span class="math inline">\(s^2_{\hat m}\)</span>.</p>
+</div>
+</div>
+<div id="simulations" class="section level1">
+<h1>Simulations</h1>
+<div id="r-squared-does-not-measure-the-goodness-of-fit" class="section level2">
+<h2>R-squared does not measure the goodness of fit</h2>
+<p>Driven by different influences, <span class="math inline">\(R^2\)</span> is known for being arbitrarily low even if the model is completely correct. In social sciences we rarely find data generation processes that are linear and homogeneously distributed. By increasing the random variance sigma around the prediction, R-squared converges towards 0, even if every assumption of the simple linear regression model is correct and identified. Again, what the sigma? When we run linear regression, our statistical model almost predicts our dependent variable. The distance between <em>almost</em> and <em>exact</em> is assumed to be a draw from a Normal distribution with <span class="math inline">\(\mu = 0\)</span> and some variance we call <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>The simulation can be broken into 3 steps</p>
+<ol style="list-style-type: decimal">
+<li>generate data which full-fills the assumptions of simple linear regression (iid residuals with constant variance),</li>
+<li>fit a simple linear model to the data, and</li>
+<li>report the R-squared. Notice: the only parameter for sake of simplicity is sigma. The parameter extraction is conducted by functions of the <strong>broom</strong> package.
+<ul>
+<li><code>tidy()</code>: component level statistics</li>
+<li><code>augment()</code>: observation-level statistics</li>
+<li><code>glance()</code>: model-level statistics</li>
+<li><a href="https://www.youtube.com/watch?v=pv4Nls49mZw">TechEd Talk (vid)</a> by Robinson on broom.</li>
+</ul></li>
+</ol>
+<pre class="r"><code>### load all packages at once
+pacman::p_load(ggplot2, dplyr, broom)
+
+### This function simulates a linear regression based on an input paramter sigma
+sim_sigma &lt;- function(sigma){
+  # simulate seqeunce of n = 100 and range of 10
+  x &lt;- seq(1, 10, length.out = 100)
+  # simulate y by true regression line + random error
+  y &lt;- 2 + 1.2*x + rnorm(100, 0, sd = sigma)
+  # fit and return lm
+  return(lm(y ~ x))    
+}
+
+# generate sigma sequence 
+sigmas &lt;- seq(.5, 20, length.out = 20)
+# initalize empty data.frames
+perform &lt;- data.frame()
+elements &lt;- data.frame()
+
+### This control loop extracts model performance measures by increasing sigma
+for(jj in sigmas){
+  # simulate model by sigma
+  model &lt;- sim_sigma(jj)
+  # extract perfomance data
+  per &lt;- broom::glance(model)
+  per$it &lt;- jj
+  perform &lt;- rbind(perform, per)
+  # extract oberservational data
+  ele &lt;- broom::augment(model)
+  ele$r2 &lt;- per$r.squared
+  ele$it &lt;- jj
+  elements &lt;- rbind(elements, ele)
+}
+
+### Function for normalization in [0, 1]
+normalize &lt;- function(x){
+  norm &lt;- (x - min(x)) / 
+    (max(x) - min(x))
+  return(norm)
+}
+
+### ggplot2 based vis for r.squared 
+gg_perform &lt;- function(perform){
+  perform %&gt;% 
+  select(it, r.squared, adj.r.squared, AIC, BIC, deviance) %&gt;% 
+  tidyr::gather(&quot;param&quot;, &quot;value&quot;, -it) %&gt;%
+  group_by(param) %&gt;%
+  mutate(value_z = normalize(value)) %&gt;% 
+  mutate(type = ifelse(param %in% c(&quot;r.squared&quot;, &quot;adj.r.squared&quot;), 
+                       &quot;1&quot;, &quot;2&quot;)) %&gt;%
+  ggplot(aes(it, value_z, colour = param)) +
+  geom_point() + 
+  geom_line(alpha = .5) +
+  ggthemes::theme_few() +
+  viridis::scale_color_viridis(discrete = T) +
+  facet_wrap(~ type, nrow = 2)
+}
+
+gg_perform(perform) +
+  ggtitle(&quot;Increasing Sample Variance by R2&quot;)</code></pre>
+<p><img src="/post/2017-08-01-R2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>As we can see the <span class="math inline">\(R^2\)</span> rapidly declines with increasing sigma, even though the model is completely correct and all assumptions are perfectly simulated. The <span class="math inline">\(R^2\)</span> and <span class="math inline">\(R^2_{adj}\)</span> are equal as BIC and AIC are (lines overlap). For model selection BIC seems fairly reasonable since it converges more slowly to 1 as adj. <span class="math inline">\(R^2\)</span> does to 0. Another way to show the impact of an increasing variance sigma on the <span class="math inline">\(R^2\)</span> is by looking directly on the error variance from the prediction line and the corresponding <span class="math inline">\(R^2\)</span> in color.</p>
+<pre class="r"><code>gg_elements &lt;- function(elements){
+  elements %&gt;%
+  ggplot(aes(x, y, colour = r2)) + 
+  geom_point(alpha = .5) + 
+  geom_smooth(method = &quot;lm&quot;, alpha = .5) +
+  # scale_color_continuous(high = &quot;red&quot;, low = &quot;blue&quot;) + 
+  facet_wrap( ~ round(it, 2), ncol = 4) +
+  ggthemes::theme_few() +
+  viridis::scale_color_viridis()
+}
+
+gg_elements(elements) +
+  ggtitle(&quot;Increasing Sample Variance by R2&quot;)</code></pre>
+<p><img src="/post/2017-08-01-R2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Data generating processes in social sciences are always very variable. If we get a normal sigma of 15, despite the identification of the true effect, our model would have a very bad <span class="math inline">\(R^2\)</span>.</p>
+</div>
+<div id="r-squared-depends-on-the-range-of-x." class="section level2">
+<h2>R-squared depends on the range of x.</h2>
+<p>Next we want to change the range of the x variable to explore its impact. Increasing the range of x equals an increase of variance <span class="math inline">\(s_x\)</span>. This is simply proved by</p>
+<pre class="r"><code>x_1 &lt;- runif(100, min = 1, max = 7)
+x_2 &lt;- runif(100, min = 1, max = 100)
+sd(x_1) &lt; sd(x_2) # is s_x1 smaller than s_x2</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>Now we turn on the range of x.</p>
+<pre class="r"><code>### Function that simulates lm based on varaible range in x
+sim_x_scale &lt;- function(x_range){
+  # simulate variable x with x_range
+  x &lt;- seq(1, x_range, length.out = 100)
+  # predict y 
+  y &lt;- 2 + 1.2*x + rnorm(100, 0, sd = 15)
+  return(lm(y ~ x))   
+}
+
+# log x intervals 
+x_range &lt;- exp(seq(log(3), log(80), length.out = 20))
+# initalize empty data.frames
+perform &lt;- data.frame()
+elements &lt;- data.frame()
+
+### Control loop for extracting model performance by different x_range
+for(jj in x_range){
+  # simulate model by sigma
+  model &lt;- sim_x_scale(jj)
+  # extract perfomance data
+  per &lt;- broom::glance(model)
+  per$it &lt;- jj
+  perform &lt;- rbind(perform, per)
+  # extract observational data
+  ele &lt;- broom::augment(model)
+  ele$r2 &lt;- per$r.squared
+  ele$it &lt;- jj
+  elements &lt;- rbind(elements, ele)
+}
+
+gg_perform(perform) + 
+    ggtitle(&quot;Increasing Range in X by R2&quot;)</code></pre>
+<p><img src="/post/2017-08-01-R2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>As we can see the true model needs a range(x) &gt; 30 to get a desired <span class="math inline">\(R^2\)</span> of higher than 0.3.</p>
+<pre class="r"><code>gg_elements(elements) +
+  ggtitle(&quot;Increasing Range in X by R2&quot;)</code></pre>
+<p><img src="/post/2017-08-01-R2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="r-squared-can-be-arbitrarily-close-to-1-when-the-model-is-totally-wrong." class="section level2">
+<h2>R-squared can be arbitrarily close to 1 when the model is totally wrong.</h2>
+<p>This circumstance is often seen and arises when a linear model is wrong specified. If a data generating process is not linear and does not full fill <em>iid</em> assumptions, the model is heavily driven by outlines as seen in the following graph.</p>
+<pre class="r"><code># x is exponentially distributed for marginal steps
+x &lt;- rexp(50, rate = 0.005) 
+# non-linear data generation
+y &lt;- (x - 1)^2 * runif(50, min=0.8, max=1.2)   
+summary(lm(y ~ x))$r.squared</code></pre>
+<pre><code>## [1] 0.8723022</code></pre>
+<pre class="r"><code>data.frame(x, y) %&gt;% 
+  ggplot(aes(x, y)) +
+    geom_point(alpha = .5) +
+    geom_smooth(method = &quot;lm&quot;, color = &quot;red&quot;) + 
+    ggthemes::theme_few() +
+    theme(panel.background = element_rect(fill = &quot;#FFFFFF&quot;)) +
+    ggtitle(&quot;Exponential Assoziation Between X and Y&quot;)</code></pre>
+<p><img src="/post/2017-08-01-R2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The xy relationship is non-linear and despite the model is completely wrong, the <span class="math inline">\(R^2\)</span> is around 0.8. Only by visual exploration this mistake can be avoided and concluded that simple linear regression is not appropriate for this type of response function.</p>
+</div>
+<div id="r-squared-is-prone-to-adding-random-predictors" class="section level2">
+<h2>R-squared is prone to adding random predictors</h2>
+<p>For robustness the adjusted <span class="math inline">\(R^2\)</span> has to be preferred as adding random uncorrelated predictors will always lead to an increase in <span class="math inline">\(R^2\)</span>. This is true as random change always generates non-zero coefficients. To address this problem for big k matrices, the lasso and rich regression were invented. The next simulation consist of 3 steps.</p>
+<ol style="list-style-type: decimal">
+<li>simulate a base model with significant effect size.</li>
+<li>add k (K=19) simulated predictors which are uncorrelated with y</li>
+<li>iterate 19 times and report r-squared for increasing model complexity with no real predictive power.</li>
+</ol>
+<pre class="r"><code>set.seed(2017)
+### simulate increasing model complexity by adding random predictors
+sim_pred &lt;- function(k){
+  if(k &gt;= 1){
+    dt &lt;- data.frame(placeholder = rep(NA, 100))
+    for(kk in 1:k){
+      dt[[kk]] &lt;- runif(n = 100, min = 1, max = 5)
+      colnames(dt)[kk] &lt;- paste(&quot;x_&quot;, kk)
+    }
+  } else {
+    dt &lt;- data.frame(placeholder = rep(NA, 100))
+  }
+  
+  # actual prediction
+  x_0 &lt;- seq(1, 10, length.out = 100)
+  y &lt;- 2 + 2*x_0 + rnorm(100, 0, sd = 15)
+  
+  dat &lt;- data.frame(y = y, x_0 = x_0, dt)
+  if(k &lt; 1) dat$placeholder &lt;- NULL
+  
+  return(lm(y ~ ., data = dat))
+}
+
+# number of x variables
+x_k &lt;- 0:19
+# initalize empty data.frames
+perform &lt;- data.frame()
+
+### control loop for extracting R2
+for(jj in x_k){
+  # simulate model by sigma
+  model &lt;- sim_pred(jj)
+  # extract perfomance measures
+  per &lt;- broom::glance(model)
+  per$it &lt;- jj
+  perform &lt;- rbind(perform, per)
+}
+
+gg_perform(perform) + 
+  ggtitle(&quot;Increasing Number of Random Predictors by R2&quot;)</code></pre>
+<p><img src="/post/2017-08-01-R2_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>The <span class="math inline">\(R^2\)</span> seems to be highly fluctuate due to adding new random predictors. The increase is only driven by chance and gives no credit to neither <span class="math inline">\(R^2\)</span> nor <span class="math inline">\(R^2_{adj}\)</span>, since the latter is increasing too.</p>
+</div>
+<div id="comparing-r2-between-y-transformations-is-evil" class="section level2">
+<h2>Comparing R2 between y-transformations is evil</h2>
+<p>Finally, <span class="math inline">\(R^2\)</span> can not be compared between a model with transformed Y and one with transformed Y, or between any kind of transformations of Y. <span class="math inline">\(R^2\)</span> can easily go down when the model assumptions are better fulfilled, etc. The simulation can be broken into x steps:</p>
+<ol style="list-style-type: decimal">
+<li>Firstly generate a linear dependent dataset by random parameter values for <span class="math inline">\(\beta_0\)</span> (the intercept), <span class="math inline">\(\beta_1\)</span> the slope and the residual variance <span class="math inline">\(\sigma^2\)</span>.</li>
+<li>Second, four differnt linear regressions are estimated on the same random data sample and their <span class="math inline">\(R^2\)</span> is stored.
+<ul>
+<li>Lin-Lin</li>
+<li>Lin-Log</li>
+<li>Log-Lin</li>
+<li>Log-Log</li>
+</ul></li>
+<li>Repeat this process 1000 times.</li>
+</ol>
+<pre class="r"><code>### simulation function for random grid paramatrization. This is an exploratory procedure as unprobed interacations could contribute to differences in model performances, which are not controlled for. 
+sim_log_response &lt;- function(){
+  # random data generation
+  n &lt;- 100
+  beta_0 &lt;- sample(seq(0, 10, by = .2), 1)
+  beta_1 &lt;- sample(seq(0, 3, by = .2), 1)
+  sigma &lt;- sample(seq(3, 30, by = .5), 1)
+  x &lt;- seq(1, 10, length.out = n)
+  y &lt;- beta_0 + beta_1 * x + rnorm(100, sd = sigma)
+  dat &lt;- data.frame(y = y, x = x)
+  
+  # fitting models
+  fit_linlin &lt;- lm(y ~ x, data = dat)
+  fit_linlog &lt;- lm(y ~ log(x), data = dat)
+  fit_loglin &lt;- lm(log(y) ~ x, data = dat)
+  fit_loglog &lt;- lm(log(y) ~ log(x), data = dat)
+
+  # extract infos
+  linlin &lt;- broom::glance(fit_linlin)
+  linlin$type &lt;- &quot;lin-lin&quot;
+  
+  linlog &lt;- broom::glance(fit_linlog)
+  linlog$type &lt;- &quot;lin-log&quot;
+  
+  loglin &lt;- broom::glance(fit_loglin)
+  loglin$type &lt;- &quot;log-lin&quot;
+  
+  loglog &lt;- broom::glance(fit_loglog)
+  loglog$type &lt;- &quot;log-log&quot;
+  
+  perform &lt;- rbind(linlin, linlog, loglin, loglog)
+  
+  perform$beta_0 &lt;- beta_0
+  perform$beta_1 &lt;- beta_1
+  perform$sigma &lt;- sigma
+  
+  return(perform)
+}
+
+# repetition time of random grid simulation
+n_sim &lt;- 1000
+
+# pb &lt;- txtProgressBar(min = 0,
+#   max = n_sim,
+#   style = 3
+# )
+
+# initalize empty data.frame
+per &lt;- data.frame()
+
+### control loop 
+for(jj in 1:n_sim){
+  per_new &lt;- sim_log_response()
+  per_new$it &lt;- jj
+  per &lt;- rbind(per, per_new)
+  # setTxtProgressBar(pb, jj)
+}</code></pre>
+<p><img src="/post/2017-08-01-R2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>The true data generation process is always linear. For this reason the linear model performs best for most of random sample data. Nevertheless there are situations were different models than lin-lin have the highest <span class="math inline">\(R^2\)</span>. The next graph explores the relationship between random parameter constellations (<em>it</em>= 1000) and the model <span class="math inline">\(R^2\)</span>s.</p>
+<p><img src="/post/2017-08-01-R2_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>The simulation counted the cases in which the <span class="math inline">\(R^2\)</span> was highest more one particular type of model, compared to the others. As assumed, the lin-lin model performs better for strong linear effect sizes and <span class="math inline">\(R^2\)</span>. Additionally, lin-lin is dominant for lower error variance. In contrast, the log transformed models perform better in situations where model uncertainty is high and the true slope is small. This can be explained by the higher flexibility of log functions which tend to over-fit and produce higher <span class="math inline">\(R^2\)</span>.</p>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>I hope to provide some useful insights on how the <span class="math inline">\(R^2\)</span> is prone to its context. First, <span class="math inline">\(R^2\)</span> is strongly influenced by the size of the error variance which is almost always higher in social sciences and pushes the <span class="math inline">\(R^2\)</span> towards 0. Second, a higher range in x, respectively higher sample variance systematically influences the <span class="math inline">\(R^2\)</span>. Third, model mis-specification could lead to unusual high model performance due to outliers. Fourth, adjusted <span class="math inline">\(R^2\)</span> is not free from reporting random variance as variance explained. And last but not least, model comparisons based on differently transformed dependent variables are not reasonable at all. In sum, these results might be disappoint for people who like to interpret their <span class="math inline">\(R^2\)</span> as fraction of the explained variance. As alternatives, AIC and BIC are designed to have an arbitrary scale which can not be accidentally interpreted as real world proportion.</p>
+<p>But what is <span class="math inline">\(R^2\)</span> good for? For model selection! If you run different nested models on the same data set without loosing observations by case-wise deletion, than you can compare the <span class="math inline">\(R^2\)</span> to select the best fitting model. The perspective I have taken when discussing <span class="math inline">\(R^2\)</span> might seem depreciating. However the over-simplification often seen in social sciences is alarming and needs to be addressed. Sadly we will always have to deal with people like colleagues, bosses and even teachers, who learned their statistics in the “good” old days, and so have to understand what they should be doing differently.</p>
+<!---Of course we honor our our ancestors work and the tradition they left us behind when we improve that tradition where we can. Respectfully challenging old concepts with new evidence sometimes requires to throwe out the broken bits. --->
+</div>

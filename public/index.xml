@@ -30,6 +30,17 @@
     </item>
     
     <item>
+      <title>R Squared Simulations</title>
+      <link>/post/2017/08/01/r-squared-simulations/</link>
+      <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017/08/01/r-squared-simulations/</guid>
+      <description>The model performance measure \(R^2\) is often subject to fierce criticism for being prone to its context. This notebook describes some well known criticism of \(R^2\) and tests the deficiencies by simulations. By combining theory, code and accessible graphics I want to show the implications for getting any useful information from \(R^2\).
+Literature The theoretical considerations are partly taken from
+ The Elements of Statistical Learning p.14-16 Urban and Mayerl (2011) set up a poison list of 10 items to be considered, as \(R^2\) is artificially biased by other parameters.</description>
+    </item>
+    
+    <item>
       <title>About Hugo XMin</title>
       <link>/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

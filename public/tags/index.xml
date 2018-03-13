@@ -48,6 +48,15 @@
     </item>
     
     <item>
+      <title>Model Fit</title>
+      <link>/tags/model-fit/</link>
+      <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/model-fit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>R Markdown</title>
       <link>/tags/r-markdown/</link>
       <pubDate>Mon, 05 Mar 2018 00:00:00 +0000</pubDate>
@@ -57,20 +66,29 @@
     </item>
     
     <item>
+      <title>R2</title>
+      <link>/tags/r2/</link>
+      <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/r2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Simulations</title>
+      <link>/tags/simulations/</link>
+      <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/simulations/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>TensorFlow</title>
       <link>/tags/tensorflow/</link>
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/tensorflow/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Widgets</title>
-      <link>/tags/widgets/</link>
-      <pubDate>Mon, 05 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/widgets/</guid>
       <description></description>
     </item>
     

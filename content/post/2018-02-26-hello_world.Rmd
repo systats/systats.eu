@@ -2,7 +2,7 @@
 title: "Blogdown, Highcharter and R Markdown"
 date: '2018-03-05'
 categories: ["R"]
-tags: ["R Markdown", "Highcharter", "widgets"]
+tags: ["R Markdown", "Highcharter"]
 description: "This post is an Rmarkdown example for using highcharter in blogdown post."
 ---
 

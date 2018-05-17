@@ -86,7 +86,7 @@
     <br>
     <div class="ui text container">
       <h1 class="ui inverted header", style = "font-size:40px">
-        About Hugo XMin
+        About Me
       </h1>
       <br>
       <br>
@@ -106,110 +106,112 @@
     
 
 <div class="article-meta">
-<h1><span class="title">About Hugo XMin</span></h1>
-<h2 class="author">Yihui Xie</h2>
+<h1><span class="title">About Me</span></h1>
+
 
 </div>
 
 <main>
-  
+  <p>Hi my name is Simon Roth and I am a social data scientist. Started with a B.A. in social sciences I have been deeply interested in measuring social processes. Therefore I am graduating in empirical political research focusing on bridging the gap between normative political theory and data evidence. Hopefully a PhD in computational social sciences will be the next step.</p>
 
-<p><strong>XMin</strong> is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the  <a href="https://github.com/rstudio/blogdown"><strong>blogdown</strong></a> book. Basically I wanted a simple theme that supports a navigation menu, a home page, other single pages, lists of pages, blog posts, categories, tags, and RSS. That is all. Nothing fancy. In terms of CSS and JavaScript, I really want to keep them minimal. In fact, this theme does not contain any JavaScript code at all, although on this example website I did introduce some JavaScript code (still relatively simple anyway). The theme does not contain any images, either, and is pretty much a plain-text theme.</p>
+<p>In the past two years a got in applied machine learning for text mining projects. There are a ton of unsolved or even unregistered tasks for social scientists in explaining the political environment. Especially, as human interaction produces a so far uncaptured trace of information and even more in democratic societies that are committed to transparency. The wast majority of information is documented as written unstructured text.</p>
 
-<p>The theme name &ldquo;XMin&rdquo; can be interpreted as &ldquo;<strong>X</strong>ie&rsquo;s <strong>Min</strong>imal theme&rdquo; (Xie is my last name) or &ldquo;e<strong>X</strong>tremely <strong>Min</strong>imal theme&rdquo;.</p>
+<!---**XMin** is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the  [**blogdown**](https://github.com/rstudio/blogdown) book. Basically I wanted a simple theme that supports a navigation menu, a home page, other single pages, lists of pages, blog posts, categories, tags, and RSS. That is all. Nothing fancy. In terms of CSS and JavaScript, I really want to keep them minimal. In fact, this theme does not contain any JavaScript code at all, although on this example website I did introduce some JavaScript code (still relatively simple anyway). The theme does not contain any images, either, and is pretty much a plain-text theme.
 
-<h1 id="config-toml">config.toml</h1>
+The theme name "XMin" can be interpreted as "**X**ie's **Min**imal theme" (Xie is my last name) or "e**X**tremely **Min**imal theme".
 
-<p>For this example site, I defined permalinks for two sections, <code>post</code> and <code>note</code>, so that the links to pages under these directories will contain the date info, e.g., <code>https://xmin.yihui.name/post/2016/02/14/a-plain-markdown-post/</code>. This is optional, and it is up to your personal taste of URLs.</p>
+# config.toml
 
-<pre><code>[permalinks]
-    post = &quot;/post/:year/:month/:day/:slug/&quot;
-    note = &quot;/note/:year/:month/:day/:slug/&quot;
-</code></pre>
+For this example site, I defined permalinks for two sections, `post` and `note`, so that the links to pages under these directories will contain the date info, e.g., `https://xmin.yihui.name/post/2016/02/14/a-plain-markdown-post/`. This is optional, and it is up to your personal taste of URLs.
 
-<p>You can define the menu through <code>menu.main</code>, e.g.,</p>
+```
+[permalinks]
+    post = "/post/:year/:month/:day/:slug/"
+    note = "/note/:year/:month/:day/:slug/"
+```
 
-<pre><code>[[menu.main]]
-    name = &quot;Home&quot;
-    url = &quot;/&quot;
+You can define the menu through `menu.main`, e.g.,
+
+```
+[[menu.main]]
+    name = "Home"
+    url = "/"
     weight = 1
 [[menu.main]]
-    name = &quot;About&quot;
-    url = &quot;/about/&quot;
+    name = "About"
+    url = "/about/"
     weight = 2
 [[menu.main]]
-    name = &quot;Categories&quot;
-    url = &quot;/categories/&quot;
+    name = "Categories"
+    url = "/categories/"
     weight = 3
 [[menu.main]]
-    name = &quot;Tags&quot;
-    url = &quot;/tags/&quot;
+    name = "Tags"
+    url = "/tags/"
     weight = 4
 [[menu.main]]
-    name = &quot;Subscribe&quot;
-    url = &quot;/index.xml&quot;
-</code></pre>
+    name = "Subscribe"
+    url = "/index.xml"
+```
 
-<p>Alternatively, you can add <code>menu: main</code> to the YAML metadata of any of your pages, so that these pages will appear in the menu.</p>
+Alternatively, you can add `menu: main` to the YAML metadata of any of your pages, so that these pages will appear in the menu.
 
-<p>The page footer can be defined in <code>.Params.footer</code>, and the text is treated as Markdown, e.g.,</p>
+The page footer can be defined in `.Params.footer`, and the text is treated as Markdown, e.g.,
 
-<pre><code>[params]
-    footer = &quot;&amp;copy; [Yihui Xie](https://yihui.name) 2017&quot;
-</code></pre>
+```
+[params]
+    footer = "&copy; [Yihui Xie](https://yihui.name) 2017"
+```
 
-<h1 id="custom-layouts">Custom layouts</h1>
+# Custom layouts
 
-<p>There are two layout files under <code>layouts/partials/</code> that you may want to override: <code>head_custom.html</code> and <code>foot_custom.html</code>. This is how you inject arbitrary HTML code to the head and foot areas. For example, this site has a file <code>layouts/partials/foot_custom.html</code> to support LaTeX math via MathJax and center images automatically:</p>
+There are two layout files under `layouts/partials/` that you may want to override: `head_custom.html` and `foot_custom.html`. This is how you inject arbitrary HTML code to the head and foot areas. For example, this site has a file `layouts/partials/foot_custom.html` to support LaTeX math via MathJax and center images automatically:
 
-<pre><code class="language-html">&lt;script src=&quot;//yihui.name/js/math-code.js&quot;&gt;&lt;/script&gt;
-&lt;script async src=&quot;//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML&quot;&gt;
-&lt;/script&gt;
+```html
+<script src="//yihui.name/js/math-code.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
 
-&lt;script async src=&quot;//yihui.name/js/center-img.js&quot;&gt;&lt;/script&gt;
-</code></pre>
+<script async src="//yihui.name/js/center-img.js"></script>
+```
 
-<p>You can certainly enable highlight.js for syntax highlighting by yourself through <code>head_custom.html</code> and <code>foot_custom.html</code> if you want.</p>
+You can certainly enable highlight.js for syntax highlighting by yourself through `head_custom.html` and `foot_custom.html` if you want.
 
-<p>If you do not like the default fonts (e.g., <code>Palatino</code>), you may provide your own <code>static/css/fonts.css</code> under the root directory of your website to override the <code>fonts.css</code> in the theme.</p>
+If you do not like the default fonts (e.g., `Palatino`), you may provide your own `static/css/fonts.css` under the root directory of your website to override the `fonts.css` in the theme.
 
-<h1 id="other-features">Other features</h1>
+# Other features
 
-<p>I could have added more features to this theme, but I decided not to, since I have no intention to make this theme feature-rich. However, I will teach you how. I have prepared several examples via pull requests at <a href="https://github.com/yihui/hugo-xmin/pulls">https://github.com/yihui/hugo-xmin/pulls</a>, so that you can see the implementations of these features when you check out the diffs in the pull requests. For example, you can:</p>
+I could have added more features to this theme, but I decided not to, since I have no intention to make this theme feature-rich. However, I will teach you how. I have prepared several examples via pull requests at https://github.com/yihui/hugo-xmin/pulls, so that you can see the implementations of these features when you check out the diffs in the pull requests. For example, you can:
 
-<ul>
-<li><p><a href="https://github.com/yihui/hugo-xmin/pull/3">Enable Google Analytics</a></p></li>
+- [Enable Google Analytics](https://github.com/yihui/hugo-xmin/pull/3)
 
-<li><p><a href="https://github.com/yihui/hugo-xmin/pull/4">Enable Disqus comments</a></p></li>
+- [Enable Disqus comments](https://github.com/yihui/hugo-xmin/pull/4)
 
-<li><p><a href="https://github.com/yihui/hugo-xmin/pull/5">Enable highlight.js for syntax highlighting of code blocks</a></p></li>
+- [Enable highlight.js for syntax highlighting of code blocks](https://github.com/yihui/hugo-xmin/pull/5)
 
-<li><p><a href="https://github.com/yihui/hugo-xmin/pull/2">Display categories and tags on a page</a></p></li>
+- [Display categories and tags on a page](https://github.com/yihui/hugo-xmin/pull/2)
 
-<li><p><a href="https://github.com/yihui/hugo-xmin/pull/7">Add a table of contents</a></p></li>
+- [Add a table of contents](https://github.com/yihui/hugo-xmin/pull/7)
 
-<li><p><a href="https://github.com/yihui/hugo-xmin/pull/6">Add a link in the footer of each page to &ldquo;Edit this page&rdquo; on Github</a></p></li>
-</ul>
+- [Add a link in the footer of each page to "Edit this page" on Github](https://github.com/yihui/hugo-xmin/pull/6)
 
-<p>To fully understand these examples, you have to read <a href="https://bookdown.org/yihui/blogdown/templates.html">the section on Hugo templates</a> in the <strong>blogdown</strong> book.</p>
+To fully understand these examples, you have to read [the section on Hugo templates](https://bookdown.org/yihui/blogdown/templates.html) in the **blogdown** book.
 
-<h1 id="design-philosophy">Design philosophy</h1>
+# Design philosophy
 
-<p>Lastly, a few words about my design philosophy for this theme: I have been relying on existing frameworks like Bootstrap for years since I&rsquo;m not really a designer, and I was always scared by the complexity of CSS.</p>
+Lastly, a few words about my design philosophy for this theme: I have been relying on existing frameworks like Bootstrap for years since I'm not really a designer, and I was always scared by the complexity of CSS.
 
-<p>When I started writing this theme, I asked myself, &ldquo;<em>What if I just write from scratch?</em>&rdquo; No Bootstrap. No Normalize.css. I don&rsquo;t care about IE (life could be so much easier without IE) or inconsistencies among browsers (for personal websites). As long as the theme looks okay in Chrome, Firefox, and Safari, I&rsquo;m done. Thanks to the simplicity of Markdown, you cannot really produce very complicated HTML, and I think styling the HTML output from Markdown is much simpler than general HTML documents. For example, I do not need to care much about form elements like textareas or buttons.</p>
+When I started writing this theme, I asked myself, "_What if I just write from scratch?_" No Bootstrap. No Normalize.css. I don't care about IE (life could be so much easier without IE) or inconsistencies among browsers (for personal websites). As long as the theme looks okay in Chrome, Firefox, and Safari, I'm done. Thanks to the simplicity of Markdown, you cannot really produce very complicated HTML, and I think styling the HTML output from Markdown is much simpler than general HTML documents. For example, I do not need to care much about form elements like textareas or buttons.
 
-<p>After I finished this theme, I started to wonder why I&rsquo;d need <code>normalize.css</code> at all (it sounds like a religious belief). The default appearance of modern browsers actually looks pretty good in my eyes, after I tweak the typeface a little bit.</p>
+After I finished this theme, I started to wonder why I'd need `normalize.css` at all (it sounds like a religious belief). The default appearance of modern browsers actually looks pretty good in my eyes, after I tweak the typeface a little bit.
 
-<p>Compared to inconsistencies across browsers, I care much more about these properties of HTML elements:</p>
+Compared to inconsistencies across browsers, I care much more about these properties of HTML elements:
 
-<ul>
-<li>Tables should always be centered, and striped tables are easier to read especially when they are wide. Tables should not have vertical borders.</li>
-<li>An image should be centered if it is the only child element of a paragraph.</li>
-<li>The <code>max-width</code> of images, videos, and iframes should be <code>100%</code>.</li>
-</ul>
+- Tables should always be centered, and striped tables are easier to read especially when they are wide. Tables should not have vertical borders.
+- An image should be centered if it is the only child element of a paragraph.
+- The `max-width` of images, videos, and iframes should be `100%`.
 
-<p>I hope you can enjoy this theme. The source code is <a href="https://github.com/yihui/hugo-xmin">on Github</a>. Happy hacking!</p>
+I hope you can enjoy this theme. The source code is [on Github](https://github.com/yihui/hugo-xmin). Happy hacking!--->
 
 </main>
 
@@ -286,4 +288,8 @@ ga('send', 'pageview');
 </script>
 
 </html>
+
+
+
+
 

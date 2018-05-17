@@ -2,6 +2,10 @@
 title: Teaching
 ---
 
+If you are interested in my teaching activities please visit [R-User-Group-Stuttgart Homepage](https://r-user-group-stuttgart.netlify.com/) to get access to all material. 
+div(class = "ui centered image", src = "")
+
+
   <!---<div class="row">
     <div class="ui equal width center aligned padded grid">
       <div class="column">
@@ -39,7 +43,7 @@ title: Teaching
         <img src="" class="ui small image">
       </div>
     </div>
-  </div>--->
+  </div>
   <div class = "middle alligned row">
     <div class="ui top attached tabular menu">
       <a class="active item" data-tab="first">
@@ -65,7 +69,7 @@ title: Teaching
 </div>
 <br>
 <br>
-</div>
+</div>--->
 
 <!--- https://www.rstudio.com/wp-content/uploads/2014/04/tidyverse.png---->
 

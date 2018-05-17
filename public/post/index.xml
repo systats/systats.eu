@@ -21,15 +21,6 @@
     </item>
     
     <item>
-      <title>Blogdown, Highcharter and R Markdown</title>
-      <link>/post/2018/03/05/blogdown-highcharter-and-r-markdown/</link>
-      <pubDate>Mon, 05 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/2018/03/05/blogdown-highcharter-and-r-markdown/</guid>
-      <description>First Header library(&amp;quot;highcharter&amp;quot;) ## Highcharts (www.highcharts.com) is a Highsoft software product which is ## not free for commercial and Governmental use data(diamonds, mpg, package = &amp;quot;ggplot2&amp;quot;) hchart(mpg, &amp;quot;scatter&amp;quot;, hcaes(x = displ, y = hwy, group = class))  {&#34;</description>
-    </item>
-    
-    <item>
       <title>R Squared Simulations</title>
       <link>/post/2017/08/01/r-squared-simulations/</link>
       <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>

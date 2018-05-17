@@ -8,11 +8,6 @@
   </url>
   
   <url>
-    <loc>/post/2018/03/05/blogdown-highcharter-and-r-markdown/</loc>
-    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/post/2017/08/01/r-squared-simulations/</loc>
     <lastmod>2017-08-01T00:00:00+00:00</lastmod>
   </url>
@@ -29,12 +24,6 @@
   <url>
     <loc>/tags/glove/</loc>
     <lastmod>2018-03-07T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/highcharter/</loc>
-    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -77,12 +66,6 @@
   <url>
     <loc>/categories/r/</loc>
     <lastmod>2018-03-07T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/r-markdown/</loc>
-    <lastmod>2018-03-05T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

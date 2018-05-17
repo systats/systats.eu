@@ -21,15 +21,6 @@
     </item>
     
     <item>
-      <title>Blogdown, Highcharter and R Markdown</title>
-      <link>/post/2018/03/05/blogdown-highcharter-and-r-markdown/</link>
-      <pubDate>Mon, 05 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/2018/03/05/blogdown-highcharter-and-r-markdown/</guid>
-      <description>First Header library(&amp;quot;highcharter&amp;quot;) ## Highcharts (www.highcharts.com) is a Highsoft software product which is ## not free for commercial and Governmental use data(diamonds, mpg, package = &amp;quot;ggplot2&amp;quot;) hchart(mpg, &amp;quot;scatter&amp;quot;, hcaes(x = displ, y = hwy, group = class))  {&#34;</description>
-    </item>
-    
-    <item>
       <title>R Squared Simulations</title>
       <link>/post/2017/08/01/r-squared-simulations/</link>
       <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>
@@ -41,12 +32,13 @@ Literature The theoretical considerations are partly taken from
     </item>
     
     <item>
-      <title>About Hugo XMin</title>
+      <title>About Me</title>
       <link>/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>XMin is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the blogdown book. Basically I wanted a simple theme that supports a navigation menu, a home page, other single pages, lists of pages, blog posts, categories, tags, and RSS. That is all. Nothing fancy. In terms of CSS and JavaScript, I really want to keep them minimal.</description>
+      <description>Hi my name is Simon Roth and I am a social data scientist. Started with a B.A. in social sciences I have been deeply interested in measuring social processes. Therefore I am graduating in empirical political research focusing on bridging the gap between normative political theory and data evidence. Hopefully a PhD in computational social sciences will be the next step.
+In the past two years a got in applied machine learning for text mining projects.</description>
     </item>
     
     <item>
@@ -65,7 +57,8 @@ Literature The theoretical considerations are partly taken from
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/teaching/</guid>
-      <description>Learning Meant to be my personal learning sources.      Teaching The materials listed below are ...      ----    --- Learning  Teaching  Sources   First  Second  Third</description>
+      <description>If you are interested in my teaching activities please visit R-User-Group-Stuttgart Homepage to get access to all material. div(class = &amp;ldquo;ui centered image&amp;rdquo;, src = &amp;ldquo;&amp;rdquo;)
+ Learning Meant to be my personal learning sources.      Teaching The materials listed below are ...      ----     Learning  Teaching  Sources   First  Second  Third    ---</description>
     </item>
     
   </channel>

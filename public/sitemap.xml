@@ -80,14 +80,14 @@
   </url>
   
   <url>
-    <loc>/tags/simulations/</loc>
-    <lastmod>2017-08-01T00:00:00+00:00</lastmod>
-    <priority>0</priority>
+    <loc>/</loc>
+    <lastmod>2018-03-07T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2018-03-07T00:00:00+00:00</lastmod>
+    <loc>/tags/simulations/</loc>
+    <lastmod>2017-08-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
   </url>
   
   <url>

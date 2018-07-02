@@ -2,11 +2,11 @@
 title: About Me
 ---
 
-Hi my name is Simon Roth and I am a social data scientist. Started with a B.A. in social sciences I have been deeply interested in measuring social processes. Therefore I am graduating in empirical political research focusing on bridging the gap between normative political theory and data evidence. Hopefully a PhD in computational social sciences will be the next step.  
 
-In the past two years a got in applied machine learning for text mining projects. There are a ton of unsolved or even unregistered tasks for social scientists in explaining the political environment. Especially, as human interaction produces a so far uncaptured trace of information and even more in democratic societies that are committed to transparency. The wast majority of information is documented as written unstructured text. 
+!---There are a ton of unsolved or even unregistered tasks for computational social scientists in explaining or predicting the political environment. Especially, as human interaction produces a so far uncaptured trace of information and even more in democratic societies that are committed to transparency. The wast majority of information is documented as written unstructured text. This is way I am personally interested in .
 
-<!---**XMin** is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the  [**blogdown**](https://github.com/rstudio/blogdown) book. Basically I wanted a simple theme that supports a navigation menu, a home page, other single pages, lists of pages, blog posts, categories, tags, and RSS. That is all. Nothing fancy. In terms of CSS and JavaScript, I really want to keep them minimal. In fact, this theme does not contain any JavaScript code at all, although on this example website I did introduce some JavaScript code (still relatively simple anyway). The theme does not contain any images, either, and is pretty much a plain-text theme.
+
+**XMin** is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the  [**blogdown**](https://github.com/rstudio/blogdown) book. Basically I wanted a simple theme that supports a navigation menu, a home page, other single pages, lists of pages, blog posts, categories, tags, and RSS. That is all. Nothing fancy. In terms of CSS and JavaScript, I really want to keep them minimal. In fact, this theme does not contain any JavaScript code at all, although on this example website I did introduce some JavaScript code (still relatively simple anyway). The theme does not contain any images, either, and is pretty much a plain-text theme.
 
 The theme name "XMin" can be interpreted as "**X**ie's **Min**imal theme" (Xie is my last name) or "e**X**tremely **Min**imal theme".
 

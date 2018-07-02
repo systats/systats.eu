@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Social Data Science on Simon&#39;s Blog</title>
+    <title>Simon Roth on Simon&#39;s Blog</title>
     <link>/</link>
-    <description>Recent content in Social Data Science on Simon&#39;s Blog</description>
+    <description>Recent content in Simon Roth on Simon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 07 Mar 2018 00:00:00 +0000</lastBuildDate>
@@ -37,8 +37,8 @@ Literature The theoretical considerations are partly taken from
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>Hi my name is Simon Roth and I am a social data scientist. Started with a B.A. in social sciences I have been deeply interested in measuring social processes. Therefore I am graduating in empirical political research focusing on bridging the gap between normative political theory and data evidence. Hopefully a PhD in computational social sciences will be the next step.
-In the past two years a got in applied machine learning for text mining projects.</description>
+      <description>!&amp;mdash;There are a ton of unsolved or even unregistered tasks for computational social scientists in explaining or predicting the political environment. Especially, as human interaction produces a so far uncaptured trace of information and even more in democratic societies that are committed to transparency. The wast majority of information is documented as written unstructured text. This is way I am personally interested in .
+XMin is the first Hugo theme I have designed.</description>
     </item>
     
     <item>

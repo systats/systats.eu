@@ -1,5 +1,5 @@
 
-## Sentiment Monitoring
+## Sentiment Neuron
 
 <!---<iframe id = "myIframe" src="https://systats.shinyapps.io/shiny_sent/" style="border: none; width: 900px; height: 1000px"></iframe>--->
 

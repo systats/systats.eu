@@ -6,10 +6,19 @@
     <description>Recent content in Tags on Simon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 07 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 01 Jul 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Feature engeneering</title>
+      <link>/tags/feature-engeneering/</link>
+      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/feature-engeneering/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Glove</title>
@@ -39,11 +48,29 @@
     </item>
     
     <item>
+      <title>ManifestoR</title>
+      <link>/tags/manifestor/</link>
+      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/manifestor/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Model Fit</title>
       <link>/tags/model-fit/</link>
       <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>/tags/model-fit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Preprocessing</title>
+      <link>/tags/preprocessing/</link>
+      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/preprocessing/</guid>
       <description></description>
     </item>
     
@@ -71,6 +98,15 @@
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/tensorflow/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Text</title>
+      <link>/tags/text/</link>
+      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/text/</guid>
       <description></description>
     </item>
     

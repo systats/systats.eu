@@ -1,9 +1,19 @@
 ---
-title: Teaching
+title: Source
 ---
 
-If you are interested in my teaching activities please visit [R-User-Group-Stuttgart Homepage](https://r-user-group-stuttgart.netlify.com/) to get access to all material. 
-div(class = "ui centered image", src = "")
+<div class="ui vertical menu">
+  <a class="item">
+    Home
+  </a>
+  <a class="item">
+    Messages
+  </a>
+  <a class="item">
+    Friends
+  </a>
+</div>
+
 
 
   <!---<div class="row">

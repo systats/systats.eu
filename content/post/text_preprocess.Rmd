@@ -1,0 +1,140 @@
+---
+title: "Text Preprocessing"
+date: "2018-07-01"
+categories: ["R", "text mining"]
+tags: ["manifestoR", "text", "preprocessing", "feature engeneering"]
+description: "This is the data wrangling part for the main blog post Text Classification in R with Keras"
+---
+
+
+```{r packs}
+#install.packages(c("devtools", "pacman"))
+#devtools::install_github("rstudio/keras")
+#devtools::install_github("systats/tidyTX")
+pacman::p_load(
+  dplyr, stringr, manifestoR, purrr, tidyr, 
+  tidytext, tidyTX
+)
+# keras::install_keras()
+```
+
+## Get data by `manifestoR`
+
+The [manifestoR api](https://manifesto-project.wzb.eu/) is a nice project that offers the scientific community parties’ policy positions derived from a content analysis of parties’ electoral manifestos. Acquire your own free key after short registration. The project is present on [github](https://github.com/ManifestoProject/manifestoR) and provide a [shiny app to explore their database](https://visuals.manifesto-project.wzb.eu/mpdb-shiny/cmp_dashboard_dataset/)
+
+<!--c1d709849c34e15130f9052699c214af-->
+
+```{r manifesto, eval = F}
+mkey <- "__put__your__key__here__"
+mp_setapikey(key = mkey)
+
+# edate = Day, month, and year of national election
+df <- mp_corpus(
+    countryname == "Germany" &
+    edate > as.Date("2002-01-01")
+  ) %>%
+  tidytext::tidy()
+```
+
+German party agendas since 2002 are downloaded and directly converted from class corpus to data.frame with the tidytext function `tidy()`. Let's inspect the raw data.
+
+```{r ldata, echo = F}
+#save(df, file = "data/df.Rdata")
+load("data/df.Rdata")
+```
+
+```{r}
+glimpse(df)
+```
+
+
+## clean text data
+
+Next the documents have to be tokenized and cleaned up. The following steps were applied:
+
+1. Clean text with stringr and [Regular Expressions](https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html).
+2. Map `party_dict` entries to get party name and id.
+3. Exclude AfD 6 (not enough data).
+4. Tokenize into one-token-one-row (tidyverse principle).
+5. Split documents into text batches of length(maxlen = 30).
+6. Exclude text batches shorter than 5 words.
+7. Sample balanced training data.
+8. Remove stopwords.
+9. Randomize order of statements.
+
+
+In the first step the data label and names are matched and renamed for better understanding and processing the data. This is done by the `tx_map_dict` function that loops through a provided dictionary and replaces a given key1 with a target key2. In order to avoid unbalanced data the AfD has been removed from the corpus. In sum 23 party manifestos are collected.
+
+```{r}
+# some information about german political data as dict
+party_dict <- list(
+  "greens"= c("Green Party", "1", "41113", "#46962b"),
+  "left" = c("The Left", "2", "41223", "#8B1A1A"),
+  "spd" = c("SPD", "3", "41320", "#E2001A"),
+  "fdp" = c("FDP", "4", "41420", "#ffed00"),
+  "union" = c("CDU/CSU", "5",  "41521", "black")
+  #"41953" = c("AfD", "6", "afd", "#1C86EE")
+)
+
+step1 <- df %>%
+  select(party, date, id, text) %>%
+  # 2. get party names and id
+  mutate(party_names = tx_map_dict(party, party_dict, key1 = 3, key2 = 1)) %>%
+  mutate(party_id = tx_map_dict(party, party_dict, key1 = 3, key2 = 2)) %>%
+  # 3. Exclude AfD 6 (not enough data)
+  filter(party_id %in% 1:5)
+
+step1 %>% 
+  count(party_names)
+```
+
+The next step takes two datasets als input, one containing a vector of (all) stopwords and one a two dimensional array carrying each possible word with its lemma in the so called `one-token-one-row` principle from R tidyverse. The dictionaries come along with the `tidyTX` package. This means a arbitrary long strings can be reshaped into `long` format where each row represents another word or token. This is very useful as we can use dplyr for wrangling and filtering. After unnesting the text, the lemmatized words are appended by words and stopwords were discarded by simply `anti_joining` the both dataframes again by words. Finally words are deleted that have numbers or punctuation aligned, as well as are not longer than one character . These procedures are important to manually reduce dimensionality of the resulting vocabulary in order to avoid overfitting the data too fast. 
+
+```{r}
+step2 <- step1 %>%
+  tidytext::unnest_tokens(word, text, to_lower = F) %>% 
+  left_join(tidyTX::hash_lemma_de, by = "word") %>%
+  mutate(lemma = ifelse(is.na(lemma), word, lemma)) %>%
+  dplyr::anti_join(tidyTX::stop_words_de, by = "word") %>%
+  filter(!stringr::str_detect(lemma, "[[:digit:]]|[[:punct:]]")) %>%
+  filter(nchar(word) > 1)
+```
+
+
+Next the tidy dataframe nested (summarized) again into sequences of text by party which are each 30 words long. 
+
+```{r}
+maxlen <- 30 # break long documents into units of 30 words
+# load german stopwords
+
+step3 <- step2 %>%
+  # 6. Split documents into text batches of length(maxlen)
+  group_by(party_id) %>%
+  dplyr::mutate(seq = seq_along(word) %/% maxlen) %>%
+  group_by(party_id, seq) %>%
+  summarise(
+    text_word = paste(word, collapse = " "),
+    text_lemma = paste(lemma, collapse = " ")) %>%
+  ungroup()
+```
+
+The final cleaning step comprises downsampling and randomization of the texts which are both very important to get unbiased predictions. 
+
+```{r}
+pol_agendas <- step3 %>%
+  # 8. Sample balanced training data
+  group_by(party_id) %>%
+  sample_n(size = 2534) %>%
+  ungroup() %>% 
+  # 9. Randomize order of statments
+  arrange(sample(1:length(seq), length(seq)))
+
+print(object.size(pol_agendas), standard = "SI", units = "MB")
+pol_agendas
+```
+
+
+```{r, echo = F}
+save(pol_agendas, file = "data/pol_agendas.Rdata")
+```
+

@@ -6,10 +6,20 @@
     <description>Recent content in Simon Roth on Simon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 07 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 01 Jul 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Text Preprocessing</title>
+      <link>/post/2018/07/01/text-preprocessing/</link>
+      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2018/07/01/text-preprocessing/</guid>
+      <description>#install.packages(c(&amp;quot;devtools&amp;quot;, &amp;quot;pacman&amp;quot;)) #devtools::install_github(&amp;quot;rstudio/keras&amp;quot;) #devtools::install_github(&amp;quot;systats/tidyTX&amp;quot;) pacman::p_load( dplyr, stringr, manifestoR, purrr, tidyr, tidytext, tidyTX ) # keras::install_keras() Get data by manifestoR The manifestoR api is a nice project that offers the scientific community parties’ policy positions derived from a content analysis of parties’ electoral manifestos. Acquire your own free key after short registration. The project is present on github and provide a shiny app to explore their database
+ mkey &amp;lt;- &amp;quot;__put__your__key__here__&amp;quot; mp_setapikey(key = mkey) # edate = Day, month, and year of national election df &amp;lt;- mp_corpus( countryname == &amp;quot;Germany&amp;quot; &amp;amp; edate &amp;gt; as.</description>
+    </item>
     
     <item>
       <title>Text Classification in R</title>
@@ -29,6 +39,15 @@
       <description>The model performance measure \(R^2\) is often subject to fierce criticism for being prone to its context. This notebook describes some well known criticism of \(R^2\) and tests the deficiencies by simulations. By combining theory, code and accessible graphics I want to show the implications for getting any useful information from \(R^2\).
 Literature The theoretical considerations are partly taken from
  The Elements of Statistical Learning p.14-16 Urban and Mayerl (2011) set up a poison list of 10 items to be considered, as \(R^2\) is artificially biased by other parameters.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/sentiment/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/sentiment/</guid>
+      <description>Sentiment Monitoring ---   iframe { min-width: 100%; }    iFrameResize({ heightCalculationMethod: &#39;taggedElement&#39; });</description>
     </item>
     
     <item>
@@ -52,13 +71,12 @@ XMin is the first Hugo theme I have designed.</description>
     </item>
     
     <item>
-      <title>Teaching</title>
+      <title>Source</title>
       <link>/teaching/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/teaching/</guid>
-      <description>If you are interested in my teaching activities please visit R-User-Group-Stuttgart Homepage to get access to all material. div(class = &amp;ldquo;ui centered image&amp;rdquo;, src = &amp;ldquo;&amp;rdquo;)
- Learning Meant to be my personal learning sources.      Teaching The materials listed below are ...      ----     Learning  Teaching  Sources   First  Second  Third    ---</description>
+      <description>Home  Messages  Friends    Learning Meant to be my personal learning sources.      Teaching The materials listed below are ...      ----     Learning  Teaching  Sources   First  Second  Third    ---</description>
     </item>
     
   </channel>

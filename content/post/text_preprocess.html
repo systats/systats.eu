@@ -1,0 +1,146 @@
+---
+title: "Text Preprocessing"
+date: "2018-07-01"
+categories: ["R", "text mining"]
+tags: ["manifestoR", "text", "preprocessing", "feature engeneering"]
+description: "This is the data wrangling part for the main blog post Text Classification in R with Keras"
+---
+
+
+
+<pre class="r"><code>#install.packages(c(&quot;devtools&quot;, &quot;pacman&quot;))
+#devtools::install_github(&quot;rstudio/keras&quot;)
+#devtools::install_github(&quot;systats/tidyTX&quot;)
+pacman::p_load(
+  dplyr, stringr, manifestoR, purrr, tidyr, 
+  tidytext, tidyTX
+)
+# keras::install_keras()</code></pre>
+<div id="get-data-by-manifestor" class="section level2">
+<h2>Get data by <code>manifestoR</code></h2>
+<p>The <a href="https://manifesto-project.wzb.eu/">manifestoR api</a> is a nice project that offers the scientific community parties’ policy positions derived from a content analysis of parties’ electoral manifestos. Acquire your own free key after short registration. The project is present on <a href="https://github.com/ManifestoProject/manifestoR">github</a> and provide a <a href="https://visuals.manifesto-project.wzb.eu/mpdb-shiny/cmp_dashboard_dataset/">shiny app to explore their database</a></p>
+<!--c1d709849c34e15130f9052699c214af-->
+<pre class="r"><code>mkey &lt;- &quot;__put__your__key__here__&quot;
+mp_setapikey(key = mkey)
+
+# edate = Day, month, and year of national election
+df &lt;- mp_corpus(
+    countryname == &quot;Germany&quot; &amp;
+    edate &gt; as.Date(&quot;2002-01-01&quot;)
+  ) %&gt;%
+  tidytext::tidy()</code></pre>
+<p>German party agendas since 2002 are downloaded and directly converted from class corpus to data.frame with the tidytext function <code>tidy()</code>. Let’s inspect the raw data.</p>
+<pre class="r"><code>glimpse(df)</code></pre>
+<pre><code>## Observations: 28
+## Variables: 17
+## $ manifesto_id                &lt;chr&gt; &quot;41113_200209&quot;, &quot;41113_200509&quot;, &quot;4...
+## $ party                       &lt;dbl&gt; 41113, 41113, 41113, 41113, 41113,...
+## $ date                        &lt;dbl&gt; 200209, 200509, 200909, 201309, 20...
+## $ language                    &lt;chr&gt; &quot;german&quot;, &quot;german&quot;, &quot;german&quot;, &quot;ger...
+## $ source                      &lt;chr&gt; &quot;MARPOR&quot;, &quot;MARPOR&quot;, &quot;MARPOR&quot;, &quot;MAR...
+## $ has_eu_code                 &lt;lgl&gt; FALSE, TRUE, TRUE, FALSE, FALSE, F...
+## $ is_primary_doc              &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE...
+## $ may_contradict_core_dataset &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE,...
+## $ md5sum_text                 &lt;chr&gt; &quot;41e90a16558cc94ea37f96c36cc92498&quot;...
+## $ url_original                &lt;chr&gt; &quot;/down/originals/2015-1/41113_2002...
+## $ md5sum_original             &lt;chr&gt; &quot;CURRENTLY_UNAVAILABLE&quot;, &quot;CURRENTL...
+## $ annotations                 &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE...
+## $ handbook                    &lt;chr&gt; &quot;3&quot;, &quot;2&quot;, &quot;2&quot;, &quot;4&quot;, &quot;5&quot;, &quot;3&quot;, &quot;2&quot;,...
+## $ is_copy_of                  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ title                       &lt;chr&gt; &quot;Grün wirkt! Unser Wahlprogramm 20...
+## $ id                          &lt;chr&gt; &quot;41113_200209&quot;, &quot;41113_200509&quot;, &quot;4...
+## $ text                        &lt;chr&gt; &quot;Grün wirkt!\nUnser Wahlprogramm\n...</code></pre>
+</div>
+<div id="clean-text-data" class="section level2">
+<h2>clean text data</h2>
+<p>Next the documents have to be tokenized and cleaned up. The following steps were applied:</p>
+<ol style="list-style-type: decimal">
+<li>Clean text with stringr and <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html">Regular Expressions</a>.</li>
+<li>Map <code>party_dict</code> entries to get party name and id.</li>
+<li>Exclude AfD 6 (not enough data).</li>
+<li>Tokenize into one-token-one-row (tidyverse principle).</li>
+<li>Split documents into text batches of length(maxlen = 30).</li>
+<li>Exclude text batches shorter than 5 words.</li>
+<li>Sample balanced training data.</li>
+<li>Remove stopwords.</li>
+<li>Randomize order of statements.</li>
+</ol>
+<p>In the first step the data label and names are matched and renamed for better understanding and processing the data. This is done by the <code>tx_map_dict</code> function that loops through a provided dictionary and replaces a given key1 with a target key2. In order to avoid unbalanced data the AfD has been removed from the corpus. In sum 23 party manifestos are collected.</p>
+<pre class="r"><code># some information about german political data as dict
+party_dict &lt;- list(
+  &quot;greens&quot;= c(&quot;Green Party&quot;, &quot;1&quot;, &quot;41113&quot;, &quot;#46962b&quot;),
+  &quot;left&quot; = c(&quot;The Left&quot;, &quot;2&quot;, &quot;41223&quot;, &quot;#8B1A1A&quot;),
+  &quot;spd&quot; = c(&quot;SPD&quot;, &quot;3&quot;, &quot;41320&quot;, &quot;#E2001A&quot;),
+  &quot;fdp&quot; = c(&quot;FDP&quot;, &quot;4&quot;, &quot;41420&quot;, &quot;#ffed00&quot;),
+  &quot;union&quot; = c(&quot;CDU/CSU&quot;, &quot;5&quot;,  &quot;41521&quot;, &quot;black&quot;)
+  #&quot;41953&quot; = c(&quot;AfD&quot;, &quot;6&quot;, &quot;afd&quot;, &quot;#1C86EE&quot;)
+)
+
+step1 &lt;- df %&gt;%
+  select(party, date, id, text) %&gt;%
+  # 2. get party names and id
+  mutate(party_names = tx_map_dict(party, party_dict, key1 = 3, key2 = 1)) %&gt;%
+  mutate(party_id = tx_map_dict(party, party_dict, key1 = 3, key2 = 2)) %&gt;%
+  # 3. Exclude AfD 6 (not enough data)
+  filter(party_id %in% 1:5)
+
+step1 %&gt;% 
+  count(party_names)</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   party_names     n
+##   &lt;chr&gt;       &lt;int&gt;
+## 1 CDU/CSU         5
+## 2 FDP             5
+## 3 Green Party     5
+## 4 SPD             5
+## 5 The Left        3</code></pre>
+<p>The next step takes two datasets als input, one containing a vector of (all) stopwords and one a two dimensional array carrying each possible word with its lemma in the so called <code>one-token-one-row</code> principle from R tidyverse. The dictionaries come along with the <code>tidyTX</code> package. This means a arbitrary long strings can be reshaped into <code>long</code> format where each row represents another word or token. This is very useful as we can use dplyr for wrangling and filtering. After unnesting the text, the lemmatized words are appended by words and stopwords were discarded by simply <code>anti_joining</code> the both dataframes again by words. Finally words are deleted that have numbers or punctuation aligned, as well as are not longer than one character . These procedures are important to manually reduce dimensionality of the resulting vocabulary in order to avoid overfitting the data too fast.</p>
+<pre class="r"><code>step2 &lt;- step1 %&gt;%
+  tidytext::unnest_tokens(word, text, to_lower = F) %&gt;% 
+  left_join(tidyTX::hash_lemma_de, by = &quot;word&quot;) %&gt;%
+  mutate(lemma = ifelse(is.na(lemma), word, lemma)) %&gt;%
+  dplyr::anti_join(tidyTX::stop_words_de, by = &quot;word&quot;) %&gt;%
+  filter(!stringr::str_detect(lemma, &quot;[[:digit:]]|[[:punct:]]&quot;)) %&gt;%
+  filter(nchar(word) &gt; 1)</code></pre>
+<pre><code>## Warning: Column `word` joining character vector and factor, coercing into
+## character vector</code></pre>
+<p>Next the tidy dataframe nested (summarized) again into sequences of text by party which are each 30 words long.</p>
+<pre class="r"><code>maxlen &lt;- 30 # break long documents into units of 30 words
+# load german stopwords
+
+step3 &lt;- step2 %&gt;%
+  # 6. Split documents into text batches of length(maxlen)
+  group_by(party_id) %&gt;%
+  dplyr::mutate(seq = seq_along(word) %/% maxlen) %&gt;%
+  group_by(party_id, seq) %&gt;%
+  summarise(
+    text_word = paste(word, collapse = &quot; &quot;),
+    text_lemma = paste(lemma, collapse = &quot; &quot;)) %&gt;%
+  ungroup()</code></pre>
+<p>The final cleaning step comprises downsampling and randomization of the texts which are both very important to get unbiased predictions.</p>
+<pre class="r"><code>pol_agendas &lt;- step3 %&gt;%
+  # 8. Sample balanced training data
+  group_by(party_id) %&gt;%
+  sample_n(size = 2534) %&gt;%
+  ungroup() %&gt;% 
+  # 9. Randomize order of statments
+  arrange(sample(1:length(seq), length(seq)))
+
+print(object.size(pol_agendas), standard = &quot;SI&quot;, units = &quot;MB&quot;)</code></pre>
+<pre><code>## 9 MB</code></pre>
+<pre class="r"><code>pol_agendas</code></pre>
+<pre><code>## # A tibble: 12,670 x 4
+##    party_id   seq text_word                    text_lemma                 
+##    &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;                        &lt;chr&gt;                      
+##  1 2         1010 erfordert dauerhafte Aufsto… erfordern dauerhaft Aufsto…
+##  2 1         4966 heute EC Karte In Alters vo… heute EC karten In Alter v…
+##  3 2          918 Rüstung Militär auszugeben … Rüstung Militär ausgeben s…
+##  4 4         3431 sich Illusion erwiesen Stro… sich Illusion erweisen Str…
+##  5 1         3159 Schwarz Rot Schwarz Gelb ka… Schwarz Rot Schwarz Gelb k…
+##  6 5         1834 wollen ältere pflegebedürft… wollen alt pflegebedürftig…
+##  7 2         1914 Takt vorgibt Eine Gesellsch… Takt vorgeben Eine Gesells…
+##  8 4          346 Organisationsstrukturen Fac… Organisationsstrukturen Fa…
+##  9 1          552 lernen haben Auf dramatisch… lernen haben Auf dramatisc…
+## 10 3          366 Krankenhausbehandlung häusl… Krankenhausbehandlung häus…
+## # ... with 12,660 more rows</code></pre>
+</div>

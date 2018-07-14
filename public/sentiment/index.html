@@ -120,13 +120,14 @@
 <li><strong>GloVe</strong> stands for <em>Global Vectors for Word Representation</em>. It&rsquo;s a popular embedding method based on factorizing a matrix of word co-occurrence statistics.</li>
 <li><strong>CNN</strong> stands for Convolutional Neural Network that originated from computer vision that takes words as inputs instead of pixels.<br /></li>
 </ul></li>
-<li>N-grams: A bi-gram is the cooccurance of two words in a sequence. Respectively a uni-gram is a single word and a N-gram can have N words in a sequence. This value indicates the window size around a given word. Thereby the context will be dynamically considered during the sentiment prediction of a word.</li>
+<li>N-grams: A bi-gram is the cooccurance of two words in a sequence. Respectively a uni-gram is a single word and a N-gram can have N words in a sequence. This value indicates the window size around a given word. Thereby the context will be dynamically considered during the sentiment prediction of a word. Thereby we see which word sequences the model has learned. The classifier was originally trained on whole sequences up to 40 words.</li>
 <li>Examples (the user text input should be empty):
 
 <ul>
-<li>Article about Angela <strong>Merkel</strong> was taken from <a href="https://www.cicero.de/innenpolitik/angela-merkel-bundeskanzlerin-befragung-abgeordnete-untersuchungsausschuss-fluechtlinge-lindner-grosse-koalition">Cicero.</a></li>
-<li>Article about Horst <strong>Seehofer</strong> was taken from <a href="http://www.spiegel.de/politik/deutschland/horst-seehofer-ein-tragischer-fall-kommentar-a-1217881.html">Spiegel.</a></li>
-<li>Article about Alexander <strong>Gauland</strong> was taken from <a href="https://www.cicero.de/afd-rede-gauland-junge-alternative-holocaust">Cicero.</a></li>
+<li>Article about Angela <strong>Merkel</strong> is taken from <a href="https://www.cicero.de/innenpolitik/angela-merkel-bundeskanzlerin-befragung-abgeordnete-untersuchungsausschuss-fluechtlinge-lindner-grosse-koalition">Cicero.</a></li>
+<li>Article about Horst <strong>Seehofer</strong> is taken from <a href="http://www.spiegel.de/politik/deutschland/horst-seehofer-ein-tragischer-fall-kommentar-a-1217881.html">Spiegel.</a></li>
+<li>Article about Alexander <strong>Gauland</strong> is taken from <a href="https://www.cicero.de/afd-rede-gauland-junge-alternative-holocaust">Cicero.</a></li>
+<li>Article about Joachim <strong>Löw</strong> is taken from <a href="https://www.cicero.de/afd-rede-gauland-junge-alternative-holocaust">Spiegel.</a></li>
 </ul></li>
 </ul>
 

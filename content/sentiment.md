@@ -31,8 +31,9 @@ This application delivers different sentiment classifiers trained on 100.000 *Am
 * Models (Keras):
     + **GloVe** stands for *Global Vectors for Word Representation*. It's a popular embedding method based on factorizing a matrix of word co-occurrence statistics.
     + **CNN** stands for Convolutional Neural Network that originated from computer vision that takes words as inputs instead of pixels.  
-* N-grams: A bi-gram is the cooccurance of two words in a sequence. Respectively a uni-gram is a single word and a N-gram can have N words in a sequence. This value indicates the window size around a given word. Thereby the context will be dynamically considered during the sentiment prediction of a word. 
+* N-grams: A bi-gram is the cooccurance of two words in a sequence. Respectively a uni-gram is a single word and a N-gram can have N words in a sequence. This value indicates the window size around a given word. Thereby the context will be dynamically considered during the sentiment prediction of a word. Thereby we see which word sequences the model has learned. The classifier was originally trained on whole sequences up to 40 words. 
 * Examples (the user text input should be empty):
-    + Article about Angela **Merkel** was taken from [Cicero.](https://www.cicero.de/innenpolitik/angela-merkel-bundeskanzlerin-befragung-abgeordnete-untersuchungsausschuss-fluechtlinge-lindner-grosse-koalition)
-    + Article about Horst **Seehofer** was taken from [Spiegel.](http://www.spiegel.de/politik/deutschland/horst-seehofer-ein-tragischer-fall-kommentar-a-1217881.html)
-    + Article about Alexander **Gauland** was taken from [Cicero.](https://www.cicero.de/afd-rede-gauland-junge-alternative-holocaust)
+    + Article about Angela **Merkel** is taken from [Cicero.](https://www.cicero.de/innenpolitik/angela-merkel-bundeskanzlerin-befragung-abgeordnete-untersuchungsausschuss-fluechtlinge-lindner-grosse-koalition)
+    + Article about Horst **Seehofer** is taken from [Spiegel.](http://www.spiegel.de/politik/deutschland/horst-seehofer-ein-tragischer-fall-kommentar-a-1217881.html)
+    + Article about Alexander **Gauland** is taken from [Cicero.](https://www.cicero.de/afd-rede-gauland-junge-alternative-holocaust)
+    + Article about Joachim **Löw** is taken from [Spiegel.](https://www.cicero.de/afd-rede-gauland-junge-alternative-holocaust)

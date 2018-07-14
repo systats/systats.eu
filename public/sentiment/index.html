@@ -85,7 +85,17 @@
 
 <h2 id="sentiment-neuron">Sentiment Neuron</h2>
 
+<p><strong>Sentiment Analysis</strong> is a popular method in Natural Language Processing that measures the polarity of sentiments from text data. Over time different approaches have been proposed. The traditional dictionary-based approach doesn&rsquo;t account for the context of a given word. Newer methods define sentiment analysis as supervised machine learning task that requires a labeld training set.</p>
+
+<p>This application delivers different sentiment classifiers trained on 100.000 <em>Amazon Reviews</em>. The main interest is to understand which word sequences a sentiment classifier learns from any given contexts. As this is part of my thesis German reviews were prioritized but English versions will follow. The different neural network architectures and other parameter are summarized below the application.</p>
+
+<p><strong>How to?</strong> Copy and paste any German text piece into the input field and press analyze. After processing and prediction you can change the color indicators.</p>
+
+<p><strong>Don&rsquo;t forget!</strong> All statistical models are wrong, some are useful. So don&rsquo;t expect perfect results. Moreover the length of the input vector should not be less than 5 and more than 40 words.</p>
+
 <!---<iframe id = "myIframe" src="https://systats.shinyapps.io/shiny_sent/" style="border: none; width: 900px; height: 1000px"></iframe>--->
+
+<p><br></p>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.16/iframeResizer.min.js"></script>
 <style>
@@ -101,10 +111,23 @@
   });
 </script>
 
-<p><br>
-<br>
-<br>
-<br></p>
+<h2 id="appendix">Appendix</h2>
+
+<ul>
+<li>Models (Keras):
+
+<ul>
+<li><strong>GloVe</strong> stands for <em>Global Vectors for Word Representation</em>. It&rsquo;s a popular embedding method based on factorizing a matrix of word co-occurrence statistics.</li>
+<li><strong>CNN</strong> stands for Convolutional Neural Network that originated from computer vision that takes words as inputs instead of pixels.<br /></li>
+</ul></li>
+<li>N-grams: A bi-gram is the cooccurance of two words in a sequence. Respectively a uni-gram is a single word and a N-gram can have N words in a sequence. This value indicates the window size around a given word. Thereby the context will be dynamically considered during the sentiment prediction of a word.</li>
+<li>Examples:
+
+<ul>
+<li>Seehofer</li>
+<li>Merkel</li>
+</ul></li>
+</ul>
 
 </main>
 

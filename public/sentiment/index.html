@@ -89,9 +89,9 @@
 
 <p>This application delivers different sentiment classifiers trained on 100.000 <em>Amazon Reviews</em>. The main interest is to understand which word sequences a sentiment classifier learns from any given contexts. As this is part of my thesis German reviews were prioritized but English versions will follow. The different neural network architectures and other parameter are summarized below the application.</p>
 
-<p><strong>How to?</strong> Copy and paste any German text piece into the input field and press analyze. After processing and prediction you can change the color indicators.</p>
+<p><strong>How to?</strong> Copy and paste any German piece of text into the input field and press <strong>Predict</strong>. After processing and prediction you can change the color indicators.</p>
 
-<p><strong>Don&rsquo;t forget!</strong> All statistical models are wrong, some are useful. So don&rsquo;t expect perfect results. Moreover the length of the input vector should not be less than 5 and more than 40 words.</p>
+<p><strong>Don&rsquo;t forget:</strong> All statistical models are wrong, some are useful. So don&rsquo;t expect perfect results. As book review data is used the classifiers are prone to different domain-specificities. Moreover the length of the input vector should not be less than 5 and more than 40 words. Enjoy experimenting!</p>
 
 <!---<iframe id = "myIframe" src="https://systats.shinyapps.io/shiny_sent/" style="border: none; width: 900px; height: 1000px"></iframe>--->
 
@@ -121,11 +121,12 @@
 <li><strong>CNN</strong> stands for Convolutional Neural Network that originated from computer vision that takes words as inputs instead of pixels.<br /></li>
 </ul></li>
 <li>N-grams: A bi-gram is the cooccurance of two words in a sequence. Respectively a uni-gram is a single word and a N-gram can have N words in a sequence. This value indicates the window size around a given word. Thereby the context will be dynamically considered during the sentiment prediction of a word.</li>
-<li>Examples:
+<li>Examples (the user text input should be empty):
 
 <ul>
-<li>Seehofer</li>
-<li>Merkel</li>
+<li>Article about Angela <strong>Merkel</strong> was taken from <a href="https://www.cicero.de/innenpolitik/angela-merkel-bundeskanzlerin-befragung-abgeordnete-untersuchungsausschuss-fluechtlinge-lindner-grosse-koalition">Cicero.</a></li>
+<li>Article about Horst <strong>Seehofer</strong> was taken from <a href="http://www.spiegel.de/politik/deutschland/horst-seehofer-ein-tragischer-fall-kommentar-a-1217881.html">Spiegel.</a></li>
+<li>Article about Alexander <strong>Gauland</strong> was taken from <a href="https://www.cicero.de/afd-rede-gauland-junge-alternative-holocaust">Cicero.</a></li>
 </ul></li>
 </ul>
 
@@ -168,9 +169,6 @@
               </a>
               <a href="https://github.com/systats" target="_blank" rel="nofollow" class = "ui circular icon inverted button">
                 <i class="inverted github icon large"></i>
-              </a>
-              <a href="" target="_blank" rel="nofollow" class = "ui circular icon inverted button">
-                <i class="inverted patreon icon large"></i>
               </a>
               <a href="mailto:sy-ro@gmx.net" target="_blank" rel="nofollow" class = "ui circular icon inverted button">
                 <i class="inverted mail icon large"></i>

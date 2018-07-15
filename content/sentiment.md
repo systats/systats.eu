@@ -1,13 +1,7 @@
 
 ## Sentiment Neuron
 
-**Sentiment Analysis** is a popular method in Natural Language Processing that measures the polarity of sentiments from text data. Over time different approaches have been proposed. The traditional dictionary-based approach doesn't account for the context of a given word. Newer methods define sentiment analysis as supervised machine learning task that requires a labeld training set. 
-
-This application delivers different sentiment classifiers trained on 100.000 *Amazon Reviews*. The main interest is to understand which word sequences a sentiment classifier learns from any given contexts. As this is part of my thesis German reviews were prioritized but English versions will follow. The different neural network architectures and other parameter are summarized below the application. 
-
-**How to?** Copy and paste any German piece of text into the input field and press **Predict**. After processing and prediction you can change the color indicators. 
-
-**Don't forget:** All statistical models are wrong, some are useful. So don't expect perfect results. As book review data is used the classifiers are prone to different domain-specificities. Moreover the length of the input vector should not be less than 5 and more than 40 words. Enjoy experimenting!
+This is a demonstration of **Sentiment Analysis** which is a popular method in Natural Language Processing that measures the polarity of sentiments from text data. This app tells you whether it thinks the text you enter below expresses positive or negative sentiment.
 
 <!---<iframe id = "myIframe" src="https://systats.shinyapps.io/shiny_sent/" style="border: none; width: 900px; height: 1000px"></iframe>--->
 <br>
@@ -27,6 +21,12 @@ This application delivers different sentiment classifiers trained on 100.000 *Am
 </script>
 
 ## Appendix
+
+The models for this app are trained on half of a million *Amazon Book/Movie/App Reviews*. The main interest is to understand which word sequences a sentiment classifier learns from any given contexts. As this is part of my thesis German reviews were prioritized but English versions will follow. The different neural network architectures and other parameters are summarized below the app. 
+
+**How to?** Copy and paste any German piece of text into the input field and press **Predict**. After processing and prediction you can change the color indicators. 
+
+**Don't forget:** All statistical models are wrong, some are useful. In this sense the results will be more accurate on text that is similar to original training data. If you get an odd result, it could be the words you've used are unrecognized. Try entering more words to improve accuracy.
 
 * Models (Keras):
     + **GloVe** stands for *Global Vectors for Word Representation*. It's a popular embedding method based on factorizing a matrix of word co-occurrence statistics.

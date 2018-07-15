@@ -85,13 +85,7 @@
 
 <h2 id="sentiment-neuron">Sentiment Neuron</h2>
 
-<p><strong>Sentiment Analysis</strong> is a popular method in Natural Language Processing that measures the polarity of sentiments from text data. Over time different approaches have been proposed. The traditional dictionary-based approach doesn&rsquo;t account for the context of a given word. Newer methods define sentiment analysis as supervised machine learning task that requires a labeld training set.</p>
-
-<p>This application delivers different sentiment classifiers trained on 100.000 <em>Amazon Reviews</em>. The main interest is to understand which word sequences a sentiment classifier learns from any given contexts. As this is part of my thesis German reviews were prioritized but English versions will follow. The different neural network architectures and other parameter are summarized below the application.</p>
-
-<p><strong>How to?</strong> Copy and paste any German piece of text into the input field and press <strong>Predict</strong>. After processing and prediction you can change the color indicators.</p>
-
-<p><strong>Don&rsquo;t forget:</strong> All statistical models are wrong, some are useful. So don&rsquo;t expect perfect results. As book review data is used the classifiers are prone to different domain-specificities. Moreover the length of the input vector should not be less than 5 and more than 40 words. Enjoy experimenting!</p>
+<p>This is a demonstration of <strong>Sentiment Analysis</strong> which is a popular method in Natural Language Processing that measures the polarity of sentiments from text data. This app tells you whether it thinks the text you enter below expresses positive or negative sentiment.</p>
 
 <!---<iframe id = "myIframe" src="https://systats.shinyapps.io/shiny_sent/" style="border: none; width: 900px; height: 1000px"></iframe>--->
 
@@ -112,6 +106,12 @@
 </script>
 
 <h2 id="appendix">Appendix</h2>
+
+<p>The models for this app are trained on half of a million <em>Amazon Book/Movie/App Reviews</em>. The main interest is to understand which word sequences a sentiment classifier learns from any given contexts. As this is part of my thesis German reviews were prioritized but English versions will follow. The different neural network architectures and other parameters are summarized below the app.</p>
+
+<p><strong>How to?</strong> Copy and paste any German piece of text into the input field and press <strong>Predict</strong>. After processing and prediction you can change the color indicators.</p>
+
+<p><strong>Don&rsquo;t forget:</strong> All statistical models are wrong, some are useful. In this sense the results will be more accurate on text that is similar to original training data. If you get an odd result, it could be the words you&rsquo;ve used are unrecognized. Try entering more words to improve accuracy.</p>
 
 <ul>
 <li>Models (Keras):

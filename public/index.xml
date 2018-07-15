@@ -47,8 +47,9 @@ Literature The theoretical considerations are partly taken from
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/sentiment/</guid>
-      <description>Sentiment Neuron Sentiment Analysis is a popular method in Natural Language Processing that measures the polarity of sentiments from text data. Over time different approaches have been proposed. The traditional dictionary-based approach doesn&amp;rsquo;t account for the context of a given word. Newer methods define sentiment analysis as supervised machine learning task that requires a labeld training set.
-This application delivers different sentiment classifiers trained on 100.000 Amazon Reviews. The main interest is to understand which word sequences a sentiment classifier learns from any given contexts.</description>
+      <description>Sentiment Neuron This is a demonstration of Sentiment Analysis which is a popular method in Natural Language Processing that measures the polarity of sentiments from text data. This app tells you whether it thinks the text you enter below expresses positive or negative sentiment.
+--- 
+  iframe { min-width: 100%; }    iFrameResize({ heightCalculationMethod: &#39;taggedElement&#39; });  Appendix The models for this app are trained on half of a million Amazon Book/Movie/App Reviews.</description>
     </item>
     
     <item>

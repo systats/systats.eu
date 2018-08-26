@@ -11,6 +11,15 @@
     
     
     <item>
+      <title>Conf</title>
+      <link>/categories/conf/</link>
+      <pubDate>Wed, 22 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/conf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>ML</title>
       <link>/categories/ml/</link>
       <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
@@ -31,9 +40,18 @@
     <item>
       <title>R</title>
       <link>/categories/r/</link>
-      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 22 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/categories/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>SNA</title>
+      <link>/categories/sna/</link>
+      <pubDate>Wed, 22 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/sna/</guid>
       <description></description>
     </item>
     

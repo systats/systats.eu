@@ -6,10 +6,21 @@
     <description>Recent content in R on Simon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Jul 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 22 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Vox-Pol Conf Twitter Community</title>
+      <link>/post/2018/08/22/vox-pol-conf-twitter-community/</link>
+      <pubDate>Wed, 22 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2018/08/22/vox-pol-conf-twitter-community/</guid>
+      <description>This is a short notebook scraping tweets related to the Vox-Pol Conference 2018 in Amsterdam. As this was again a very inspiring Vox-Pol event I thought it was time to further explore the twitter community.
+Packages Load the necessary packages
+# install pacman once if not avaible on your machine # install.packages(&amp;quot;pacman&amp;quot;) pacman::p_load(tidyverse, purrr, tidyr, rtweet, stringr, ggraph, igraph, tidygraph, forcats)  Get Data Call Twitter API. If you want to scrape data yourself you have to register a free account where you get your personal access point to Twitter.</description>
+    </item>
     
     <item>
       <title>Text Preprocessing</title>

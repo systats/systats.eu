@@ -12,11 +12,17 @@
     {{ range (where .Data.Pages "Section" "!=" "") }}
     <a class="item" href="{{ .URL }}">
       <div class = "content">
-        <h3 class="ui header">
+        <h2 class="ui header">
         	{{ .Title }}
-        </h3>
+        </h2>
         <div class = "meta">
     		  {{ .Date.Format "2006-01-02" }} 
+    		  {{range .Params.tags}}
+            <div class="ui horizontal label">
+              <i class="tag icon"></i> 
+              {{ . }}
+            </div>
+      		{{end}}
         </div>
         {{ if .Params.header.image }}
           {{ if .Params.header.img_source }}
@@ -29,14 +35,6 @@
         <div class="description" style = "color:#A0A0A0;">
           {{.Description}}
           ... ({{.ReadingTime}} min read)
-        </div>
-        <div class = "extra">
-          {{range .Params.tags}}
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              {{ . }}
-            </div>
-      		{{end}}
         </div>
       </div>
     </a>

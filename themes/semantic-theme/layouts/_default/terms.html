@@ -1,24 +1,24 @@
 {{ partial "header.html" . }}
 
 <!-- keyword list -->
-<br>
-<br>
-<div class="ui large relaxed list">
- {{ range $key, $value := .Data.Terms }}
- <div class="item">
-   <a href="{{ (print "/" $.Data.Plural "/" $key | urlize) | relURL }}">
-      <div class="ui right labeled button" tabindex="0">
-        <div class="ui button">
-          {{ $key }}
+<div class = "ui container">
+  <div class="ui large relaxed list">
+   {{ range $key, $value := .Data.Terms }}
+   <div class="item">
+     <a href="{{ (print "/" $.Data.Plural "/" $key | urlize) | relURL }}">
+        <div class="ui right labeled button" tabindex="0">
+          <div class="ui button">
+            {{ $key }}
+          </div>
+          <div class="ui left pointing label">
+            <i class="tags icon"></i> 
+            {{ len $value }}
+          </div>
         </div>
-        <div class="ui inverted blue left pointing label">
-          <i class="tags icon"></i> 
-          {{ len $value }}
-        </div>
-      </div>
-    </a>
+      </a>
+    </div>
+    {{ end }}
   </div>
-  {{ end }}
 </div>
 <br>
 <br>

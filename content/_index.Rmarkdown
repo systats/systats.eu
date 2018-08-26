@@ -3,62 +3,82 @@ title: Simon Roth
 ---
 
 <!---first content--->
-
-
 <br>
-<div class = "ui center aligned grid">
-  <div class="middle aligned row">
+<br>
+
+<div class = "ui text container">
+  <!-- <h1 class="ui header"> -->
+  <!--     Welcome to my blog. -->
+  <!-- </h1> -->
+  <div class = "ui stackable grid">
+    <div class = "six wide center aligned column">
+      <img class="ui medium centered circular image" src="https://scontent-frx5-1.xx.fbcdn.net/v/t1.0-9/32374686_908400989340112_7502787324665659392_n.jpg?_nc_cat=0&oh=493ba2867c03e206ca64b36a01db1355&oe=5BE0BF5D">
+      <br>
+      <p>
+        <a href="" target="_blank" rel="nofollow" class = "ui blue circular icon button">
+          <i class="inverted facebook icon large"></i>
+        </a>
+        <a href="https://twitter.com/systatz" target="_blank" rel="nofollow" class = "ui blue circular icon button">
+          <i class="inverted twitter icon large"></i>
+        </a>
+        <a href="https://github.com/systats" target="_blank" rel="nofollow" class = "ui black circular icon button">
+          <i class="inverted github icon large"></i>
+        </a>
+        <a href="mailto:nomis.roth@gmx.net" target="_blank" rel="nofollow" class = "ui circular icon button">
+          <i class="inverted mail icon large"></i>
+        </a>
+      </p>
+      <!-- <h1 class="ui centered header"> -->
+      <!--   Simon Roth -->
+      <!-- </h1> -->
+    </div>
     <div class = "ten wide column">
-      <h1 class="ui header">
-        Welcome to my blog.
-      </h1>
-      <img class="ui left floated small circular image" src="https://scontent-frx5-1.xx.fbcdn.net/v/t1.0-9/32374686_908400989340112_7502787324665659392_n.jpg?_nc_cat=0&oh=493ba2867c03e206ca64b36a01db1355&oe=5BE0BF5D">
-      I am a computational social scientist who always wants to learn and apply new methods especially in Natural Language Processing and Machine Learning in general. Started with a B.A. in social sciences I have been interested in measuring all kind of social processes. Therefore I am graduating in empirical political research focusing on bridging the gap between normative political theory and data evidence. At the moment I work as a Data Scientist at a start up business called Paraboost. The next step will be hopefully a PhD in computational social sciences at the university of Konstanz (Germany). In the following you find a short overview of my research interests ...
-    </div>  
-  </div>
-</div>
-<br>
-<br>
-
-<div class="row">
-    <div class="ui equal width center aligned padded grid">
-      <div class="column">
-      </div>
-      <div class="column">
-        <h2 class="ui icon header">
-          <i class="code icon"></i>
-          <div class="content">
-            Web Development
-            <div class="sub header">
-              This website is ⚡ by hugo, blogdown,  Rmarkdown and Semantic UI. Beside front-end development I like to build Shiny Apps which bring the power of R (programming language) to everyone. This is where my data science journey has started 3 years ago. 
-            </div>
-          </div>
-        </h2>
-      </div>
-      <div class="column">
-        <h2 class="ui icon header">
-          <i class="language icon"></i>
-          <div class="content">
-            Text Mining
-            <div class="sub header">
-            I ♡ web scraping and processing large collections of unstructured data. Particularly social media monitoring through NLP prediction methods like word2vec, LSTM or CNN that bear useful signals for predicting bitcoin stock prices or election outcomes. 
-            </div>
-          </div>
-        </h2>
-      </div>
-      <div class="column">
-        <h2 class="ui icon header">
-          <i class="flask icon"></i>
-          <div class="content">
-            Social Sciences
-            <div class="sub header">
-              Combining interesting research questions about human behavoir and socital dynamics with statistics and machine learning is never boring but enlightening 💡 In 2018 I started to investigate Alt-Right radicalization on social media and terrorism informatics thanks to VOX-Pol. 
-            </div>
-          </div>
-        </h2>
-      </div>
-      <div class="column">
-      </div>
+      Welcome to my blog. I am a computational social scientist with a favor for applied machine learning especially in the context of Natural Language Processing. Currently I am graduating in empirical political research with   At the moment I work as a Data Scientist at a start up business called Paraboost. The next step will be hopefully a PhD in computational social sciences at the university of Konstanz (Germany). In the following you find a short overview of my research interests.
     </div>
   </div>
 </div>
+
+<br>
+<div class="ui divider"></div>
+<br>
+
+<div class="ui stackable three column grid container">
+  <div class="column">
+    <h2 class="ui icon header">
+      <i class="code icon"></i>
+      <div class="content">
+        Web Development
+        <div class="sub header">
+          This website is ⚡ by hugo, blogdown,  Rmarkdown and Semantic UI. Beside front-end development I like to build Shiny Apps which bring the power of R (programming language) to everyone. This is where my data science journey has started 3 years ago.
+        </div>
+      </div>
+    </h2>
+  </div>
+  <div class="column">
+    <h2 class="ui icon header">
+      <i class="language icon"></i>
+      <div class="content">
+        Text Mining
+        <div class="sub header">
+          I ♡ web scraping and processing large collections of unstructured data. Particularly social media monitoring through NLP prediction methods like word2vec, LSTM or CNN that bear useful signals for predicting bitcoin stock prices or election outcomes.
+        </div>
+      </div>
+    </h2>
+  </div>
+  <div class="column">
+    <h2 class="ui icon header">
+      <i class="flask icon"></i>
+        <div class="content">
+          Social Sciences
+        <div class="sub header">
+          Combining interesting research questions about human behavoir and socital dynamics with statistics and machine learning is never boring but enlightening 💡 In 2018 I started to investigate Alt-Right radicalization on social media and terrorism informatics thanks to VOX-Pol.
+        </div>
+      </div>
+    </h2>
+  </div>
+</div>
+
+<br>
+<div class="ui divider"></div>
+<br>
+

@@ -1,0 +1,11 @@
+{{ if .Params.header.image }}
+  <!---{{ $img_src := urls.Parse .Params.header.image }}
+  {{ if $img_src.Scheme }}--->
+    <img src="{{ .Params.header.image }}" class = "ui centered image">
+  <!---{{ else }}
+    <img src="{{ (printf "/img/%s" .Params.header.image) | relURL }}" class = "ui centered image">
+  {{ end }}--->
+{{end}}
+
+
+

@@ -53,16 +53,6 @@ Literature The theoretical considerations are partly taken from
     </item>
     
     <item>
-      <title>About Me</title>
-      <link>/about/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/about/</guid>
-      <description>!&amp;mdash;There are a ton of unsolved or even unregistered tasks for computational social scientists in explaining or predicting the political environment. Especially, as human interaction produces a so far uncaptured trace of information and even more in democratic societies that are committed to transparency. The wast majority of information is documented as written unstructured text. This is way I am personally interested in .
-XMin is the first Hugo theme I have designed.</description>
-    </item>
-    
-    <item>
       <title>Semantic UI</title>
       <link>/semanticui/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

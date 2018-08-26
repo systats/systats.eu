@@ -15,17 +15,17 @@ title: Simon Roth
       <img class="ui medium centered circular image" src="https://scontent-frx5-1.xx.fbcdn.net/v/t1.0-9/32374686_908400989340112_7502787324665659392_n.jpg?_nc_cat=0&oh=493ba2867c03e206ca64b36a01db1355&oe=5BE0BF5D">
       <br>
       <p>
-        <a href="" target="_blank" rel="nofollow" class = "ui blue circular icon button">
-          <i class="inverted facebook icon large"></i>
+        <a class="ui circular facebook icon button" href="" target="_blank" rel="nofollow">
+          <i class="facebook icon"></i>
+        </button>
+        <a href="https://twitter.com/systatz" target="_blank" rel="nofollow" class = "ui circular twitter icon button">
+          <i class="twitter icon"></i>
         </a>
-        <a href="https://twitter.com/systatz" target="_blank" rel="nofollow" class = "ui blue circular icon button">
-          <i class="inverted twitter icon large"></i>
+        <a href="https://github.com/systats" target="_blank" rel="nofollow" class = "ui circular github icon button">
+          <i class="github icon"></i>
         </a>
-        <a href="https://github.com/systats" target="_blank" rel="nofollow" class = "ui black circular icon button">
-          <i class="inverted github icon large"></i>
-        </a>
-        <a href="mailto:nomis.roth@gmx.net" target="_blank" rel="nofollow" class = "ui circular icon button">
-          <i class="inverted mail icon large"></i>
+        <a href="mailto:nomis.roth@gmx.net" target="_blank" rel="nofollow" class = "ui circular mail icon button">
+          <i class="mail icon"></i>
         </a>
       </p>
       <!-- <h1 class="ui centered header"> -->

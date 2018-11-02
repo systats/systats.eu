@@ -6,19 +6,10 @@
     <description>Recent content in Tags on Simon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Jul 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 22 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Feature engeneering</title>
-      <link>/tags/feature-engeneering/</link>
-      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/feature-engeneering/</guid>
-      <description></description>
-    </item>
     
     <item>
       <title>Ggplot2</title>
@@ -39,101 +30,11 @@
     </item>
     
     <item>
-      <title>Glove</title>
-      <link>/tags/glove/</link>
-      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/glove/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Keras</title>
-      <link>/tags/keras/</link>
-      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/keras/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>LSTM</title>
-      <link>/tags/lstm/</link>
-      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/lstm/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>ManifestoR</title>
-      <link>/tags/manifestor/</link>
-      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/manifestor/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Model Fit</title>
-      <link>/tags/model-fit/</link>
-      <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/model-fit/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Network</title>
       <link>/tags/network/</link>
       <pubDate>Wed, 22 Aug 2018 00:00:00 +0000</pubDate>
       
       <guid>/tags/network/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Preprocessing</title>
-      <link>/tags/preprocessing/</link>
-      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/preprocessing/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R2</title>
-      <link>/tags/r2/</link>
-      <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/r2/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Simulations</title>
-      <link>/tags/simulations/</link>
-      <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/simulations/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>TensorFlow</title>
-      <link>/tags/tensorflow/</link>
-      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/tensorflow/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Text</title>
-      <link>/tags/text/</link>
-      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/text/</guid>
       <description></description>
     </item>
     

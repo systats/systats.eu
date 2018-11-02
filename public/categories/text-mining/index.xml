@@ -6,19 +6,18 @@
     <description>Recent content in Text mining on Simon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Jul 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 28 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/text-mining/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Text Preprocessing</title>
-      <link>/post/2018/07/01/text-preprocessing/</link>
-      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
+      <title>Sentiment Prediction using Keras</title>
+      <link>/post/2018/10/28/sentiment-prediction-using-keras/</link>
+      <pubDate>Sun, 28 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/post/2018/07/01/text-preprocessing/</guid>
-      <description>#install.packages(c(&amp;quot;devtools&amp;quot;, &amp;quot;pacman&amp;quot;)) #devtools::install_github(&amp;quot;rstudio/keras&amp;quot;) #devtools::install_github(&amp;quot;systats/tidyTX&amp;quot;) pacman::p_load( dplyr, stringr, manifestoR, purrr, tidyr, tidytext, tidyTX ) # keras::install_keras() Get data by manifestoR The manifestoR api is a nice project that offers the scientific community parties’ policy positions derived from a content analysis of parties’ electoral manifestos. Acquire your own free key after short registration. The project is present on github and provide a shiny app to explore their database
- mkey &amp;lt;- &amp;quot;__put__your__key__here__&amp;quot; mp_setapikey(key = mkey) # edate = Day, month, and year of national election df &amp;lt;- mp_corpus( countryname == &amp;quot;Germany&amp;quot; &amp;amp; edate &amp;gt; as.</description>
+      <guid>/post/2018/10/28/sentiment-prediction-using-keras/</guid>
+      <description>-- -- -- -- --  Code and Links   iframe { min-width: 100%; }     iFrameResize({ heightCalculationMethod: &#39;taggedElement&#39; });   $(&#39;#confirm&#39;) .on(&#39;click&#39;, function() { // programmatically activating tab $.tab(&#39;change tab&#39;, &#39;shiny_sent&#39;); }); $(&#39;#info&#39;) .on(&#39;click&#39;, function() { // programmatically activating tab $.tab(&#39;change tab&#39;, &#39;shiny_info&#39;); });  Load Packages pacman::p_load(dplyr, ggplot2, purrr, tidyr, stringr, keras) ggplot2::theme_set(theme_bw()) # keras::install_keras()  Load Data load(&amp;quot;_data/reviews_sample.Rdata&amp;quot;) reviews_sample %&amp;gt;% glimpse ## Observations: 50,000 ## Variables: 10 ## $ id &amp;lt;int&amp;gt; 362139, 90817, 541427, 361424, 167474, 43767, .</description>
     </item>
     
   </channel>

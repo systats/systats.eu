@@ -1,0 +1,45 @@
+---
+title: "Readme"
+author: "Simon"
+date: "28 10 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+pacman::p_load(blogdown)
+```
+
+
+```{r}
+serve_site()
+```
+
+
+```{r}
+stop_server()
+```
+
+
+```{r}
+build_site()
+```
+
+
+
+## ToDO
+
+* Link Slides
+* banner/hero
+* footer email change
+
+
+
+
+
+
+

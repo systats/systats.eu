@@ -1,0 +1,320 @@
+---
+title: "Sentiment Prediction using Keras"
+date: "2018-10-28"
+categories: ["R", "text mining"]
+description: "Some Sentiment Predictions using Keras and Amazon Reviews"
+header:
+  image: "sent_word_level.png"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+<!-- https://stackoverflow.com/questions/44663623/animation-with-semantic-ui    -->
+<!-- <div id="my_container"  style = "display: none"> -->
+<!--   Hello World! -->
+<!-- </div> -->
+<!-- <input class="ui secondary button" type="button" value="Confirm" id="confirm" /> -->
+
+<!-- <script> -->
+<!--   $("#confirm").on("click", function() { -->
+<!--     $('#my_container').transition('scale'); -->
+<!--   }); -->
+<!-- </script> -->
+
+
+
+<!-- CDN -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.16/iframeResizer.min.js"></script>
+
+<!-- Buttons -->
+<p align = "center">
+    <input class="ui blue button" type="button" value="Info" id="info"/>
+    <input class="ui green button" type="button" value="Shiny App" id="confirm" tabindex="0"/>
+</p>
+
+<!-- Data Tabs -->
+<div class = "ui active tab" data-tab="shiny_info">
+  Code and Links
+</div>
+<div class = "ui tab" data-tab="shiny_sent">
+  <style>
+    iframe {
+      min-width: 100%;
+    }
+  </style>
+  <iframe id="myIframe" src="https://systats.shinyapps.io/shiny_sent/" scrolling="no" frameborder="no"></iframe>
+</div>
+
+<!-- Javascript -->
+<script>
+  iFrameResize({
+    heightCalculationMethod: 'taggedElement'
+  });
+</script>
+<script>
+  $('#confirm')
+  .on('click', function() {
+    // programmatically activating tab
+    $.tab('change tab', 'shiny_sent');
+  });
+  $('#info')
+  .on('click', function() {
+    // programmatically activating tab
+    $.tab('change tab', 'shiny_info');
+  });
+</script>
+    
+    
+
+
+## Load Packages
+
+```{r}
+pacman::p_load(dplyr, ggplot2, purrr, tidyr, stringr, keras)
+ggplot2::theme_set(theme_bw())
+# keras::install_keras()
+```
+
+
+## Load Data
+
+```{r}
+load("_data/reviews_sample.Rdata")
+reviews_sample %>% glimpse
+```
+
+## Train/ Test Split
+
+```{r}
+final <- reviews_sample %>% 
+  filter(!duplicated(text)) %>% 
+  select(id, text, binary, nwords) %>% 
+  mutate(nchars = nchar(text)) %>% 
+  arrange(sample(id, size = n())) %>% 
+  drop_na(binary) %>% 
+  mutate(split_id = sample(c(T, F), size = n(), replace = T, prob = c(.9, .1))) 
+
+train <- final %>% filter(split_id)
+test <- final %>% filter(!split_id)
+```
+
+```{r}
+train %>% 
+  ggplot(aes(nchars)) +
+  geom_density(fill = "gray", color = NA, alpha = .7) + 
+  xlim(0, 1000) 
+```
+
+
+## Sequence Building
+
+```{r}
+library(keras)
+max_token <- 50
+batch_size <- 32
+maxlen <- 500
+
+tokenizer <- text_tokenizer(num_words = max_token, char_level = T)
+fit_text_tokenizer(tokenizer, x = train$text)
+#keras::save_text_tokenizer(tokenizer, "_models/tokenizer")
+#tokenizer <- keras::load_text_tokenizer("_models/tokenizer")
+
+train_seq <- tokenizer %>% 
+  texts_to_sequences(train$text) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+
+test_seq <- tokenizer %>% 
+  texts_to_sequences(test$text) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+
+# tokenizer %>%
+#   .$index_word %>% 
+#   map_chr(1) %>% 
+#   tibble(
+#     char = ., 
+#     index = names(tokenizer$index_word)
+#   ) %>% 
+#   slice(1:50)
+```
+
+
+# Keras
+
+## Define Model
+
+```{r}
+embed_size <- 25
+filter_sizes <- c(1, 2, 3, 5)
+num_filters <- 32
+
+inp <- keras::layer_input(shape = list(maxlen))
+  
+x <- inp %>%
+  layer_embedding(
+    input_dim = max_token, 
+    output_dim = embed_size, 
+    input_length = maxlen
+  ) %>% 
+  #layer_spatial_dropout_1d(0.2) %>% 
+  layer_reshape(list(maxlen, embed_size, 1))
+
+conv_1 <- x %>% 
+  layer_conv_2d(
+    num_filters, 
+    kernel_size = list(filter_sizes[1], embed_size), 
+    kernel_initializer = 'normal',
+    activation='elu'
+  )
+
+conv_2 <- x %>% 
+  layer_conv_2d(
+    num_filters, 
+    kernel_size = list(filter_sizes[2], embed_size), 
+    kernel_initializer = 'normal',
+    activation='elu'
+  )
+
+conv_3 <- x %>% 
+  layer_conv_2d(
+    num_filters, 
+    kernel_size = list(filter_sizes[3], embed_size), 
+    kernel_initializer = 'normal',
+    activation='elu'
+  )
+
+conv_4 <- x %>% 
+  layer_conv_2d(
+    num_filters, 
+    kernel_size = list(filter_sizes[4], embed_size), 
+    kernel_initializer = 'normal',
+    activation='elu'
+  )
+
+
+max_pool1 <- conv_1 %>% 
+  layer_max_pooling_2d(pool_size=list(maxlen - filter_sizes[1] + 1, 1))
+
+max_pool2 <- conv_2 %>% 
+  layer_max_pooling_2d(pool_size=list(maxlen - filter_sizes[2] + 1, 1))
+
+max_pool3 <- conv_3 %>% 
+  layer_max_pooling_2d(pool_size=list(maxlen - filter_sizes[3] + 1, 1))
+
+max_pool4 <- conv_4 %>% 
+  layer_max_pooling_2d(pool_size=list(maxlen - filter_sizes[4] + 1, 1))
+
+z <- layer_concatenate(list(max_pool1, max_pool2, max_pool3, max_pool4), axis = 1) %>% 
+  layer_flatten()
+
+outp <- z %>% 
+  layer_dense(units = 1, activation = "sigmoid")
+
+multi_model <- keras::keras_model(inp, outp) %>%
+  compile(
+    loss = "binary_crossentropy",
+    optimizer = "adam",
+    metrics = "accuracy"
+  )  
+summary(multi_model)
+```
+
+## Fit Model
+
+```{r, eval = F}
+hist_hist <- multi_model %>% 
+  keras::fit(
+    x = train_seq, 
+    y = train$binary,
+    batch_size = batch_size,
+    epochs = 1,
+    validation_split = .1
+  )
+
+#keras::save_model_hdf5(multi_model, filepath = "_models/multi_model")
+```
+
+
+## Test Model
+
+```{r, eval = F}
+pred_multi <- predict(multi_model, x = test_seq) %>% 
+  as.vector() 
+pred_multi <- ifelse(pred_multi > .5, 1, 0)
+mean(pred_multi == test$binary) #%>% glue::glue("Accuracy of {.}") # 0.7697401
+print(object.size(multi_model), units = "MB")
+```
+
+
+```{r}
+### TEXT PROCESSING
+transform_text <- function(x, n_grams){
+  text <- x %>% 
+    tibble(text = .) %>% 
+    mutate(id = 1:n()) %>%
+    tidytext::unnest_tokens(word, text, token = "words", to_low = F) %>%
+    group_by(id) %>% 
+    mutate(tid = 1:n()) %>%
+    ungroup 
+  
+
+  ngram <- text %>%
+    group_by(id) %>%
+    summarise(text_word = paste(word, collapse = " ")) %>%
+    ungroup %>% 
+    tidytext::unnest_tokens(ngram, text_word, token = "ngrams", n = as.integer(n_grams), to_low = F) %>%
+    group_by(id) %>%
+    mutate(tid = 1:n()) %>% 
+    ungroup
+  
+  out <- text %>% 
+    left_join(ngram) %>% 
+    mutate(ngram = ifelse(is.na(ngram), word, ngram))
+  
+  return(out)
+}  
+
+transform_text(x = "Hi Hallo wie gehts uns denn heute so?", 3)
+
+
+# library(shiny)
+# sent_colors <- get_sent_palette(c(1))
+# plot(rep(1,10),col=sent_colors, pch=19,cex=2)
+get_sent_palette <- function(type) {
+  
+  pos <- "white"
+  neu <- "gray80"
+  neg <- "white"
+  
+  if(1 %in% type) {
+    neg <- "#e63900"
+  }
+  if(2 %in% type) {
+    neu <- "#ffd11a"
+  }
+  if(3 %in% type) {
+    pos <- "#00cc44"
+  }
+  
+  colfunc <- colorRampPalette(c(neg, neu, pos))
+  sent_colors <- colfunc(10)
+  
+  if(!(1 %in% type)) {
+    sent_colors <- c(rep("white", 4) , sent_colors[5:10])
+  }
+  if(!(3 %in% type)) {
+    sent_colors <- c(sent_colors[1:6], rep("white", 4))
+  }
+  
+  #sent_colors <- c(colfunc1(5), colfunc2(5))
+  return(sent_colors)
+}
+```
+
+
+
+

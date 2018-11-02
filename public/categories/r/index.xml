@@ -6,10 +6,19 @@
     <description>Recent content in R on Simon&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 28 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Sentiment Prediction using Keras</title>
+      <link>/post/2018/10/28/sentiment-prediction-using-keras/</link>
+      <pubDate>Sun, 28 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2018/10/28/sentiment-prediction-using-keras/</guid>
+      <description>-- -- -- -- --  Code and Links   iframe { min-width: 100%; }     iFrameResize({ heightCalculationMethod: &#39;taggedElement&#39; });   $(&#39;#confirm&#39;) .on(&#39;click&#39;, function() { // programmatically activating tab $.tab(&#39;change tab&#39;, &#39;shiny_sent&#39;); }); $(&#39;#info&#39;) .on(&#39;click&#39;, function() { // programmatically activating tab $.tab(&#39;change tab&#39;, &#39;shiny_info&#39;); });  Load Packages pacman::p_load(dplyr, ggplot2, purrr, tidyr, stringr, keras) ggplot2::theme_set(theme_bw()) # keras::install_keras()  Load Data load(&amp;quot;_data/reviews_sample.Rdata&amp;quot;) reviews_sample %&amp;gt;% glimpse ## Observations: 50,000 ## Variables: 10 ## $ id &amp;lt;int&amp;gt; 362139, 90817, 541427, 361424, 167474, 43767, .</description>
+    </item>
     
     <item>
       <title>Vox-Pol Conf Twitter Community</title>
@@ -20,36 +29,6 @@
       <description>This is a short notebook scraping tweets related to the Vox-Pol Conference 2018 in Amsterdam. As this was again a very inspiring Vox-Pol event I thought it was time to further explore the twitter community.
 Packages Load the necessary packages
 # install pacman once if not avaible on your machine # install.packages(&amp;quot;pacman&amp;quot;) pacman::p_load(tidyverse, purrr, tidyr, rtweet, stringr, ggraph, igraph, tidygraph, forcats)  Get Data Call Twitter API. If you want to scrape data yourself you have to register a free account where you get your personal access point to Twitter.</description>
-    </item>
-    
-    <item>
-      <title>Text Preprocessing</title>
-      <link>/post/2018/07/01/text-preprocessing/</link>
-      <pubDate>Sun, 01 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/2018/07/01/text-preprocessing/</guid>
-      <description>#install.packages(c(&amp;quot;devtools&amp;quot;, &amp;quot;pacman&amp;quot;)) #devtools::install_github(&amp;quot;rstudio/keras&amp;quot;) #devtools::install_github(&amp;quot;systats/tidyTX&amp;quot;) pacman::p_load( dplyr, stringr, manifestoR, purrr, tidyr, tidytext, tidyTX ) # keras::install_keras() Get data by manifestoR The manifestoR api is a nice project that offers the scientific community parties’ policy positions derived from a content analysis of parties’ electoral manifestos. Acquire your own free key after short registration. The project is present on github and provide a shiny app to explore their database
- mkey &amp;lt;- &amp;quot;__put__your__key__here__&amp;quot; mp_setapikey(key = mkey) # edate = Day, month, and year of national election df &amp;lt;- mp_corpus( countryname == &amp;quot;Germany&amp;quot; &amp;amp; edate &amp;gt; as.</description>
-    </item>
-    
-    <item>
-      <title>Text Classification in R</title>
-      <link>/post/2018/03/07/text-classification-in-r/</link>
-      <pubDate>Wed, 07 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/post/2018/03/07/text-classification-in-r/</guid>
-      <description>Today’s tutorial will cover how to perform text classification with keras (build on top of tensorflow). This is a fairly new but incredible experience for R users who have been limited in the past to more high level machine learning libraries like caret and h2o. These packages are great for a variety of machine learning tasks by the magic ensemble learning and hyperparameter grid search infrastructure from h2o. Despite some good feed forward networks, natural language or computer vision tasks require more complex network architectures to learn informative low dimensional features.</description>
-    </item>
-    
-    <item>
-      <title>R Squared Simulations</title>
-      <link>/post/2017/08/01/r-squared-simulations/</link>
-      <pubDate>Tue, 01 Aug 2017 00:00:00 +0000</pubDate>
-      
-      <guid>/post/2017/08/01/r-squared-simulations/</guid>
-      <description>The model performance measure \(R^2\) is often subject to fierce criticism for being prone to its context. This notebook describes some well known criticism of \(R^2\) and tests the deficiencies by simulations. By combining theory, code and accessible graphics I want to show the implications for getting any useful information from \(R^2\).
-Literature The theoretical considerations are partly taken from
- The Elements of Statistical Learning p.14-16 Urban and Mayerl (2011) set up a poison list of 10 items to be considered, as \(R^2\) is artificially biased by other parameters.</description>
     </item>
     
   </channel>

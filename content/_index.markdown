@@ -21,19 +21,10 @@ title: ""
           </div>
         </div>
       </h1>
-    </div>
-    <div class = "ten wide column">
-      <p>
-      <div class="ui disabled header">
-        About Me
-      </div>
-      I'm a PhD student at the Graduate School of Decision Sciences (GSDS) from University of Konstanz. My research interests include political polarization and extremism, as well as Natural Language Processing, machine learning and web development. Currently, I'am working part time as a junior data scientist. at Paraboost and Lovai. 
-      </p>
-      <br>
       <p align="center">
-        <a class="ui circular facebook icon button" href="" target="_blank" rel="nofollow">
-          <i class="facebook icon"></i>
-        </button>
+        <!-- <a class="ui circular facebook icon button" href="" target="_blank" rel="nofollow"> -->
+        <!--   <i class="facebook icon"></i> -->
+        <!-- </a> -->
         <a href="https://twitter.com/systatz" target="_blank" rel="nofollow" class = "ui circular twitter icon button">
           <i class="twitter icon"></i>
         </a>
@@ -43,6 +34,20 @@ title: ""
         <a href="mailto:sy-ro[at]gmx[dot]net" target="_blank" rel="nofollow" class = "ui circular mail icon button">
           <i class="mail icon"></i>
         </a>
+      </p>
+      <a class="github-button" href="https://github.com/systats" data-size="large" data-show-count="true" aria-label="@systats on GitHub">systats</a>
+      <br>
+      <br>
+      <!-- Place this tag in your head or just before your close body tag. -->
+      <!-- Place this tag in your head or just before your close body tag. -->
+      <script async defer src="https://buttons.github.io/buttons.js"></script></p>
+    </div>
+    <div class = "ten wide column">
+      <p>
+      <div class="ui disabled header">
+        About Me
+      </div>
+      I'm a first year PhD student at the Graduate School of Decision Sciences (GSDS) from the University of Konstanz. My research interests include political extremism and hate speech which will be updated soon. Additionally, I'am working as a junior data scientist at Paraboost and Lovai. The focus on computational methods has helped me a lot to find common ground between academia and business approaches and taught me to appreciate the best from to very different communities. My last projects were build upon methods from Natural Language Processing, machine learning and web development. Every day I use R, occasionally blog about it and organize from time to time workshops. 
       </p>
     </div>
   </div>
@@ -63,8 +68,9 @@ title: ""
     Slides
   </div>
 </h1>
-<!--html_preserve--><div class="ui two stackable cards">
-<div class="card">
+
+<!--html_preserve--><div class="ui two stackable link cards">
+<a class="card" href="https://decoding-the-altright.netlify.com/#1" target="_blank" rel="nofollow">
 <div class="ui fade reveal image">
 <img class="visible content" src="slides/altright_concept.png"/>
 <img class="hidden content" src="slides/altright_model.png"/>
@@ -73,12 +79,15 @@ title: ""
 <h3 class="ui header">
 <div class="content">
 DECODING THE ALT-RIGHT
-<div class="meta">VOX-Pol Conference Amsterdam</div>
-<div class="meta">2018</div>
+<div class="meta">
+VOX-Pol Conference Amsterdam
+ 
+2018
+</div>
 </div>
 </h3>
 </div>
-</div>
+</a>
 </div><!--/html_preserve-->
 </div>
 
@@ -116,7 +125,7 @@ DECODING THE ALT-RIGHT
         <div class="content">
           Social Sciences
         <div class="sub header">
-          Combining interesting research questions about human behavoir and decisions with statistics and machine learning is never boring but enlightening. n 2018, I started to investigate Alt-Right radicalization on social media and terrorism informatics thanks to VOX-Pol.
+          Combining interesting research questions about human behavoir and decisions with statistics and machine learning is never boring but enlightening. In 2018, I started to investigate Alt-Right radicalization on social media and terrorism informatics thanks to VOX-Pol.
         </div>
       </div>
     </h2>

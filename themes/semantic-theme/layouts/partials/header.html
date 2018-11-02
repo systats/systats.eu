@@ -2,47 +2,32 @@
 <html lang="{{ .Site.LanguageCode }}">
   <head>
     <meta charset="utf-8">
+    <title>systats - personal blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ "/css/style.css" | relURL }}" />
     <!---<link rel="stylesheet" href="{{ "/css/fonts.css" | relURL }}" />--->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.css">
     <!--- jquery has to be placed befor js cdn due to $ init---->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.js"></script>
     <!---<link rel="stylesheet" href="{{ "/css/tomorrow-night-bright.css" | relURL }}">--->
     <script src="{{ "/js/highlight.pack.js" | relURL }}"></script>
-  </head>
-  <!--- body ---->
+  	<style>
+     </style>
+   </head>
   <body>
-    <div class="ui container">
-      <div class="ui top fixed grey inverted compact icon menu">
-      <!---<div class="ui large top fixed menu transition visible"
-      style="display: flex !important;">---->
-        <!---<a class="toc item">
-        <i class="sidebar icon"></i>
-        </a>-->
+    {{ if .IsHome }}
+     <div class="ui container">
+      <div class="ui top fixed inverted compact icon menu" style = "background-color: #396690;">
         {{partial "menu" .}}
       </div>
-      <br>
-      <br>
     </div>
-    {{ if .IsHome }}
-    <div class="ui grey inverted vertical center aligned segment">
-    <br>
-    <br>
-    <div class="ui text container">
-      <h1 class="ui inverted header", style = "font-size:40px">
-        <!---{{ .Title }}--->
-        Simon Roth
-        <div class="ui sub header">
-          <!---{{ .Title }}--->
-          Social Data Scientist
-        </div>
-      </h1>
-      <br>
+    <img class="ui fluid image" src="/images/banner.png">
+	{{ else }} 
+    <div class="ui container">
+      <div class="ui top fixed inverted gray compact icon menu">
+        {{partial "menu" .}}
+      </div>
     </div>
-    <!---page grid---->
-  </div>
-  <!---<img src = "/banner.jpg" style="width:100%;">---->
-  {{ end }} 
+  	{{ end }} 
     

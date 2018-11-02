@@ -3,42 +3,29 @@
   <head>
 	<meta name="generator" content="Hugo 0.24.1" />
     <meta charset="utf-8">
+    <title>systats - personal blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/style.css" />
     
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.js"></script>
     
     <script src="/js/highlight.pack.js"></script>
-  </head>
-  
+  	<style>
+     </style>
+   </head>
   <body>
-    <div class="ui container">
-      <div class="ui top fixed grey inverted compact icon menu">
-      
-        
+    
+     <div class="ui container">
+      <div class="ui top fixed inverted compact icon menu" style = "background-color: #396690;">
         <a class="item" href="/">
 
   Start
 </a>
 
-<div class="ui dropdown item">
-  
-  Portfolio
-  <i class="dropdown icon"></i>
-  <div class="menu">
-    <a class="item", href="/sentiment/">
-      <div class="content">
-        <h5 class="ui icon header">
-          <i class="green smile icon"></i>
-          Sentiment Neuron
-        </h5>
-      </div>
-    </a>
-  </div>
-</div>
+
 <div class="right compact menu">
   
   <div class="ui dropdown item">
@@ -65,28 +52,9 @@
 
 
       </div>
-      <br>
-      <br>
     </div>
-    
-    <div class="ui grey inverted vertical center aligned segment">
-    <br>
-    <br>
-    <div class="ui text container">
-      <h1 class="ui inverted header", style = "font-size:40px">
-        
-        Simon Roth
-        <div class="ui sub header">
-          
-          Social Data Scientist
-        </div>
-      </h1>
-      <br>
-    </div>
-    
-  </div>
-  
-   
+    <img class="ui fluid image" src="/images/banner.png">
+	 
     
 
 <!---first content--->
@@ -106,19 +74,10 @@
           </div>
         </div>
       </h1>
-    </div>
-    <div class = "ten wide column">
-      <p>
-      <div class="ui disabled header">
-        About Me
-      </div>
-      I'm a PhD student at the Graduate School of Decision Sciences (GSDS) from University of Konstanz. My research interests include political polarization and extremism, as well as Natural Language Processing, machine learning and web development. Currently, I'am working part time as a junior data scientist. at Paraboost and Lovai. 
-      </p>
-      <br>
       <p align="center">
-        <a class="ui circular facebook icon button" href="" target="_blank" rel="nofollow">
-          <i class="facebook icon"></i>
-        </button>
+        <!-- <a class="ui circular facebook icon button" href="" target="_blank" rel="nofollow"> -->
+        <!--   <i class="facebook icon"></i> -->
+        <!-- </a> -->
         <a href="https://twitter.com/systatz" target="_blank" rel="nofollow" class = "ui circular twitter icon button">
           <i class="twitter icon"></i>
         </a>
@@ -128,6 +87,20 @@
         <a href="mailto:sy-ro[at]gmx[dot]net" target="_blank" rel="nofollow" class = "ui circular mail icon button">
           <i class="mail icon"></i>
         </a>
+      </p>
+      <a class="github-button" href="https://github.com/systats" data-size="large" data-show-count="true" aria-label="@systats on GitHub">systats</a>
+      <br>
+      <br>
+      <!-- Place this tag in your head or just before your close body tag. -->
+      <!-- Place this tag in your head or just before your close body tag. -->
+      <script async defer src="https://buttons.github.io/buttons.js"></script></p>
+    </div>
+    <div class = "ten wide column">
+      <p>
+      <div class="ui disabled header">
+        About Me
+      </div>
+      I'm a first year PhD student at the Graduate School of Decision Sciences (GSDS) from the University of Konstanz. My research interests include political extremism and hate speech which will be updated soon. Additionally, I'am working as a junior data scientist at Paraboost and Lovai. The focus on computational methods has helped me a lot to find common ground between academia and business approaches and taught me to appreciate the best from to very different communities. My last projects were build upon methods from Natural Language Processing, machine learning and web development. Every day I use R, occasionally blog about it and organize from time to time workshops. 
       </p>
     </div>
   </div>
@@ -149,8 +122,9 @@
     Slides
   </div>
 </h1>
-<!--html_preserve--><div class="ui two stackable cards">
-<div class="card">
+
+<!--html_preserve--><div class="ui two stackable link cards">
+<a class="card" href="https://decoding-the-altright.netlify.com/#1" target="_blank" rel="nofollow">
 <div class="ui fade reveal image">
 <img class="visible content" src="slides/altright_concept.png"/>
 <img class="hidden content" src="slides/altright_model.png"/>
@@ -159,12 +133,15 @@
 <h3 class="ui header">
 <div class="content">
 DECODING THE ALT-RIGHT
-<div class="meta">VOX-Pol Conference Amsterdam</div>
-<div class="meta">2018</div>
+<div class="meta">
+VOX-Pol Conference Amsterdam
+ 
+2018
+</div>
 </div>
 </h3>
 </div>
-</div>
+</a>
 </div><!--/html_preserve-->
 </div>
 
@@ -201,7 +178,7 @@ DECODING THE ALT-RIGHT
         <div class="content">
           Social Sciences
         <div class="sub header">
-          Combining interesting research questions about human behavoir and decisions with statistics and machine learning is never boring but enlightening. n 2018, I started to investigate Alt-Right radicalization on social media and terrorism informatics thanks to VOX-Pol.
+          Combining interesting research questions about human behavoir and decisions with statistics and machine learning is never boring but enlightening. In 2018, I started to investigate Alt-Right radicalization on social media and terrorism informatics thanks to VOX-Pol.
         </div>
       </div>
     </h2>
@@ -220,6 +197,27 @@ DECODING THE ALT-RIGHT
   </h1>
   
   <div class="ui items">
+    
+    <a class="item" href="/post/2018/10/28/sentiment-prediction-using-keras/">
+      <div class = "content">
+        <h2 class="ui header">
+        	Sentiment Prediction using Keras
+        </h2>
+        <div class = "meta">
+    		  2018-10-28 
+    		  
+        </div>
+        
+          
+            <img src='/img/sent_word_level.png' class="ui image">
+          
+        
+        <div class="description" style = "color:#A0A0A0;">
+          Some Sentiment Predictions using Keras and Amazon Reviews
+          ... (4 min read)
+        </div>
+      </div>
+    </a>
     
     <a class="item" href="/post/2018/08/22/vox-pol-conf-twitter-community/">
       <div class = "content">
@@ -253,118 +251,6 @@ DECODING THE ALT-RIGHT
         <div class="description" style = "color:#A0A0A0;">
           In this blog post I scraped over 1200 tweets published during the VOX-Pol Conference 2018 in Amsterdam
           ... (6 min read)
-        </div>
-      </div>
-    </a>
-    
-    <a class="item" href="/post/2018/07/01/text-preprocessing/">
-      <div class = "content">
-        <h2 class="ui header">
-        	Text Preprocessing
-        </h2>
-        <div class = "meta">
-    		  2018-07-01 
-    		  
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              manifestoR
-            </div>
-      		
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              text
-            </div>
-      		
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              preprocessing
-            </div>
-      		
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              feature engeneering
-            </div>
-      		
-        </div>
-        
-        
-        <div class="description" style = "color:#A0A0A0;">
-          This is the data wrangling part for the main blog post Text Classification in R with Keras
-          ... (5 min read)
-        </div>
-      </div>
-    </a>
-    
-    <a class="item" href="/post/2018/03/07/text-classification-in-r/">
-      <div class = "content">
-        <h2 class="ui header">
-        	Text Classification in R
-        </h2>
-        <div class = "meta">
-    		  2018-03-07 
-    		  
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              Keras
-            </div>
-      		
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              TensorFlow
-            </div>
-      		
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              Glove
-            </div>
-      		
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              LSTM
-            </div>
-      		
-        </div>
-        
-        
-        <div class="description" style = "color:#A0A0A0;">
-          Building text classification models with keras and tensorflow trained on political party agendas (`manifestoR`).
-          ... (10 min read)
-        </div>
-      </div>
-    </a>
-    
-    <a class="item" href="/post/2017/08/01/r-squared-simulations/">
-      <div class = "content">
-        <h2 class="ui header">
-        	R Squared Simulations
-        </h2>
-        <div class = "meta">
-    		  2017-08-01 
-    		  
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              R2
-            </div>
-      		
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              Simulations
-            </div>
-      		
-            <div class="ui horizontal label">
-              <i class="tag icon"></i> 
-              Model Fit
-            </div>
-      		
-        </div>
-        
-          
-            <img src="https://images.ecosia.org/J-xchMT6eSAR3nikkIBx2JE49d8=/0x390/smart/https%3A%2F%2Fi.amz.mshcdn.com%2FnHE6pgURwjLryKMUJL0TS0cMQAA%3D%2Ffit-in%2F1200x9600%2Fhttps%253A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fcard%2Fimage%2F23540%2FGettyImages-482332148.jpg" class="ui image">
-          
-        
-        <div class="description" style = "color:#A0A0A0;">
-          This post is imported from my last blog which demostrates the volatility of R-square and its consequences by talking about explained variance.
-          ... (13 min read)
         </div>
       </div>
     </a>

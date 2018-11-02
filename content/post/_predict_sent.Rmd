@@ -1,0 +1,1015 @@
+---
+title: "R Notebook"
+output: html_document
+---
+
+## Packages
+
+```{r}
+pacman::p_load(dplyr, ggplot2, purrr, xml2, stringr, magrittr, tidyr, jsonlite, keras, cleanNLP, udpipe)
+```
+
+
+## Text Preprocessing
+
+
+```{r}
+load("data/reviews_final.Rdata")
+
+final <- reviews_final %>% 
+  select(id, text, binary) %>% 
+  mutate(text = str_to_lower(text) %>% str_remove_all("\\d")) %>% 
+  arrange(sample(id, size = length(id))) %>% 
+  filter(!is.na(binary)) %>% 
+  mutate(split_id = sample(1:2, size = n(), replace = T, prob = c(.9, .1))) 
+
+final %>%
+  count(binary)
+```
+
+
+## Train Test Split
+
+```{r}
+train <- final %>% filter(split_id == 1)
+test <- final %>% filter(split_id == 2)
+```
+
+
+```{r}
+train %>%
+  select(nwords, nchars, target) %>%
+  gather(var, value, -target) %>%
+  ggplot(aes(value)) +
+  geom_histogram() +
+  facet_wrap(~var, scales = "free")
+```
+
+
+```{r}
+n_words <- train %>%
+  tidytext::unnest_tokens(word, text, token = "words") %>%
+  count(word, sort = T)
+#n_words %>% filter(n > 5)# %>% tail(20)
+```
+
+
+# H2O
+
+## Glove text2vec
+
+```{r}
+# library(text2vec)
+# 
+# # Create iterator over tokens
+# tokens <- train$text %>% text2vec::word_tokenizer()
+# 
+# # Create vocabulary. Terms will be unigrams (simple words).
+# it <- tokens %>% itoken(progressbar = F) %>% 
+# vocab <- it %>% 
+#   create_vocabulary() %>% 
+#   prune_vocabulary(
+#     term_count_min = 5, 
+#     doc_proportion_max = .6
+#   )
+# 
+# # Use our filtered vocabulary
+# vectorizer <- vocab_vectorizer(vocab)
+# # use window of 5 for context words
+# # tcm <- create_tcm(it, vectorizer, skip_grams_window = 5L)
+# # 
+# # glove <- GlobalVectors$new(
+# #   word_vectors_size = 128, 
+# #   vocabulary = vocab, 
+# #   x_max = 10
+# # )
+# # 
+# # wv_main <- glove$fit_transform(tcm, n_iter = 10, convergence_tol = 0.01)
+# # 
+# # wv_context <- glove$components
+# # dim(wv_context)
+# # word_vectors <- wv_main + t(wv_context)
+# 
+# dtm_train <- create_dtm(it_train, vectorizer)
+# 
+# tidyMBO::build_dtm(vectorizer, test$text, id = 1:nrow(test))
+# 
+# dtm_train <- create_dtm(it_train, vectorizer)
+```
+
+## H2O
+
+# Keras
+
+## Sequence Building
+
+```{r}
+library(keras)
+
+max_features <- 80000 # top most common words
+batch_size <- 32
+maxlen <- 750
+
+tokenizer <- text_tokenizer(num_words = max_features)
+fit_text_tokenizer(tokenizer, x = train$text)
+#keras::save_text_tokenizer(tokenizer, "models/tokenizer")
+#tokenizer <- keras::load_text_tokenizer("data/tokenizer")
+
+train_seq <- tokenizer %>% 
+  texts_to_sequences(train$text) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+
+test_seq <- tokenizer %>% 
+  texts_to_sequences(test$text) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+```
+
+
+## Models 
+
+### GLOVE + Global Pooling = FastText?
+
+```{r}
+glove_model <- keras_model_sequential() %>%
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+    ) %>%
+  layer_global_average_pooling_1d() %>%
+  layer_dense(1, activation = "sigmoid") %>% 
+  compile(
+    loss = "binary_crossentropy",
+    optimizer = "adam",
+    metrics = "accuracy"
+  )
+
+summary(glove_model)
+```
+
+```{r}
+glove_hist <- glove_model %>% 
+  keras::fit(
+    x = train_seq, 
+    y = train$binary,
+    batch_size = batch_size,
+    epochs = 2, 
+    validation_split = .1
+  )
+```
+
+```{r}
+#print(object.size(glove_model), units = "MB")
+#keras::save_model_hdf5(glove_model, "shiny_sent/sent_glove_review", overwrite = T)
+
+pred_glove <- keras::predict_classes(glove_model, x = test_seq) %>% 
+  as.vector()
+mean(pred_glove == test$binary)
+vis_table(pred = pred_glove, real = test$binary)
+```
+
+
+
+### LSTM
+
+```{r}
+lstm_model <- keras_model_sequential() %>%
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+  ) %>% 
+  layer_lstm(units = 100, dropout = .2, recurrent_dropout = 0.2) %>% 
+  #layer_dropout(rate = 0.) %>% 
+  layer_dense(units = 1, activation = 'sigmoid') %>%
+  compile(
+    loss = 'binary_crossentropy',
+    optimizer = 'adam',
+    metrics = c('accuracy')
+  )
+
+summary(lstm_model)
+```
+
+```{r}
+lstm_hist <- lstm_model %>% 
+  keras::fit(
+    x = train_seq, 
+    y = train$target,
+    batch_size = 30,
+    epochs = 2,
+    validation_split = .1
+  )
+```
+
+```{r}
+pred_lstm <- keras::predict_classes(lstm_model, x = test_seq) %>% 
+  as.vector()
+mean(pred_lstm == test$target)
+
+vis_table(pred = pred_lstm, real = test$target)
+```
+
+
+### GRU
+
+* https://www.kaggle.com/yekenot/pooled-gru-fasttext
+
+```{python}
+#def get_model():
+#    inp = Input(shape=(maxlen, ))
+#    x = Embedding(max_features, embed_size, weights=[embedding_matrix])(inp)
+#    x = SpatialDropout1D(0.2)(x)
+#    x = Bidirectional(GRU(80, return_sequences=True))(x)
+#    avg_pool = GlobalAveragePooling1D()(x)
+#    max_pool = GlobalMaxPooling1D()(x)
+#    conc = concatenate([avg_pool, max_pool])
+#    outp = Dense(6, activation="sigmoid")(conc)
+#    
+#    model = Model(inputs=inp, outputs=outp)
+#    model.compile(loss='binary_crossentropy',
+#                  optimizer='adam',
+#                  metrics=['accuracy'])
+```
+
+
+```{r}
+inp <- keras::layer_input(shape = list(maxlen))
+    
+main <- inp %>%
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+  ) %>% 
+  layer_spatial_dropout_1d(0.2) %>% 
+  keras::bidirectional(keras::layer_gru(units = 80, return_sequences = T))
+
+avg_pool <- main %>% layer_global_average_pooling_1d()
+max_pool <- main %>% layer_global_average_pooling_1d()
+outp <- layer_concatenate(c(avg_pool, max_pool)) %>% 
+  layer_dense(1, activation="sigmoid")
+
+gru_model <- keras::keras_model(inp, outp) %>%
+  compile(
+    loss = "binary_crossentropy",
+    optimizer = "adam",
+    metrics = "accuracy"
+  )  
+
+summary(gru_model)
+```
+
+
+```{r}
+hist_gru <- gru_model %>% 
+  keras::fit(
+    x = train_seq, 
+    y = train$target,
+    batch_size = batch_size,
+    epochs = 2,
+    validation_split = .05
+  )
+```
+
+```{r}
+pred_gru <- predict(gru_model, x = test_seq) %>% 
+  as.vector() 
+pred_gru <- ifelse(pred_gru > .5, 1, 0)
+
+
+vis_table(pred = pred_gru, real = test$target)
+```
+
+
+
+## Advanced 
+
+### Multi Channel CNN
+
+* [Code](https://www.kaggle.com/yekenot/textcnn-2d-convolution)
+
+```{python}
+#max_features = 100000
+#maxlen = 200
+#embed_size = 300
+#filter_sizes = [1,2,3,5]
+#num_filters = 32
+#
+#inp = Input(shape=(maxlen, ))
+#x = Embedding(max_features, embed_size, weights=[embedding_matrix])(inp)
+#x = SpatialDropout1D(0.4)(x)
+#x = Reshape((maxlen, embed_size, 1))(x)
+#
+#conv_0 = Conv2D(num_filters, kernel_size=(filter_sizes[0], embed_size), #kernel_initializer='normal',
+#                                                                               #activation='elu')(x)
+#conv_1 = Conv2D(num_filters, kernel_size=(filter_sizes[1], embed_size), #kernel_initializer='normal',
+#                                                                               #activation='elu')(x)
+#conv_2 = Conv2D(num_filters, kernel_size=(filter_sizes[2], embed_size), #kernel_initializer='normal',
+#                                                                               #activation='elu')(x)
+#conv_3 = Conv2D(num_filters, kernel_size=(filter_sizes[3], embed_size), #kernel_initializer='normal',
+#                                                                               #activation='elu')(x)
+#
+#maxpool_0 = MaxPool2D(pool_size=(maxlen - filter_sizes[0] + 1, 1))(conv_0)
+#maxpool_1 = MaxPool2D(pool_size=(maxlen - filter_sizes[1] + 1, 1))(conv_1)
+#maxpool_2 = MaxPool2D(pool_size=(maxlen - filter_sizes[2] + 1, 1))(conv_2)
+#maxpool_3 = MaxPool2D(pool_size=(maxlen - filter_sizes[3] + 1, 1))(conv_3)
+#   
+#z = Concatenate(axis=1)([maxpool_0, maxpool_1, maxpool_2, maxpool_3])   
+#z = Flatten()(z)
+#z = Dropout(0.1)(z)
+#   
+#outp = Dense(6, activation="sigmoid")(z)
+#
+#model = Model(inputs=inp, outputs=outp)
+#model.compile(loss='binary_crossentropy',
+#             optimizer='adam',
+#             metrics=['accuracy'])
+```
+
+
+```{r}
+embed_size <- 128
+filter_sizes <- c(1, 2, 3, 5)
+num_filters <- 32
+
+inp <- keras::layer_input(shape = list(maxlen))
+  
+x <- inp %>%
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = embed_size, 
+    input_length = maxlen
+  ) %>% 
+  #layer_spatial_dropout_1d(0.2) %>% 
+  layer_reshape(list(maxlen, embed_size, 1))
+
+conv_1 <- x %>% 
+  layer_conv_2d(
+    num_filters, 
+    kernel_size = list(filter_sizes[1], embed_size), 
+    kernel_initializer = 'normal',
+    activation='elu'
+  )
+
+conv_2 <- x %>% 
+  layer_conv_2d(
+    num_filters, 
+    kernel_size = list(filter_sizes[2], embed_size), 
+    kernel_initializer = 'normal',
+    activation='elu'
+  )
+
+conv_3 <- x %>% 
+  layer_conv_2d(
+    num_filters, 
+    kernel_size = list(filter_sizes[3], embed_size), 
+    kernel_initializer = 'normal',
+    activation='elu'
+  )
+
+conv_4 <- x %>% 
+  layer_conv_2d(
+    num_filters, 
+    kernel_size = list(filter_sizes[4], embed_size), 
+    kernel_initializer = 'normal',
+    activation='elu'
+  )
+
+
+max_pool1 <- conv_1 %>% 
+  layer_max_pooling_2d(pool_size=list(maxlen - filter_sizes[1] + 1, 1))
+
+max_pool2 <- conv_2 %>% 
+  layer_max_pooling_2d(pool_size=list(maxlen - filter_sizes[2] + 1, 1))
+
+max_pool3 <- conv_3 %>% 
+  layer_max_pooling_2d(pool_size=list(maxlen - filter_sizes[3] + 1, 1))
+
+max_pool4 <- conv_4 %>% 
+  layer_max_pooling_2d(pool_size=list(maxlen - filter_sizes[4] + 1, 1))
+
+z <- layer_concatenate(list(max_pool1, max_pool2, max_pool3, max_pool4), axis = 1) %>% 
+  layer_flatten()
+
+outp <- z %>% 
+  layer_dense(1, activation="sigmoid")
+
+multi_model <- keras::keras_model(inp, outp) %>%
+  compile(
+    loss = "binary_crossentropy",
+    optimizer = "adam",
+    metrics = "accuracy"
+  )  
+
+summary(multi_model)
+```
+
+```{r}
+hist_hist <- multi_model %>% 
+  keras::fit(
+    x = train_seq, 
+    y = train$binary,
+    batch_size = batch_size,
+    epochs = 2,
+    validation_split = .1
+  )
+```
+
+```{r}
+pred_multi <- predict(multi_model, x = test_seq) %>% 
+  as.vector() 
+pred_multi <- ifelse(pred_multi > .5, 1, 0)
+mean(pred_multi == test$target)
+
+vis_table(pred = pred_multi, real = test$target)
+```
+
+
+
+### stacked CNN LSTM
+
+```{r}
+library(keras)
+keras::k_clear_session()
+kernel_size <- 5
+filters <- 100
+pool_size <- 4
+
+stacked_model <- keras_model_sequential() %>%
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+  ) %>%
+  #layer_dropout(0.25) %>%
+  layer_conv_1d(
+    filters, 
+    kernel_size, 
+    padding = "valid",
+    activation = "relu",
+    strides = 1
+  ) %>%
+  layer_max_pooling_1d(pool_size) %>%
+  layer_lstm(units = 64, dropout = 0.3, recurrent_dropout = 0.2) %>% #
+  layer_dense(units = 1, activation = 'sigmoid') %>%
+  compile(
+    loss = "binary_crossentropy",
+    optimizer = "adam",
+    metrics = "accuracy"
+  )
+
+summary(stacked_model)
+
+hist_stacked <- stacked_model %>% 
+  keras::fit(
+    x = train_seq, 
+    y = train$binary,
+    batch_size = batch_size,
+    epochs = 1,
+    validation_split = .1
+  )
+
+# keras::save_model_hdf5(stacked_model, filepath = "models/stacked_model", overwrite = T)
+```
+
+```{r}
+pred_stacked <- keras::predict_classes(stacked_model, x = test_seq) %>% 
+  as.vector()
+mean(pred_stacked == test$binary)
+# 0.9212782
+vis_table(pred = pred_stacked, real = test$target)
+```
+
+
+
+
+
+### GRU + CNN
+
+* [Code](https://www.kaggle.com/mosnoiion/two-rnn-cnn-columns-networks-with-keras)
+* [Paper](http://people.idsia.ch/~ciresan/data/cvpr2012.pdf)
+
+```{r}
+inp <- layer_input(shape = list(maxlen), dtype = "int32", name = "input")
+emm <- inp %>%
+  layer_embedding(
+    input_dim = max_features, 
+    output_dim = 128, 
+    input_length = maxlen
+  ) %>%
+  layer_spatial_dropout_1d(rate = .1)
+
+model_1 <- emm %>%
+  bidirectional(
+    layer_gru(units = 40, return_sequences = TRUE, recurrent_dropout = 0.1) 
+  ) %>% 
+  layer_conv_1d(
+    60, 
+    3, 
+    padding = "valid",
+    activation = "relu",
+    strides = 1
+  ) 
+
+model_2 <- emm %>%
+  bidirectional(
+    layer_gru(units = 80, return_sequences = TRUE, recurrent_dropout = 0.1) 
+  ) %>% 
+  layer_conv_1d(
+    120, 
+    2, 
+    padding = "valid",
+    activation = "relu",
+    strides = 1
+  ) 
+
+max_pool1 <- model_1 %>% layer_global_max_pooling_1d()
+ave_pool1 <- model_1 %>% layer_global_average_pooling_1d()
+max_pool2 <- model_2 %>% layer_global_max_pooling_1d()
+ave_pool2 <- model_2 %>% layer_global_average_pooling_1d()
+
+outp <- layer_concatenate(list(ave_pool1, max_pool1, ave_pool2, max_pool2)) %>%
+        layer_dense(units = 1, activation = "sigmoid")
+
+gru_cnn_model <- keras_model(inp, outp) %>% 
+  compile(
+    optimizer = "adam",
+    loss = "binary_crossentropy",
+    metrics = c("acc")
+  )
+
+summary(gru_cnn_model)
+```
+
+```{r}
+hist_gru_cnn <- gru_cnn_model %>% 
+  keras::fit(
+    x = train_seq, 
+    y = train$target,
+    batch_size = batch_size,
+    epochs = 2,
+    validation_split = .05
+  )
+```
+
+
+```{r}
+pred_gru_cnn <- predict(gru_cnn_model, x = test_seq) %>% 
+  as.vector()
+pred_gru_cnn <- ifelse(pred_gru_cnn > .5, 1, 0)
+mean(pred_gru_cnn == test$target)
+
+vis_table(pred = pred_gru_cnn, real = test$target)
+```
+
+```{r}
+nn <- test %>% 
+  mutate(pred = pred_gru_cnn) %>% 
+  filter(source == "altright")
+
+
+mean(nn$pred == nn$target)
+vis_table(pred = nn$pred, real = nn$target)
+```
+
+## Explain models
+
+
+```{r}
+# new <- c('I hate you scumbag nigger.',' But I love you too. My stupid father is a bus driver. He should kill himself because he is an rappist.') 
+# new <- "While @BetteMidler is an extremely unattractive woman, I refuse to say that because I always insist on being politically correct."
+#final[final$source == "hate" & final$target == 1,]$text
+# paste(new$text[new$target == 1][1:100], collapse = " ")
+test1 <- "Communist control freak engineered scum situation, this attack proves it's all organized ahead of time."
+test2 <- "Shoot dat nigga &amp; his shorty bitch...shorty bitch"
+test3 <- "@VICESports it past your bed time. No wonder no one reads that garbage on vice because faggots like you write shit #fuck off"
+test4 <- "Get the fuck outta here talking bout the response will be better. You fucking ignorant stupid asshole."
+test5 <- "Because mudslimes are mudslimes for a reason. When you let mudslimes into your country, your people are going to spend the rest of their days getting raped and beheaded."
+test6 <- "Deport all immigrants who refuse to be deported or kill them if they resist this is literally the law."
+test7 <- "Illegal immigrants need to deported, right now. Trump will make this happen and there is nothing you liberal snowflakes can do about that."
+test8 <- "Immigrants from Islam countries CANNOT, WILL NOT and DON’T WANT to integrate in our soceity, our colture, so why have them over in the first place, fujk that shit."
+test9 <- "Immigration from shithole brown countries means low IQ immigration and low IQ immigration means more crime, more rape, more glorious diversity. No thanks!"
+test10 <- "We’ve been told over and over again to listen to this pc dicatorship. I will not bow down to this any longer, screw it."
+test11 <- "Im sorry to say. This is going to sound extremely racist, but without all the white influence in this world back then, if there were never white people, this whole world would suck and be uncivilized. The world is a better place when there are white ethnostates."
+test12 <- "Liberal SJWs wants to censor or shut down anyone who oppose them. Insecure, whiney, narcissist snowflakes who have been given a position that allow them too much manipulation of many. Fuck Censorship. Fuck Political Correctness. Fuck Cultural Marxism."
+test13 <- "(((Pro refugee groups))) are the ones demanding for white countries to have open borders and how ‘racist’ and ‘bigoted’ whites are for wanting their own country. Meanwhile they control the banks, the government and the media and want to makes us think it ain’t so. I won’t be guilt tripped by any holoxaux fake story anymore."
+test14 <- "We fight each other while we need to fight the muslims. Wake the uck up america. these “reformers” are not real muslims,becuase it the quran it says to kill the infidels, this is what Islam tells them to do. If you see a muslim trying to rape your women or aboutto blow up, KILL him!!! It’s very straight forward."
+new <- list(test1, test2, test3, test4, test5, test6, test7, test8, test9, test10, test11, test12, test13, test14)
+k <- 4
+ngram <- 5 
+
+lstm_model %>% text_highlight(new[[k]], ngram) 
+glove_model %>% text_highlight(new[[k]], ngram) 
+stacked_model %>% text_highlight(new[[k]], ngram) 
+gru_model %>% text_highlight(new[[k]], ngram) 
+multi_model %>% text_highlight(new[[k]], ngram) 
+gru_cnn_model %>% text_highlight(new[[k]], ngram) 
+
+models <- list(
+  glove_model,
+  lstm_model,
+  stacked_model,
+  gru_model,
+  multi_model,
+  gru_cnn_model
+)
+
+text_predictions <- new %>% 
+  map(.x = ., ~{
+    text <- .x
+    models %>%
+      map(~{
+        .x %>% 
+          prepare_text_viz(text, ngram) 
+      })
+  })
+
+
+save(text_predictions, file = "text_predictions.Rdata")
+
+text_predictions[[1]][[2]] %>% 
+  viz_text
+```
+
+
+```{r}
+library(shiny)
+library(shiny.semantic)
+#gru_cnn_model %>% vis_text(new, 5) 
+
+li <- list(
+    glove_model = glove_model, 
+    lstm_model = lstm_model, 
+    gru_model = gru_model, 
+    multi_model = multi_model,
+    stacked_model = stacked_model,
+    grucnn_model = gru_cnn_model
+  ) %>% 
+  vis_comparison(text = "Fuck those cowards that attacked you. They will get what's coming to them.", ngram = 3)
+
+li[[2]]
+
+com_list <- c("Fuck those cowards that attacked you. They will get what's coming to them.", new) %>% 
+  map(~{
+    li <- list(
+      glove_model = glove_model, 
+      lstm_model = lstm_model, 
+      gru_model = gru_model, 
+      multi_model = multi_model,
+      stacked_model = stacked_model,
+      grucnn_model = gru_cnn_model
+    ) %>% 
+    vis_comparison(text = .x, ngram = 3)
+    return(li)
+  })
+
+
+com_list[[2]][[1]]
+save(com_list, file = "com_list.Rdata")
+
+# htmltools::save_html(li[[1]], file = "model_comp.html")
+```
+
+
+
+## Predict on Speeches
+
+
+```{r}
+load("E:/MEGA/thesis_hub/data_mart/plenary_final.Rdata")
+
+max_features <- 80000 # top most common words
+batch_size <- 32
+maxlen <- 750
+
+
+tokenizer <- keras::load_text_tokenizer("models/tokenizer")
+stacked_model <- keras::load_model_hdf5("models/stacked_model")
+
+new_seq <- tokenizer %>% 
+  texts_to_sequences(str_to_lower(plenary_final$speech)) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+
+pred <- predict(stacked_model, x = new_seq) %>% 
+  as.vector()
+
+plenary_final <- plenary_final %>% 
+  mutate(sent = pred) %>% 
+  mutate(nword = nword %>% map_int(1))
+
+glimpse(plenary_final)
+# save(plenary_final, file = "E:/MEGA/thesis_hub/data_mart/plenary_final.Rdata")
+```
+
+
+
+## Compare Classifier
+
+```{r}
+pred_models <- list(
+  glove = pred_glove,
+  gru = pred_gru,
+  lstm = pred_lstm,
+  multi = pred_multi,
+  stacked = pred_stacked,
+  grucnn = pred_gru_cnn
+) %>% 
+  purrr::map(as.factor) 
+
+container <- list(preds = pred_models, test = as.factor(test$target))
+
+glimpse(container)
+
+container$caret <- container$preds %>% 
+  map(~{
+    caret::confusionMatrix(.x, container$test)
+  })
+
+glimpse(container)
+```
+
+```{r}
+container$caret[[1]]$overall %>% as.list  %>% .$Accuracy
+container$caret[[1]]$byClass %>% as.list %>% .$F1
+```
+
+
+## Test Strings
+
+```{r}
+prep_new_text <- function(x){
+  
+  out <- tibble(text = x) %>% 
+    mutate(id = 1:n()) %>% 
+    select(id, text) %>% 
+    tidytext::unnest_tokens(word, text, token = "words") %>% 
+    anti_join(tidyTX::stop_words_de) %>%
+    left_join(tidyTX::hash_lemma_de) %>% 
+    mutate(lemma = ifelse(is.na(lemma), word, lemma)) %>% 
+    group_by(id) %>% 
+    summarise(
+      text_lemma = paste(word, collapse = " "),
+      text_word = paste(lemma, collapse = " ")
+    )
+  return(out)
+}
+
+
+prep_string <- c(
+  "Ich kann ihrem Gestezt nicht zustimmen, da es voll mit Fehler und Lücken ist.", 
+  "Wir müssen die Umwelt schützen und Bewahren und dazu gehört auch erneuerbare Energien zu fördern.", 
+  "Ich befürworte ihre Gesetzgebung da ich sie gut finde.", 
+  "Ich mag das vorliegende Gesetzt nicht da es nicht ausgereift ist. Außerdem kann man kaum glauben was hier vorgelegt wurde.",
+  "Ich bin noch unentschlossen ob es mag oder nicht.",
+  "Ich finde es toll das die Bundesregierung dafür so wehement einsetzt."
+  ) %>%
+  prep_new_text
+
+string_seq <- tokenizer %>% 
+  texts_to_sequences(texts = prep_string$text_word) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+
+nn <- prep_string %>% 
+  mutate(
+    pred_glove = keras::predict_classes(glove_model, x = string_seq)[ ,1],
+    pred_lstm = keras::predict_classes(lstm_model, x = string_seq)[ ,1],
+    pred_cnn = keras::predict_classes(cnn_model, x = string_seq)[ ,1],
+    pred_cnn_lstm = keras::predict_classes(cnn_lstm_model, x = string_seq)[ ,1],
+    prob_glove = keras::predict_proba(glove_model, x = string_seq)[ ,1],
+    prob_lstm = keras::predict_proba(lstm_model, x = string_seq)[ ,1],
+    prob_cnn = keras::predict_proba(cnn_model, x = string_seq)[ ,1],
+    prob_cnn_lstm = keras::predict_proba(cnn_lstm_model, x = string_seq)[ ,1]
+  )
+```
+
+
+
+```{r}
+prep_new_word <- function(x){
+  
+  out <- tibble(text = x) %>% 
+    mutate(id = 1:n()) %>% 
+    select(id, text) %>% 
+    tidytext::unnest_tokens(word, text, token = "words") %>% 
+    anti_join(tidyTX::stop_words_de) %>%
+    left_join(tidyTX::hash_lemma_de) %>% 
+    mutate(lemma = ifelse(is.na(lemma), word, lemma))
+  return(out)
+}
+
+new <- "wir haben heute die fünften deutsch-chinesischen Regierungskonsultationen durchgeführt. Da hat es sich angeboten, parallel dazu auch ein deutsch-chinesisches Forum für wirtschaftliche und technologische Zusammenarbeit zu veranstalten – immerhin schon das neunte. Dieses Forum findet zu einer Zeit statt, in der wir spüren, dass die wirtschaftliche, die technologische und die Innovationsdynamik weiter zugenommen haben.
+
+Wir haben ein deutsch-chinesisches Wirtschaftsforum schon in Zeiten der Eurokrise und der damit verbundenen großen Herausforderungen durchgeführt. Damals ging es darum, gemeinsam Handel, Wandel, Forschung zu treiben, um krisenhaften Entwicklungen entgegenzuwirken. Heute ist die Weltwirtschaft im Grunde in einem relativ guten Zustand. Auch die gesamte Europäische Union verzeichnet wie auch der Euroraum wirtschaftliches Wachstum. China hatte sich positiv für einen stabilen Euro eingesetzt und dafür gearbeitet. Das wie auch die chinesischen Konjunkturprogramme während der großen Weltfinanzkrise im ersten Jahrzehnt dieses Jahrhunderts haben dazu beigetragen, dass wir in Europa heute wieder auf einem guten Kurs sind." %>% 
+  prep_new_word
+```
+
+```{r}
+new_word_seq <- tokenizer %>% 
+  texts_to_sequences(texts = new$lemma) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+
+dd <- new %>% 
+  mutate(
+    prob = keras::predict_proba(glove_model, x = new_word_seq)[ ,1]
+  )
+
+
+library(shiny)
+colfunc <- colorRampPalette(c("#e63900", "#ffd11a", "#00cc44"))
+sent_colors <- colfunc(10)
+plot(rep(1,10),col=sent_colors, pch=19,cex=2)
+
+get_sent_color <- function(x){
+  index <- (x*10) %>% 
+    round
+  sent_colors[index]
+}
+
+get_sent_color(.5)
+
+dd %>% 
+  split(1:nrow(.)) %>% 
+  map(~{
+    span(
+      style= paste0("background-color:", get_sent_color(.x$prob)), paste0(.x$word, " ")
+    )
+  }) %>% 
+  p(.)
+```
+
+```{r}
+prep_new_word <- function(x){
+  
+  
+  out <- tibble(text = x) %>% 
+    mutate(id = 1:n()) %>% 
+    select(id, text) %>% 
+    tidytext::unnest_tokens(word, text, token = "words") %>% 
+    anti_join(tidyTX::stop_words_de) %>%
+    left_join(tidyTX::hash_lemma_de) %>% 
+    mutate(lemma = ifelse(is.na(lemma), word, lemma))
+    
+  tibble(start = 1:nrow(out), end = c(1, 1, 1:(nrow(out)-2))) %>% 
+    mutate(text = map2_chr(start, end, ~{
+        paste(out$lemma[.x:.y], collapse = " ")
+      })
+    ) %>%
+    bind_cols(out)
+    
+  return(out)
+}
+
+x <- "Sehr geehrter Herr Ministerpräsident,
+sehr geehrter Herr Vorsitzender der Nationalen Reform- und Entwicklungskommission,
+lieber Herr Kollege Peter Altmaier,
+vor allem Sie, liebe Damen und Herren, hier in diesem Raum und im Nachbarraum,
+
+wir haben heute die fünften deutsch-chinesischen Regierungskonsultationen durchgeführt. Da hat es sich angeboten, parallel dazu auch ein deutsch-chinesisches Forum für wirtschaftliche und technologische Zusammenarbeit zu veranstalten – immerhin schon das neunte. Dieses Forum findet zu einer Zeit statt, in der wir spüren, dass die wirtschaftliche, die technologische und die Innovationsdynamik weiter zugenommen haben."
+```
+
+
+
+
+```{r}
+library(shiny)
+#library(cleanNLP)
+#cnlp_init_udpipe(model_name = "german")
+
+transform_text <- function(x){
+  text <- tibble(text = x) %>% 
+    #tidytext::unnest_tokens(sentence, text, token = "sentences", to_low = F) %>%
+    mutate(id = 1:n()) %>%
+    tidytext::unnest_tokens(word, text, token = "words", to_low = F) %>%
+    group_by(id) %>% 
+    mutate(tid = 1:n()) %>%
+    ungroup 
+    #cnlp_annotate(as_strings = T) %>% 
+    #.$token %>% 
+    #filter(!upos %in% c("PUNCT", "DET"), tid != 0) %>% 
+    #select(id, sid, tid, word, lemma)
+  
+  ngram <- text %>%
+    group_by(id) %>%
+    summarise(
+      text_word = paste(word, collapse = " ")
+      #text_lemma = paste(lemma, collapse = " ")
+    ) %>%
+    ungroup %>% 
+    #mutate(text_lemma = text_lemma %>% str_remove("\\|")) %>%
+    tidytext::unnest_tokens(ngram, text_word, token = "ngrams", n = 5, to_low = F) %>%
+    group_by(id) %>%
+    mutate(tid = 1:n())
+    
+  out <- text %>% 
+    left_join(ngram) %>% 
+    mutate(ngram = ifelse(is.na(ngram), word, ngram))
+  
+  return(out)
+  
+}  
+  
+
+new <- c('Jetzt auch noch die Sache mit den abgeschobenen Afghanen an seinem Geburtstag. Und wieder hat es sich Horst Seehofer selbst eingebrockt: Bei der Vorstellung seines sogenannten Masterplans Migration am Dienstag erwähnte der Innenminister und CSU-Chef voller Stolz, dass es just an seinem 69. Geburtstag gelungen sei, 69 Menschen aus Afghanistan in ihre Heimat abzuschieben. Der Einschub: "Das war von mir nicht so bestellt", half dann auch nichts mehr.
+
+Zumal inzwischen bekannt wurde, dass sich einer der am vergangenen Mittwoch abgeschobenen Afghanen in Kabul erhängt hat. Zynismus-Vorwürfe waren gestern, nun muss sich Seehofer selbst aus der Partei des Koalitionspartners SPD Rücktrittsforderungen anhören.
+
+Horst Seehofer reklamiert für sich gerne ein Alleinstellungsmerkmal in der deutschen Politik. In den vergangenen Wochen ist ihm tatsächlich Einmaliges gelungen: Seinen politischen Ruf innerhalb kurzer Zeit so zu ruinieren wie er, das hat in der Geschichte dieser Republik wohl noch keiner geschafft.
+
+Nein, Seehofer ist kein Mann ohne Anstand. Kein Mensch ohne Empathie. Kein Extremist. Im Gegenteil.
+
+Aber in kürzester Zeit hat es der CSU-Politiker vermocht, in Teilen der Öffentlichkeit genau dieses Bild von sich zu erzeugen.
+
+Video: Juso-Chef Kühnert - Seehofer ist "dem Amt charatkterlich nicht gewachsen"
+
+Video abspielen... Video
+AFP
+Der Herzchirurg Umeswaran Arunagirinathan, der einst als unbegleiteter Flüchtling aus Sri Lanka nach Deutschland gekommen war, hat gerade der "Zeit" voller Erstaunen von einer Begegnung mit Seehofer berichtet: Wie ihm der Innenminister vor einem Auftritt die Hand reichte und die Nervosität mit dem Satz "Sie schaffen das" zu nehmen versuchte. So eine Geste hatte Arunagirinathan, sagt er, von Seehofer gegenüber ihm, einem dunkelhäutigen ehemaligen Flüchtling, nicht erwartet.
+
+Es ist nicht zu fassen.
+
+
+(Mehr zur Aktion "Deutschland spricht" finden Sie hier .)
+
+Derselbe Seehofer ist das, den sie in der Union lange Jahre als "Herz-Jesu-Sozialisten" verspottet haben, weil er stets ein Herz für die Schwachen in der Gesellschaft hatte. Der als Vizechef der CDU/CSU-Bundestagsfraktion 2004 zurücktrat, weil er die von den Arbeitgebern geforderte Kopfpauschale in der Gesundheitspolitik nicht mittragen wollte. Der seinen Freistaat als bayerischer Ministerpräsident zu einem Vorzeigebundesland in Sachen Integration gemacht und sich seinen Worten zufolge stets gegen Rassismus und Fremdenfeindlichkeit eingesetzt hat.
+
+Früher hatte alles Grenzen bei Seehofer
+
+Seine Späßchen, auch auf Kosten anderer, hat Seehofer immer schon getrieben. Aber alles hatte Grenzen. Seehofer machte Politik, wie er es einst in der Bonner Republik gelernt hatte.
+
+Nun scheint es diese Grenzen nicht mehr zu geben.
+
+Aus dem Maß-und-Mitte-Christsozialen wird plötzlich eine Art CSU-Trump. Um maximale Härte vor der bayerischen Landtagswahl im Herbst zu zeigen, ist Seehofer neben entsprechender Rhetorik offenbar fast jedes Mittel recht: der angekündigte doppelte Rücktritt, um maximalen Druck aufzubauen, der dann wieder kassiert wird. Persönliche Attacken auf die Kanzlerin im Asylstreit, die jede und jeder andere als Angela Merkel wohl mit der unmittelbaren Entlassung des Innenministers beantwortet hätte.
+
+Und dann kam der Satz mit den 69 nach Afghanistan abgeschobenen Flüchtlingen an seinem 69. Geburtstag.
+
+Im Video: Seehofer und sein sogenannter Masterplan
+
+Video abspielen... Video
+DPA
+"Es ist für eine christliche Partei eine Schande, so über Menschen zu reden - als handele es sich bei Flüchtlingen um Kartoffelsäcke. Das sind aber keine Kartoffelsäcke, sondern Menschen mit Schicksalen." Das hat Norbert Blüm mit Blick auf den CSU-Politiker und manche seiner Parteifreunde kürzlich der "Berliner Zeitung" gesagt. Seehofer war unter dem CDU-Mann Blüm, Arbeitsminister im Kabinett Kohl, drei Jahre lang Staatssekretär in Bonn. Blüm macht in dem Interview den Eindruck, als verstehe er seinen einstigen Schützling auch nicht mehr.
+
+"Mit Sicherheit nicht". Das antwortete Seehofer am Dienstag auf die Frage, ob er im Rückblick auf die vergangenen Wochen irgendetwas anders machen würde. Falls das die ehrliche Antwort ist, wäre dem CSU-Chef nicht einmal bewusst, auf welchen Kurs er eingeschwenkt ist. Es scheint Seehofer nicht klar zu sein, dass er alles zerstören könnte, was er sich in vier Jahrzehnten einer beeindruckenden politischen Karriere an Reputation aufgebaut hat.
+
+Das ist tragisch.
+') 
+
+new_input <- new %>%
+  # str_replace_all("\\s+", " ") %>% 
+  # str_replace_all('\\\"', "") %>% 
+  # str_remove_all("[^[:alnum:]|\\s)]") %>%
+  transform_text
+
+new_word_seq <- tokenizer %>% 
+  texts_to_sequences(texts = new_input$ngram) %>% 
+  pad_sequences(maxlen = maxlen, value = 0)
+
+dd <- new_input %>% 
+  mutate(
+    prob = keras::predict_proba(glove_model, x = new_word_seq)[ ,1]
+  )
+
+colfunc1 <- colorRampPalette(c("#e63900", "white"))
+colfunc2 <- colorRampPalette(c("white", "#00cc44"))
+#sent_colors <- c(colfunc1(6)[-6], colfunc2(6)[-1])
+sent_colors <- c(colfunc1(5)[-5], colfunc2(5)[-1])
+#sent_colors <- c(colfunc1(6)[-6], colfunc2(6)[-1])
+#plot(rep(1,10),col=sent_colors, pch=19,cex=2)
+
+get_sent_color <- function(x){
+  index <- (x*10) %>% 
+    round
+  sent_colors[index]
+}
+
+dd %>% 
+  split(1:nrow(.)) %>% 
+  map(~{
+    span(
+      style= paste0("background-color:", get_sent_color(.x$prob)), .x$word
+    )
+  }) %>% 
+  p(.)
+
+# nn <- dd %>% 
+#   split(1:nrow(.)) %>% 
+#   map_chr(~{
+#       paste0('\\', "colorbox{", get_sent_color(.x$prob), "}{", .x$word, "}")
+#   }) %>% 
+#   unlist %>% 
+#   #paste0(., " ") %>% 
+#   paste(collapse = " ")
+# nn  
+```
+
+
+
+
+
+
+
+
+
+
+
+

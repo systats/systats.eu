@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 pacman::p_load(blogdown)
+#blogdown::install_hugo()
 ```
 
 

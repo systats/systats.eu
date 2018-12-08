@@ -1,0 +1,107 @@
+---
+title: "Geocoding with Purrr and X"
+date: "2018-11-07"
+categories: ["R", "API"]
+description: "short note"
+header:
+  image: "flags.png"
+---
+
+
+This short blogpost shows how to retrieve location information from an API. Specifically we are interested in the Latitute and Longitute of thousends of cities. 
+
+
+## Packages
+
+
+```{r}
+pacman::p_load(dplyr, ggplot2, purrr, stringr, tidyr, ggmap, highcharter, jsonlite, httr)
+```
+
+
+## The data
+
+
+
+## Helpers
+
+```{r}
+fromJSON_pro  <- possibly(fromJSON, NULL)
+
+progressively <- function(.f, .n, ...) {
+  pb <- progress::progress_bar$new(total = .n, ...)
+  function(...) {
+    pb$tick()
+    .f(...)
+  }
+}
+```
+
+
+## Geo codes
+
+<!--`r api_key <- "62c5d45b86b644e2a80de0a2c3c37d25"`-->
+
+```{r}
+api_key <- "__put_your_API_key_here__"
+
+get_opencagedata <- function(x, api_key){
+  
+  api_url <- "https://api.opencagedata.com/geocode/v1/json?q="
+  api_auth <- glue::glue("&key={api_key}&pretty=1")
+
+  # query <- "Stuttgart+Germany"  
+  query <- c(x$city, x$country) %>% 
+    glue::glue_collapse("+") %>% 
+    str_replace_all(" ", "%")
+
+  request <- c(api_url, query, api_auth) %>% glue::glue_collapse("")
+  
+  parsed_file <- request %>%
+    httr::GET() %>%
+    httr::content(., "text") %>% 
+    fromJSON_pro
+  ^
+  if(length(parsed_file$results) == 0) return(x)
+  if(nrow(parsed_file$results) == 0) return(x)
+  
+  parsed <- parsed_file$results[1,] # filter the highest confidence
+  
+  coord <- parsed$annotations$DMS %>% 
+    map_dfc(~{
+      .x %>% 
+        str_extract("'.*?$") %>% 
+        str_remove_all("[^(\\d|\\.)]")
+    })
+  
+  currency <- parsed$annotations$currency[, c("iso_code", "iso_numeric", "name", "symbol")] 
+  
+  flag <- tibble(flag = parsed$annotations$flag)
+  
+  out <- list(x, coord, currency, flag) %>% 
+    map_dfc(~{
+      if(length(.x) == 0).x <- tibble(symbol = NA)
+      return(.x)
+    })
+  
+  print(glue::glue("{out$flag} {query}"))
+
+  return(out)
+}
+
+get_opencagedata_pro <- progressively(get_opencagedata, .n = 3)
+
+final_coords <- tibble(city = c("Stuttgart", "Berlin", "Paris"), country = c("Germany", "Germany", "France")) %>%
+  split(1:nrow(.)) %>%
+  map_df(~get_opencagedata_pro(.x, api_key))
+  
+
+final_coords %>%
+  drop_na(flag) %>%
+  arrange(country) %>% 
+  .$flag %>% 
+  walk(cat)
+```
+
+
+## Map Affiliations

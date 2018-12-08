@@ -33,6 +33,18 @@ Packages Load the necessary packages
     
     <item>
       <title></title>
+      <link>/cv/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/cv/</guid>
+      <description>.myrow { margin-bottom: 0px !important; margin-left: 0px !important; margin-right: 0px !important; margin-top: 0px !important; margin: 0px; padding-bottom: 0px !important; padding-left: 0px !important; padding-right: 0px !important; padding-top: 0px !important; padding: 0px; } .ui.header { margin-left: 0px !important; margin-right: 0px !important; margin-bottom: 10px !important; }  
+ 
+Simon Roth  
+  Univeristät Konstanz, Germany    +49 irgendwas    s.roth@uni-konstanz.de    Blog  systats.</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>/sentiment/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       

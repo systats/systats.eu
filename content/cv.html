@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<title></title>
+
+<!-- https://yihui.name/en/2018/07/latex-math-markdown/-->
+<!-- Just one possible MathJax CDN below. You may use others. -->
+<!--<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"async></script>-->
+<!--<script src="//yihui.name/js/math-code.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+
+<link href="cv_files/font-awesome-5.3.1/css/all.min.css" rel="stylesheet" />
+<link href="cv_files/font-awesome-5.3.1/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.js"></script>
+
+<!-- calender cdn -->
+<script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
+
+<!-- data table cdn -->
+<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.18/js/dataTables.semanticui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/dataTables.semanticui.min.css">
+
+
+
+<!-- better use rmarkdown internal syntax highlighting -->
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/languages/r.min.js">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>--->
+<!-- down before body tag -->
+<!--<script>hljs.initHighlightingOnLoad();</script>-->
+
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+
+</style>
+
+<style type="text/css">
+pre, code {
+  background-color: #f7f7f7;
+  border-radius: 3px;
+  color: #333;
+  white-space: pre-wrap;    
+}
+pre {
+  border-radius: 3px;
+  margin: 5px 0px 10px 0px;
+  padding: 10px;
+}
+pre:not([class]) {
+  background-color: white;
+}
+code:not([class]) {
+  background-color: white;
+}
+code {
+  font-family: Consolas, Monaco, 'Courier New', monospace;
+  font-size: 85%;
+}
+p > code, li > code {
+  padding: 2px 0px;
+}
+</style>
+
+</head>
+<body>
+<div class = "wrapper">
+<style>
+.myrow {
+    margin-bottom: 0px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    margin-top: 0px !important;
+    margin: 0px;
+    padding-bottom: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-top: 0px !important;
+    padding: 0px;
+}
+.ui.header {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  margin-bottom: 10px !important;
+}
+</style>
+<p><br> <br></p>
+<div class="ui container">
+<p><a class="ui blue big right corner label"> <i class="print icon"></i> </a></p>
+<h1 class="ui massive centered header">
+Simon Roth
+</h1>
+<p><br></p>
+<div class="ui divided grid">
+<div class="myrow row">
+<div class="right aligned four wide column">
+<i class="fa fa-building"></i>
+</div>
+<div class="thirdten wide column">Univeristät Konstanz, Germany</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<i class="fa fa-phone"></i>
+</div>
+<div class="thirdten wide column">+49 irgendwas</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<i class="fa fa-envelope outline"></i>
+</div>
+<div class="thirdten wide column"><a href = 'mailto:s.roth@uni-konstanz.de'>s.roth@uni-konstanz.de</a></div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<i class="fa fa-globe"></i>
+</div>
+<div class="thirdten wide column">Blog <i class ="right chevron icon"></i> <a href = "www.systats.eu" target="_blank">systats.eu</a></div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<i class="fab fa-github"></i>
+</div>
+<div class="thirdten wide column">Github <i class="right chevron icon"></i> <a href = "www.github.com/systats" target="_blank">systats</a></div>
+</div>
+</div>
+<p><br> <br></p>
+<div class="ui divided grid">
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px"></div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px"><div class = "ui header"> Education </div></div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">since 2018</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">
+PhD Student at the Graduate School of Decision Sciences (<a href = 'https://www.gsds.uni-konstanz.de/' target='_blank'>GSDS</a>) and member of the Center for Data and Methods (<a href = 'https://www.polver.uni-konstanz.de/cdm/' target='_blank'>CDM</a>), University of Konstanz. Supervisor: <i>Susumu Shikano</i>
+<br/>
+<a class='ui gray horizontal label'>Major</a> Information Processing and Statistical Analysis <br> <a class='ui gray horizontal label'> Minor </a>
+ Political Decisions and Institutions
+</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">2015 - 2018</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">
+Master’s Degree in Empirical Research in Social Sciences at Stuttgart University. Supervisior: <i>André Bächtiger</i>
+<br/>
+<a class='ui gray horizontal label'> Thesis </a> The Good, the Bad, the Ugly: The strategic use of sentiment in parliamentary speeches.
+</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">2012 - 2015</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">Bachelor’s Degree in Social Sciences at Stuttgart University</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">1999 - 2012</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">Abitur at Freie Waldorfschule Vaihingen/Enz.</div>
+</div>
+</div>
+</div>
+<p><br> <br></p>
+<div class="ui divided grid">
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px"></div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px"><div class = "ui header"> Jobs & Academia </div></div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">since 2017</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">Data Scientist at <a href = 'www.paraboost.de'>Paraboost </a>GmBH.</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">2015 - 2017</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">Research assistant within several NCCR projects on democratic preferences and political attitudes measured with experimental survey designs (Supervision André Bächtiger).</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">2015 - 2016</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">Teaching assistant for the lecture International Relations and European Integration</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">Sep - Nov 2014</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">Internship at Leibniz-Institut for Social Sciences (GESIS Mannheim): Department for Survey Design and Methodology.</div>
+</div>
+</div>
+</div>
+<p><br> <br></p>
+<div class="ui divided grid">
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px"></div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px"><div class = "ui header"> Workshops & Conferences </div>
+</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">Aug 2018</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">VOX-Pol Conference Amsterdam with a presentation: Decoding the Alt-Right</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">May 2018</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">Combating Online Extremism, VOX-Pol Network of Excellence, VOX-Pol Workshop at University of Oxford.</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">Jun 2018</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">Challenges of Terrorism Informatics, VOX-Pol Network of Excellence,
+VOX-Pol Workshop at Dublin City University.</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">Jun 2017</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">Participation at UseR! 2017 in Brussels.</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+<div class="item" style="margin-bottom: 5px">Aug 2016</div>
+</div>
+<div class="thirdten wide column">
+<div class="item" style="margin-bottom: 5px">ECPR Method Summer School, Budapest. Workshop on Bayesian Statistics.</div>
+</div>
+</div>
+</div>
+<!-- <div class = "ui header"> -->
+<!--   Working Papers -->
+<!-- </div> -->
+<!-- <div class = "ui header"> -->
+<!--   Research Interest -->
+<!-- </div> -->
+<p><br> <br></p>
+<div class="ui divided grid">
+<div class="myrow row">
+<div class="right aligned four wide column">
+
+</div>
+<div class="thirdten wide column">
+<div class="ui header">
+Technical Skills
+</div>
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+Back-End
+</div>
+<div class="thirdten wide column">
+everyday R, sometimes Python &amp; Unix
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+ML
+</div>
+<div class="thirdten wide column">
+Keras, H2O, SpaCy
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+Front-End
+</div>
+<div class="thirdten wide column">
+Shiny Apps and Semantic UI
+</div>
+</div>
+<div class="myrow row">
+<div class="right aligned four wide column">
+Reports
+</div>
+<div class="thirdten wide column">
+<p>Markdown, Rmarkdown, <span class="math inline">\(\LaTeX\)</span></p>
+</div>
+</div>
+</div>
+<p><br> <br> <br></p>
+<div align="right">
+<p>Last Update: 2018-12-08</p>
+</div>
+<p><br> <br> <br></p>
+<!-- close container -->
+</div>
+</div>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<!--<script async src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"async></script>-->
+
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+<!-- -->
+</body>
+</html>

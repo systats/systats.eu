@@ -1,0 +1,273 @@
+---
+title: ""
+output: semantic.doc::semantic_document
+---
+
+
+```{r, warning=F, message=F, error=F, echo = F}
+pacman::p_load(blogdown, shiny, shiny.semantic, dplyr, purrr)
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, eval = T, message = NA, error = F, warning = F)
+```
+
+<style>
+.myrow {
+    margin-bottom: 0px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    margin-top: 0px !important;
+    margin: 0px;
+    padding-bottom: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    padding-top: 0px !important;
+    padding: 0px;
+}
+.ui.header {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  margin-bottom: 10px !important;
+}
+</style>
+
+<br>
+<br>
+
+<div class = "ui container">
+
+<a class="ui blue big right corner label">
+  <i class="print icon"></i>
+</a>
+
+
+<h1 class = "ui massive centered header">
+Simon Roth 
+</h1>
+
+
+<br>
+
+```{r}
+pacman::p_load(shiny, shiny.semantic, dplyr, purrr)
+
+cv_entries <- function(x){
+  x %>% 
+    split(1:nrow(.)) %>% 
+    purrr::map(~{
+      div(class = "myrow row",
+        div(class = "right aligned four wide column",
+          div(class = "item", style ="margin-bottom: 5px",
+            shiny::HTML(.x$short)    
+          )
+        ),
+        div(class = "thirdten wide column",
+          div(class = "item",  style ="margin-bottom: 5px",
+            shiny::HTML(.x$long)
+          )
+        )
+      )
+    }) %>% 
+    div(class = "ui divided grid", .) %>% 
+    tagList(.)
+}
+
+cv_entries_desc <- function(x){
+  x %>% 
+    split(1:nrow(.)) %>% 
+    purrr::map(~{
+      div(class = "myrow row",
+        div(class = "right aligned four wide column",
+          div(class = "item", style ="margin-bottom: 5px",
+            .x$short
+          )
+        ),
+        div(class = "thirdten wide column",
+          div(class = "item", style ="margin-bottom: 5px",
+            shiny::HTML(.x$long), 
+            if(.x$meta != "") tagList(br(), shiny::HTML(.x$meta))
+          )
+        )
+      )
+    }) %>% 
+    div(class = "ui divided grid", .) %>% 
+    tagList(.)
+}
+
+cv_icon_entries <- function(x){
+  x %>% 
+    split(1:nrow(.)) %>% 
+    purrr::map(~{
+      div(class = "myrow row",
+        div(class = "right aligned four wide column",
+          icon(.x$short)
+        ),
+        div(class = "thirdten wide column",
+          shiny::HTML(.x$long)
+        )
+      )
+    }) %>% 
+    div(class = "ui divided grid", .) %>% 
+    tagList(.)
+}
+
+rbind(
+  c("building", "Univeristät Konstanz, Germany"),
+  c("phone", "+49 irgendwas"),
+  c("envelope outline", "<a href = 'mailto:s.roth@uni-konstanz.de'>s.roth@uni-konstanz.de</a>"),
+  c("globe", 'Blog <i class ="right chevron icon"></i> <a href = "www.systats.eu" target="_blank">systats.eu</a>'),
+  c("github", 'Github <i class="right chevron icon"></i> <a href = "www.github.com/systats" target="_blank">systats</a>')
+) %>%
+  as_tibble %>% 
+  set_names(c("short", "long")) %>% 
+  cv_icon_entries
+```
+
+
+
+<br>
+<br>
+
+
+```{r}
+rbind(
+  c("", '<div class = "ui header"> Education </div>', ""),
+  c("since 2018", "PhD Student at the Graduate School of Decision Sciences (<a href = 'https://www.gsds.uni-konstanz.de/' target='_blank'>GSDS</a>) and member of the Center for Data and Methods (<a href = 'https://www.polver.uni-konstanz.de/cdm/' target='_blank'>CDM</a>), University of Konstanz. Supervisor: <i>Susumu Shikano</i>", "<a class='ui gray horizontal label'>Major</a> Information Processing and Statistical Analysis <br> <a class='ui gray horizontal label'> Minor </a>
+ Political Decisions and Institutions"), 
+  c("2015 - 2018", "Master’s Degree in Empirical Research in Social Sciences at Stuttgart University. Supervisior: <i>André Bächtiger</i>", "<a class='ui gray horizontal label'> Thesis </a> The Good, the Bad, the Ugly: The strategic use of sentiment in parliamentary speeches."),
+  c("2012 - 2015", "Bachelor’s Degree in Social Sciences at Stuttgart University", ""),
+  c("1999 - 2012", "Abitur at Freie Waldorfschule Vaihingen/Enz.", "")
+) %>%
+  as_tibble %>% 
+  set_names(c("short", "long", "meta")) %>% 
+  cv_entries_desc
+```
+
+
+<br>
+<br>
+
+
+```{r}
+rbind(
+  c("", '<div class = "ui header"> Jobs & Academia </div>'),
+  c("since 2017", "Data Scientist at <a href = 'www.paraboost.de'>Paraboost </a>GmBH."),
+  c("2015 - 2017", "Research assistant within several NCCR projects on democratic preferences and political attitudes measured with experimental survey designs (Supervision André Bächtiger)."),
+  c("2015 - 2016", "Teaching assistant for the lecture International Relations and European Integration"),
+  c("Sep - Nov 2014", "Internship at Leibniz-Institut for Social Sciences (GESIS Mannheim): Department for Survey Design and Methodology.")
+) %>%
+  as_tibble %>% 
+  set_names(c("short", "long")) %>% 
+  cv_entries
+```
+
+
+<br>
+<br>
+
+
+```{r}
+rbind(
+  # c("2018", "Decoding the Alt-Right - Machine Learning and NLP project with a presnetation at VOX-Pol Amsterdam."),
+  # c("2016", "ECPR General Conference, Prague with a paper presentation: A Deliberative Experiment on Democratic Preferences: Evaluating Preference Formation and Change.")
+  c("", '<div class = "ui header"> Workshops & Conferences </div>
+'),
+  c("Aug 2018", "VOX-Pol Conference Amsterdam with a presentation: Decoding the Alt-Right"),
+  c("May 2018", "Combating Online Extremism, VOX-Pol Network of Excellence, VOX-Pol Workshop at University of Oxford."),
+  c("Jun 2018", "Challenges of Terrorism Informatics, VOX-Pol Network of Excellence,
+VOX-Pol Workshop at Dublin City University."),
+  c("Jun 2017", "Participation at UseR! 2017 in Brussels."), 
+  c("Aug 2016", "ECPR Method Summer School, Budapest. Workshop on Bayesian Statistics.")
+) %>%
+  as_tibble %>% 
+  set_names(c("short", "long")) %>% 
+  cv_entries
+```
+
+
+<!-- <div class = "ui header"> -->
+<!--   Working Papers -->
+<!-- </div> -->
+
+<!-- <div class = "ui header"> -->
+<!--   Research Interest -->
+<!-- </div> -->
+
+```{r, eval = F}
+rbind(
+  c("substantive", "Collective Behaviour, Online Extremesim & Hate Speech"),
+  c("methods", "NLP, machine learning, Bayesian statistics")
+) %>%
+  as_tibble %>% 
+  set_names(c("short", "long")) %>% 
+  cv_entries
+```
+
+
+<br>
+<br>
+
+
+<div class = "ui divided grid">
+  <div class = "myrow row">
+  <div class = "right aligned four wide column">
+  </div>
+  <div class = "thirdten wide column">
+  <div class = "ui header"> Technical Skills </div>
+  </div>
+ </div>
+  <div class = "myrow row">
+  <div class = "right aligned four wide column">
+  Back-End
+  </div>
+  <div class = "thirdten wide column">
+  everyday R, sometimes Python & Unix
+  </div>
+ </div>
+  <div class = "myrow row">
+  <div class = "right aligned four wide column">
+  ML
+  </div>
+  <div class = "thirdten wide column">
+  Keras, H2O, SpaCy
+  </div>
+</div>
+  <div class = "myrow row">
+  <div class = "right aligned four wide column">
+  Front-End
+  </div>
+  <div class = "thirdten wide column">
+  Shiny Apps and Semantic UI
+  </div>
+</div>
+  <div class = "myrow row">
+  <div class = "right aligned four wide column">
+  Reports
+  </div>
+  <div class = "thirdten wide column">
+  
+  Markdown, Rmarkdown, $\LaTeX$
+  
+ </div>
+ </div>
+</div>
+
+
+
+<br>
+<br>
+<br>
+
+<div align = "right">
+  Last Update: `r Sys.Date()`
+</div>
+
+<br>
+<br>
+<br>
+
+
+<!-- close container -->
+</div>

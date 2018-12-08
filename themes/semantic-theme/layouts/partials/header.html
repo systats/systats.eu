@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.css">
     <!--- jquery has to be placed befor js cdn due to $ init---->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.js"></script>
+	   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.js"></script>
     <!---<link rel="stylesheet" href="{{ "/css/tomorrow-night-bright.css" | relURL }}">--->
     <script src="{{ "/js/highlight.pack.js" | relURL }}"></script>
   	<style>
@@ -17,17 +17,50 @@
    </head>
   <body>
     {{ if .IsHome }}
-     <div class="ui container">
-      <div class="ui top fixed inverted compact icon menu" style = "background-color: #396690;">
-        {{partial "menu" .}}
+      <div class="pusher">
+        <!--Hidden  Menu-->
+        <div class="ui top fixed hidden secondary menu">
+          <a class="toc item">
+            <i class="sidebar icon"></i>
+          </a>
+          <div class = "right item">
+            <a class="github-button" href="https://github.com/systats" data-size="large" data-show-count="true" aria-label="@systats on GitHub">systats</a>
+            <script async defer src="https://buttons.github.io/buttons.js"></script>
+          </div>
+        </div>
+        <!--Sidebar Menu-->
+        <div class="ui vertical inverted sidebar menu">
+          {{partial "menu" .}}
+        </div>
+        <div class="ui inverted vertical masthead center aligned segment">
+          <div class="ui container">
+            <div class="ui large secondary inverted pointing menu">
+              <a class="toc item">
+                <i class="sidebar icon"></i>
+              </a>
+              {{partial "menu" .}}
+              <a class="ui big corner label" href="https://github.com/systats" target="_blank">
+                <i class="github icon"></i>
+              </a>
+            </div>
+          </div>
+          <div class="ui text container">
+          
+          {{partial "front_card" .}}
+
+        </div>
       </div>
-    </div>
-    <img class="ui fluid image" src="/images/banner.png">
-	{{ else }} 
-    <div class="ui container">
-      <div class="ui top fixed inverted gray compact icon menu">
-        {{partial "menu" .}}
-      </div>
-    </div>
-  	{{ end }} 
+    {{ else }} 
+      <div class="pusher">
+        <div class="ui top fixed secondary menu">
+          <a class="toc item">
+            <i class="sidebar icon"></i>
+          </a>
+        </div>
+        <!--Sidebar Menu-->
+        <div class="ui vertical inverted sidebar menu">
+          {{partial "menu" .}}
+        </div>
+    {{ end }}
+
     

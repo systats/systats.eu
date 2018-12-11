@@ -13,6 +13,7 @@ pacman::p_load(blogdown, shiny, shiny.semantic, dplyr, purrr)
 knitr::opts_chunk$set(echo = F, eval = T, message = NA, error = F, warning = F)
 ```
 
+
 <style>
 .myrow {
     margin-bottom: 0px !important;
@@ -26,6 +27,7 @@ knitr::opts_chunk$set(echo = F, eval = T, message = NA, error = F, warning = F)
     padding-top: 0px !important;
     padding: 0px;
 }
+
 .ui.header {
   margin-left: 0px !important;
   margin-right: 0px !important;
@@ -34,12 +36,15 @@ knitr::opts_chunk$set(echo = F, eval = T, message = NA, error = F, warning = F)
 </style>
 
 <br>
-<br>
 
 <div class = "ui container">
 
-<a class="ui blue big right corner label">
-  <i class="print icon"></i>
+<!-- <a class="ui blue big right corner label" href = "http://www.systats.eu/cv_print/cv_simon_roth.pdf" target="_blank"> -->
+<!--   <i class="file pdf icon"></i> -->
+<!-- </a> -->
+
+<a class="ui massive corner label" href="/cv_print/cv_simon_roth.pdf" target="_blank">
+  <i class="file pdf icon"></i>
 </a>
 
 
@@ -102,7 +107,7 @@ cv_icon_entries <- function(x){
     purrr::map(~{
       div(class = "myrow row",
         div(class = "right aligned four wide column",
-          icon(.x$short)
+          shiny::HTML(.x$short)
         ),
         div(class = "thirdten wide column",
           shiny::HTML(.x$long)
@@ -114,11 +119,12 @@ cv_icon_entries <- function(x){
 }
 
 rbind(
-  c("building", "Univeristät Konstanz, Germany"),
-  c("phone", "+49 irgendwas"),
-  c("envelope outline", "<a href = 'mailto:s.roth@uni-konstanz.de'>s.roth@uni-konstanz.de</a>"),
-  c("globe", 'Blog <i class ="right chevron icon"></i> <a href = "www.systats.eu" target="_blank">systats.eu</a>'),
-  c("github", 'Github <i class="right chevron icon"></i> <a href = "www.github.com/systats" target="_blank">systats</a>')
+  c("<i class='building icon'></i>", "University Konstanz, Germany"),
+  c("<i class='map pin icon'></i>", "Room E 220"), 
+  c("<i class='phone icon'></i>", "+49 7531-88-4127"),
+  c("<i class='envelope outline icon'></i>", "<a href = 'mailto:s.roth@uni-konstanz.de'>s.roth@uni-konstanz.de</a>"),
+  c("<i class='globe icon'></i>", 'Blog <i class ="right chevron icon"></i> <a href = "http://www.systats.eu/" target="_blank">systats.eu</a>'),
+  c("<i class='github icon'></i>", 'Github <i class="right chevron icon"></i> <a href = "https://github.com/systats" target="_blank">systats</a>')
 ) %>%
   as_tibble %>% 
   set_names(c("short", "long")) %>% 
@@ -153,7 +159,7 @@ rbind(
 ```{r}
 rbind(
   c("", '<div class = "ui header"> Jobs & Academia </div>'),
-  c("since 2017", "Data Scientist at <a href = 'www.paraboost.de'>Paraboost </a>GmBH."),
+  c("since 2017", "Data Scientist at <a href = 'https://www.paraboost.de/' target='_blank'>Paraboost </a>GmBH and at <a href = 'http://www.lov.ai/' target='_blank'>lov.ai <i class ='red heart outline icon'></i>  </a>"),
   c("2015 - 2017", "Research assistant within several NCCR projects on democratic preferences and political attitudes measured with experimental survey designs (Supervision André Bächtiger)."),
   c("2015 - 2016", "Teaching assistant for the lecture International Relations and European Integration"),
   c("Sep - Nov 2014", "Internship at Leibniz-Institut for Social Sciences (GESIS Mannheim): Department for Survey Design and Methodology.")
@@ -248,7 +254,9 @@ rbind(
   </div>
   <div class = "thirdten wide column">
   
+  
   Markdown, Rmarkdown, $\LaTeX$
+  
   
  </div>
  </div>
@@ -267,7 +275,6 @@ rbind(
 <br>
 <br>
 <br>
-
 
 <!-- close container -->
 </div>

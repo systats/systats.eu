@@ -1,89 +1,10 @@
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="pandoc" />
-
-<title></title>
-
-<!-- https://yihui.name/en/2018/07/latex-math-markdown/-->
-<!-- Just one possible MathJax CDN below. You may use others. -->
-<!--<script async src="//mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML"async></script>-->
-<!--<script src="//yihui.name/js/math-code.js"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-
-<link href="cv_files/font-awesome-5.3.1/css/all.min.css" rel="stylesheet" />
-<link href="cv_files/font-awesome-5.3.1/css/v4-shims.min.css" rel="stylesheet" />
-
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.js"></script>
-
-<!-- calender cdn -->
-<script src="https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/76959c6f7d33a527b49be76789e984a0a407350b/dist/calendar.min.js"></script>
-
-<!-- data table cdn -->
-<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.18/js/dataTables.semanticui.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/dataTables.semanticui.min.css">
+---
+title: ""
+output: semantic.doc::semantic_document
+---
 
 
 
-<!-- better use rmarkdown internal syntax highlighting -->
-<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css"> 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/languages/r.min.js">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>--->
-<!-- down before body tag -->
-<!--<script>hljs.initHighlightingOnLoad();</script>-->
-
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
-
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-
-</style>
-
-<style type="text/css">
-pre, code {
-  background-color: #f7f7f7;
-  border-radius: 3px;
-  color: #333;
-  white-space: pre-wrap;    
-}
-pre {
-  border-radius: 3px;
-  margin: 5px 0px 10px 0px;
-  padding: 10px;
-}
-pre:not([class]) {
-  background-color: white;
-}
-code:not([class]) {
-  background-color: white;
-}
-code {
-  font-family: Consolas, Monaco, 'Courier New', monospace;
-  font-size: 85%;
-}
-p > code, li > code {
-  padding: 2px 0px;
-}
-</style>
-
-</head>
-<body>
-<div class = "wrapper">
 <style>
 .myrow {
     margin-bottom: 0px !important;
@@ -97,49 +18,47 @@ p > code, li > code {
     padding-top: 0px !important;
     padding: 0px;
 }
+
 .ui.header {
   margin-left: 0px !important;
   margin-right: 0px !important;
   margin-bottom: 10px !important;
 }
 </style>
-<p><br> <br></p>
+<p><br></p>
 <div class="ui container">
-<p><a class="ui blue big right corner label"> <i class="print icon"></i> </a></p>
+<!-- <a class="ui blue big right corner label" href = "http://www.systats.eu/cv_print/cv_simon_roth.pdf" target="_blank"> -->
+<!--   <i class="file pdf icon"></i> -->
+<!-- </a> -->
+<p><a class="ui massive corner label" href="/cv_print/cv_simon_roth.pdf" target="_blank"> <i class="file pdf icon"></i> </a></p>
 <h1 class="ui massive centered header">
 Simon Roth
 </h1>
 <p><br></p>
 <div class="ui divided grid">
 <div class="myrow row">
-<div class="right aligned four wide column">
-<i class="fa fa-building"></i>
-</div>
-<div class="thirdten wide column">Univeristät Konstanz, Germany</div>
+<div class="right aligned four wide column"><i class='building icon'></i></div>
+<div class="thirdten wide column">University Konstanz, Germany</div>
 </div>
 <div class="myrow row">
-<div class="right aligned four wide column">
-<i class="fa fa-phone"></i>
-</div>
-<div class="thirdten wide column">+49 irgendwas</div>
+<div class="right aligned four wide column"><i class='map pin icon'></i></div>
+<div class="thirdten wide column">Room E 220</div>
 </div>
 <div class="myrow row">
-<div class="right aligned four wide column">
-<i class="fa fa-envelope outline"></i>
+<div class="right aligned four wide column"><i class='phone icon'></i></div>
+<div class="thirdten wide column">+49 7531-88-4127</div>
 </div>
+<div class="myrow row">
+<div class="right aligned four wide column"><i class='envelope outline icon'></i></div>
 <div class="thirdten wide column"><a href = 'mailto:s.roth@uni-konstanz.de'>s.roth@uni-konstanz.de</a></div>
 </div>
 <div class="myrow row">
-<div class="right aligned four wide column">
-<i class="fa fa-globe"></i>
-</div>
-<div class="thirdten wide column">Blog <i class ="right chevron icon"></i> <a href = "www.systats.eu" target="_blank">systats.eu</a></div>
+<div class="right aligned four wide column"><i class='globe icon'></i></div>
+<div class="thirdten wide column">Blog <i class ="right chevron icon"></i> <a href = "http://www.systats.eu/" target="_blank">systats.eu</a></div>
 </div>
 <div class="myrow row">
-<div class="right aligned four wide column">
-<i class="fab fa-github"></i>
-</div>
-<div class="thirdten wide column">Github <i class="right chevron icon"></i> <a href = "www.github.com/systats" target="_blank">systats</a></div>
+<div class="right aligned four wide column"><i class='github icon'></i></div>
+<div class="thirdten wide column">Github <i class="right chevron icon"></i> <a href = "https://github.com/systats" target="_blank">systats</a></div>
 </div>
 </div>
 <p><br> <br></p>
@@ -209,7 +128,7 @@ Master’s Degree in Empirical Research in Social Sciences at Stuttgart Universi
 <div class="item" style="margin-bottom: 5px">since 2017</div>
 </div>
 <div class="thirdten wide column">
-<div class="item" style="margin-bottom: 5px">Data Scientist at <a href = 'www.paraboost.de'>Paraboost </a>GmBH.</div>
+<div class="item" style="margin-bottom: 5px">Data Scientist at <a href = 'https://www.paraboost.de/' target='_blank'>Paraboost </a>GmBH and at <a href = 'http://www.lov.ai/' target='_blank'>lov.ai <i class ='red heart outline icon'></i>  </a></div>
 </div>
 </div>
 <div class="myrow row">
@@ -343,26 +262,8 @@ Reports
 </div>
 <p><br> <br> <br></p>
 <div align="right">
-<p>Last Update: 2018-12-08</p>
+<p>Last Update: 2018-12-11</p>
 </div>
 <p><br> <br> <br></p>
 <!-- close container -->
 </div>
-</div>
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<!--<script async src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"async></script>-->
-
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
-<!-- -->
-</body>
-</html>

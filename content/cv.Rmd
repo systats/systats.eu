@@ -159,7 +159,7 @@ rbind(
 ```{r}
 rbind(
   c("", '<div class = "ui header"> Jobs & Academia </div>'),
-  c("since 2017", "Data Scientist at <a href = 'https://www.paraboost.de/' target='_blank'>Paraboost </a>GmBH and at <a href = 'http://www.lov.ai/' target='_blank'>lov.ai <i class ='red heart outline icon'></i>  </a>"),
+  c("since 2017", "Data Scientist at <a href = 'https://www.paraboost.de/' target='_blank'>Paraboost </a>GmBH "), #and at <a href = 'http://www.lov.ai/' target='_blank'>lov.ai <i class ='red heart outline icon'></i>  </a>"),
   c("2015 - 2017", "Research assistant within several NCCR projects on democratic preferences and political attitudes measured with experimental survey designs (Supervision André Bächtiger)."),
   c("2015 - 2016", "Teaching assistant for the lecture International Relations and European Integration"),
   c("Sep - Nov 2014", "Internship at Leibniz-Institut for Social Sciences (GESIS Mannheim): Department for Survey Design and Methodology.")
